@@ -32,12 +32,14 @@ namespace doccure.Repositories.Implementaion
 					{
 						var userRoles = await userManager.GetRolesAsync(user);
 						var authClaims = new List<Claim> {
-				new Claim(ClaimTypes.Name,user.UserName)
+				new Claim(ClaimTypes.Name,user.UserName),
+              
 				};
 						foreach (var userRole in userRoles)
 						{
 							authClaims.Add(new Claim(ClaimTypes.Role, userRole));
 						}
+                        
                         result = true;
 					}
 					

@@ -1,18 +1,43 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using doccure.Data.Models;
+@using System.Security.Claims;
 @inject SignInManager<Applicationuser> SignInManager
 @inject UserManager<Applicationuser> UserManager
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item">
+	<li class="nav-item dropdown has-arrow logged-item">
+		<a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+			<span class="user-img">
+				<img class="rounded-circle" src="~/img/patients/patient.jpg" width="31" alt="Ryan Taylor">
+			</span>
+		</a>
+		<div class="dropdown-menu dropdown-menu-right">
+			<div class="user-header">
+				<div class="avatar avatar-sm">
+					<img src="~/img/patients/patient.jpg" alt="User Image" class="avatar-img rounded-circle">
+				</div>
+				<div class="user-text">
+					<h6>Hello @User.Identity?.Name!</h6>
+					<p class="text-muted mb-0">@User.FindFirstValue(ClaimTypes.Role)</p>
+				</div>
+			</div>
+			<a class="dropdown-item" href="patient-dashboard.html">Dashboard</a>
+			<a class="dropdown-item" href="profile-settings.html">Profile Settings</a>
+			<form class="form-inline" asp-controller="PatientAuthuntication" asp-action="logout">
+				<button type="submit" class="dropdown-item">Logout</button>
+			</form>
+			
+		</div>
+	</li>
+   @* <li class="nav-item">
         <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
     </li>
     <li class="nav-item">
         <form class="form-inline" asp-controller="PatientAuthuntication" asp-action="logout">
             <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
-    </li>
+        </form><a class="dropdown-item" href="login.html">Logout</a>
+    </li>*@
 }
 else
 {
