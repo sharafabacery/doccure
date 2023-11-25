@@ -1,5 +1,7 @@
 using doccure.Data;
 using doccure.Data.Models;
+using doccure.Repositories.Implementaion;
+using doccure.Repositories.Interfance;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +22,8 @@ namespace doccure
 
 
             builder.Services.ConfigureApplicationCookie(op => op.LoginPath = "/UserAuthuntication/Login");
+            builder.Services.AddScoped<IUserAuthenticationService, UserAuthunticationService>();
+            
            // builder.Services.AddScoped<IUserAuthticationService, UserAuthticationService>();
 
             //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
