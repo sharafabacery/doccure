@@ -23,7 +23,7 @@
 				</div>
 			</div>
 			<a class="dropdown-item" href="patient-dashboard.html">Dashboard</a>
-			<a class="dropdown-item" href="profile-settings.html">Profile Settings</a>
+			<a class="dropdown-item" asp-controller="UserProfileRedirect" asp-action="Index">Profile Settings</a>
 			<form class="form-inline" asp-controller="PatientAuthuntication" asp-action="logout">
 				<button type="submit" class="dropdown-item">Logout</button>
 			</form>

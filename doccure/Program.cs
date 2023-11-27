@@ -23,7 +23,7 @@ namespace doccure
 
             builder.Services.ConfigureApplicationCookie(op => op.LoginPath = "/UserAuthuntication/Login");
             builder.Services.AddScoped<IUserAuthenticationService, UserAuthunticationService>();
-            
+            builder.Services.AddScoped<IUserProfileSettingsService,UserProfileSettingsService>();
            // builder.Services.AddScoped<IUserAuthticationService, UserAuthticationService>();
 
             //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
