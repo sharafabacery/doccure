@@ -141,15 +141,74 @@
 								<div class="col-12 col-md-6">
 									<div class="form-group">
 										<label>Blood Group</label>
-										<select class="form-control select">
-											<option>A-</option>
-											<option>A+</option>
-											<option>B-</option>
-											<option>B+</option>
-											<option>AB-</option>
-											<option>AB+</option>
-											<option>O-</option>
-											<option>O+</option>
+										<select class="form-control select" asp-for="BloodGroup">
+											@{
+												if (user.BloodGroup == "A-")
+												{
+													<option selected>A-</option>
+												}
+												else
+												{
+													<option>A-</option>
+												}
+												if (user.BloodGroup == "A+")
+												{
+													<option selected>A+</option>
+												}
+												else
+												{
+													<option>A+</option>
+												}
+												if (user.BloodGroup == "B-")
+												{
+													<option selected>B-</option>
+												}
+												else
+												{
+													<option>B-</option>
+												}
+												if (user.BloodGroup == "B+")
+												{
+													<option selected>B+</option>
+												}
+												else
+												{
+													<option>B+</option>
+												}
+												if (user.BloodGroup == "AB-")
+												{
+													<option selected>AB-</option>
+												}
+												else
+												{
+													<option>AB-</option>
+												}
+												if (user.BloodGroup == "AB+")
+												{
+													<option selected>AB+</option>
+												}
+												else
+												{
+													<option>AB+</option>
+												}
+												if (user.BloodGroup == "O-")
+												{
+													<option selected>O-</option>
+												}
+												else
+												{
+													<option>O-</option>
+												}
+												if (user.BloodGroup == "O+")
+												{
+													<option selected>O+</option>
+												}
+												else
+												{
+													<option>O+</option>
+												}
+											}
+											
 										</select>
 									</div>
 								</div>
