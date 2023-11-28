@@ -2,12 +2,14 @@
 using doccure.Data.Models;
 using doccure.Data.RequestModels;
 using doccure.Repositories.Interfance;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace doccure.Repositories.Implementaion
 {
+	[Authorize]
 	public class UserProfileSettingsService : IUserProfileSettingsService
 	{
 		private readonly UserManager<Applicationuser> userManager;
