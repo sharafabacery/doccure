@@ -8,5 +8,7 @@ namespace doccure.Repositories.Interfance
 	{
 		Task<Applicationuser> GetUserData(ClaimsPrincipal user);
 		Task<Applicationuser> UpdateUserData(UserProfileRequest user, ClaimsPrincipal userClamis);
+
+		Task<Applicationuser> UpdatePassword(UpdatePasswordRequset updatePasswordRequset,ClaimsPrincipal userClamis);
 	}
 }

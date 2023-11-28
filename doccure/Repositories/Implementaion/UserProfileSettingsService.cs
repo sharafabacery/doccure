@@ -29,6 +29,41 @@ namespace doccure.Repositories.Implementaion
 
 		}
 
+		public async Task<Applicationuser> UpdatePassword(UpdatePasswordRequset updatePasswordRequset, ClaimsPrincipal userClamis)
+		{
+			var UserData = await userManager.GetUserAsync(userClamis);
+			if (UserData == null)
+			{
+				UserData= null;
+			}
+			else
+			{
+				if (updatePasswordRequset.ConfirmPassword != updatePasswordRequset.NewPassword)
+				{
+					UserData = null;
+				}
+				else
+				{
+					bool IsPassword = await userManager.CheckPasswordAsync(UserData, updatePasswordRequset.OldPassword);
+					if (IsPassword)
+					{
+						var usernewPassword = await userManager.ChangePasswordAsync(UserData, updatePasswordRequset.OldPassword, updatePasswordRequset.NewPassword);
+						if (!usernewPassword.Succeeded)
+						{
+							UserData = null;
+						}
+						
+
+					}
+					else
+					{
+						UserData = null;
+					}
+				}
+			}
+			return UserData;
+		}
+
 		public async Task<Applicationuser> UpdateUserData(UserProfileRequest user, ClaimsPrincipal userClamis)
 		{
 			var UserData = await userManager.GetUserAsync(userClamis);

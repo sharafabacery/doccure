@@ -35,11 +35,43 @@ namespace doccure.Controllers.patient
 			if(result == null)
 			{
 				ViewBag.message = "Cant update the data";
-				return RedirectToAction("UserProfile", "UserProfile");
+				return View();
 			}
 			else
 			{
 				return RedirectToAction("UserProfile", "UserProfile");
+			}
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> UserPasswordUpdated()
+		{
+			var user = await userProfileSettingsService.GetUserData(User);
+			if (user == null)
+			{
+				return NotFound();
+			}
+			else
+			{
+				ViewBag.User = user;
+			}
+			return View();
+		}
+
+		[HttpPost]
+
+		public async Task<IActionResult> UserPasswordUpdated(UpdatePasswordRequset updatePasswordRequset)
+		{
+			var result = await userProfileSettingsService.UpdatePassword(updatePasswordRequset,User);
+			if (result == null)
+			{
+				ViewBag.message = "Cant update the password";
+				return View();
+			}
+			else
+			{
+				ViewBag.User = result;
+				return RedirectToAction("UserPasswordUpdated", "UserProfile");
 			}
 		}
 	}
