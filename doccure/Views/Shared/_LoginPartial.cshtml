@@ -24,7 +24,7 @@
 			</div>
 			<a class="dropdown-item" href="patient-dashboard.html">Dashboard</a>
 			<a class="dropdown-item" asp-controller="UserProfileRedirect" asp-action="Index">Profile Settings</a>
-			<form class="form-inline" asp-controller="PatientAuthuntication" asp-action="logout">
+			<form class="form-inline" asp-controller="UserAuthuntication" asp-action="logout">
 				<button type="submit" class="dropdown-item">Logout</button>
 			</form>
 			
@@ -42,7 +42,7 @@
 else
 {
         <li class="nav-item">
-        <a class="nav-link header-login" asp-controller="PatientAuthuntication" asp-action="login">login / Signup </a>
+		<a class="nav-link header-login" asp-controller="UserAuthuntication" asp-action="login">login / Signup </a>
         </li>
 }
 

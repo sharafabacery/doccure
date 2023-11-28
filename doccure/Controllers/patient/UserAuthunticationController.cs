@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace doccure.Controllers.patient
 {
-    public class PatientAuthunticationController : Controller
+    public class UserAuthunticationController : Controller
     {
 
         private readonly IUserAuthenticationService authenticationService;
 
-        public PatientAuthunticationController(IUserAuthenticationService authenticationService)
+        public UserAuthunticationController(IUserAuthenticationService authenticationService)
         {
             this.authenticationService = authenticationService;
         }
@@ -27,7 +27,6 @@ namespace doccure.Controllers.patient
             {
                 return View(registerRequest);
             }
-            registerRequest.Role = "patient";
             bool result = await authenticationService.RegisterAsync(registerRequest);
             if (result)
             {
@@ -35,7 +34,8 @@ namespace doccure.Controllers.patient
             }
             else
             {
-                return RedirectToAction(nameof(Register));
+                ViewBag.message = "Cant register the account";
+                return View();
             }
 
 

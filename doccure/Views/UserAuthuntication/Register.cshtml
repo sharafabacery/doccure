@@ -1,7 +1,8 @@
 ﻿@model doccure.Data.RequestModels.RegisterRequest
 
 @{
-    ViewData["Title"] = "Register";
+	ViewData["Title"] = "Register";
+	var Message = (string)ViewData["message"];
 }
 
 <div class="content">
@@ -20,11 +21,19 @@
 							<div class="login-header">
 								<h3>Patient Register <a href="doctor-register.html">Are you a Doctor?</a></h3>
 							</div>
+							@{
+								if (!string.IsNullOrEmpty(Message))
+								{
+									<label class="control-label">@(Message)</label>
 
+								}
+							}
 							<!-- Register Form -->
 							<form asp-action="Register">
 								<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
+								<div class="form-group form-focus">
+									<input asp-for="Role" type="text" class="form-control floating" value="patient" hidden="hidden">
+									</div>
 								<div class="form-group form-focus">
 									<input asp-for="Email" type="text" class="form-control floating">
 									<label asp-for="Email" class="focus-label">Email</label>
