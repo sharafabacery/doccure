@@ -19,7 +19,7 @@
 						</div>
 						<div class="col-md-12 col-lg-6 login-right">
 							<div class="login-header">
-								<h3>Patient Register <a href="doctor-register.html">Are you a Doctor?</a></h3>
+								<h3>Patient Register <a asp-controller="UserAuthuntication" asp-action="RegisterDoctor">Are you a Doctor?</a></h3>
 							</div>
 							@{
 								if (!string.IsNullOrEmpty(Message))
@@ -48,7 +48,7 @@
 									<label asp-for="Password" class=" focus-label">Create Password</label>
 								</div>
 								<div class="text-right">
-									<a class="forgot-link" href="login.html">Already have an account?</a>
+									<a class="forgot-link" asp-controller="UserAuthuntication" asp-action="Login">Already have an account?</a>
 								</div>
 								<button class="btn btn-primary btn-block btn-lg login-btn" type="submit">Signup</button>
 								<div class="login-or">

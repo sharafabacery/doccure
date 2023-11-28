@@ -20,6 +20,10 @@ namespace doccure.Controllers.patient
         {
             return View();
         }
+        public IActionResult RegisterDoctor()
+        {
+            return View();
+        }
         [HttpPost]
         public async Task<IActionResult> Register(RegisterRequest registerRequest)
         {
