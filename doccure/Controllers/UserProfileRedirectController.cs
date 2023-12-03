@@ -12,6 +12,9 @@ namespace doccure.Controllers
 			if (user.IsInRole("patient"))
 			{
 				return RedirectToAction("UserProfile", "UserProfile");
+			}else if (user.IsInRole("doctor"))
+			{
+				return RedirectToAction("DoctorProfile", "DoctorProfile");
 			}
 			return View();
 		}

@@ -24,11 +24,13 @@ namespace doccure
             builder.Services.ConfigureApplicationCookie(op => op.LoginPath = "/UserAuthuntication/Login");
             builder.Services.AddScoped<IUserAuthenticationService, UserAuthunticationService>();
             builder.Services.AddScoped<IUserProfileSettingsService,UserProfileSettingsService>();
-           // builder.Services.AddScoped<IUserAuthticationService, UserAuthticationService>();
+            builder.Services.AddScoped<IUserProfileSettingsService,DoctorProfileSettingsService>();
+            builder.Services.AddScoped<ISpecalityService,SpecalityService>();
+			// builder.Services.AddScoped<IUserAuthticationService, UserAuthticationService>();
 
-            //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-            //     .AddEntityFrameworkStores<ApplicationDbContext>();
-            builder.Services.AddControllersWithViews();
+			//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+			//     .AddEntityFrameworkStores<ApplicationDbContext>();
+			builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
 

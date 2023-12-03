@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace doccure.Repositories.Implementaion
 {
-	[Authorize]
+
 	public class UserProfileSettingsService : IUserProfileSettingsService
 	{
 		private readonly UserManager<Applicationuser> userManager;

@@ -7,6 +7,7 @@ namespace doccure.Data.Models
         public int Id { get; set; }
         public string applicationuserId { get; set; }
         public int SpecialityId { get; set; }
+        public string? AboutMe { get; set; }
         public string? Specialization { get; set; }
         public string? Services { get; set; }
         public float? Price { get; set; }
