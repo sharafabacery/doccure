@@ -66,8 +66,9 @@ namespace doccure.Repositories.Implementaion
 			return UserData;
 		}
 
-		public async Task<Applicationuser> UpdateUserData(UserProfileRequest user, ClaimsPrincipal userClamis)
+		public async Task<Applicationuser> UpdateUserData(object userr, ClaimsPrincipal userClamis)
 		{
+			var user = (UserProfileRequest)userr;
 			var UserData = await userManager.GetUserAsync(userClamis);
 			if(UserData == null)
 			{

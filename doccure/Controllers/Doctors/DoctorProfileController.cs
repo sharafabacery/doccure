@@ -33,9 +33,9 @@ namespace doccure.Controllers.Doctors
 		}
 
 		[HttpPost]
-		public IActionResult DoctorProfile(DoctorProfileRequest doctorProfileRequest)
+		public async Task< IActionResult> DoctorProfile(DoctorProfileRequest doctorProfileRequest)
 		{
-
+			await userProfileSettingsService.UpdateUserData(doctorProfileRequest, User);
 			return RedirectToAction("DoctorProfile", "DoctorProfile");
 		}
 	}

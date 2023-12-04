@@ -7,7 +7,7 @@ namespace doccure.Repositories.Interfance
 	public interface IUserProfileSettingsService
 	{
 		Task<Applicationuser> GetUserData(ClaimsPrincipal user);
-		Task<Applicationuser> UpdateUserData(UserProfileRequest user, ClaimsPrincipal userClamis);
+		Task<Applicationuser> UpdateUserData(object user, ClaimsPrincipal userClamis);
 
 		Task<Applicationuser> UpdatePassword(UpdatePasswordRequset updatePasswordRequset,ClaimsPrincipal userClamis);
 	}
