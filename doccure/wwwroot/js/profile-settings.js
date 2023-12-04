@@ -60,7 +60,8 @@ Version      : 1.0
     });
 	
 	// Experience Add More
-	
+	var indexExperience = $(".experience-cont").length;
+
     $(".experience-info").on('click','.trash', function () {
 		$(this).closest('.experience-cont').remove();
 		return false;
@@ -68,44 +69,45 @@ Version      : 1.0
 
     $(".add-experience").on('click', function () {
 		
-		var experiencecontent = '<div class="row form-row experience-cont">' +
-			'<div class="col-12 col-md-10 col-lg-11">' +
-				'<div class="row form-row">' +
-					'<div class="col-12 col-md-6 col-lg-4">' +
-						'<div class="form-group">' +
-							'<label>Hospital Name</label>' +
-							'<input type="text" class="form-control">' +
-						'</div>' +
-					'</div>' +
-					'<div class="col-12 col-md-6 col-lg-4">' +
-						'<div class="form-group">' +
-							'<label>From</label>' +
-							'<input type="text" class="form-control">' +
-						'</div>' +
-					'</div>' +
-					'<div class="col-12 col-md-6 col-lg-4">' +
-						'<div class="form-group">' +
-							'<label>To</label>' +
-							'<input type="text" class="form-control">' +
-						'</div>' +
-					'</div>' +
-					'<div class="col-12 col-md-6 col-lg-4">' +
-						'<div class="form-group">' +
-							'<label>Designation</label>' +
-							'<input type="text" class="form-control">' +
-						'</div>' +
-					'</div>' +
-				'</div>' +
-			'</div>' +
-			'<div class="col-12 col-md-2 col-lg-1"><label class="d-md-block d-sm-none d-none">&nbsp;</label><a href="#" class="btn btn-danger trash"><i class="far fa-trash-alt"></i></a></div>' +
-		'</div>';
-		
+		var experiencecontent = `<div class="row form-row experience-cont">
+			<div class="col-12 col-md-10 col-lg-11">
+				<div class="row form-row">
+					<div class="col-12 col-md-6 col-lg-4">
+						<div class="form-group">
+							<label>Hospital Name</label>
+							<input type="text" class="form-control" name="Experience[${indexExperience}].HospitalName">
+						</div>
+					</div>
+					<div class="col-12 col-md-6 col-lg-4">
+						<div class="form-group">
+							<label>From</label>
+							<input type="date" class="form-control" name="Experience[${indexExperience}].From>
+						</div>
+					</div>
+						<div class="col-12 col-md-6 col-lg-4">
+						<div class="form-group">
+							<label>To</label>
+							<input type="date" class="form-control" name="Experience[${indexExperience}].To>
+						</div>
+					</div>
+					<div class="col-12 col-md-6 col-lg-4">
+						<div class="form-group">
+							<label>Designation</label>
+							<input type="text" class="form-control" name="Experience[${indexExperience}].Designation>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 col-md-2 col-lg-1"><label class="d-md-block d-sm-none d-none">&nbsp;</label><a href="#" class="btn btn-danger trash"><i class="far fa-trash-alt"></i></a></div>
+		</div>`;
+		indexExperience++;
         $(".experience-info").append(experiencecontent);
         return false;
     });
 	
 	// Awards Add More
-	
+	var indexAwards = $(".awards-cont").length;
+
     $(".awards-info").on('click','.trash', function () {
 		$(this).closest('.awards-cont').remove();
 		return false;
@@ -113,31 +115,32 @@ Version      : 1.0
 
     $(".add-award").on('click', function () {
 
-        var regcontent = '<div class="row form-row awards-cont">' +
-			'<div class="col-12 col-md-5">' +
-				'<div class="form-group">' +
-					'<label>Awards</label>' +
-					'<input type="text" class="form-control">' +
-				'</div>' +
-			'</div>' +
-			'<div class="col-12 col-md-5">' +
-				'<div class="form-group">' +
-					'<label>Year</label>' +
-					'<input type="text" class="form-control">' +
-				'</div>' +
-			'</div>' +
-			'<div class="col-12 col-md-2">' +
-				'<label class="d-md-block d-sm-none d-none">&nbsp;</label>' +
-				'<a href="#" class="btn btn-danger trash"><i class="far fa-trash-alt"></i></a>' +
-			'</div>' +
-		'</div>';
+        var regcontent = `<div class="row form-row awards-cont">
+			<div class="col-12 col-md-5">
+				<div class="form-group">
+					<label>Awards</label>
+					<input name="Awards[${indexAwards}].award" type="text" class="form-control">
+				</div>
+			</div>
+			<div class="col-12 col-md-5">
+				<div class="form-group">
+					<label>Year</label>
+					<input name="Awards[${indexAwards}].year" type="date" class="form-control">
+				</div>
+			</div>
+			<div class="col-12 col-md-2">
+				<label class="d-md-block d-sm-none d-none">&nbsp;</label>
+				<a href="#" class="btn btn-danger trash"><i class="far fa-trash-alt"></i></a>
+			</div>
+		</div>`;
 		
         $(".awards-info").append(regcontent);
         return false;
     });
 	
 	// Membership Add More
-	
+	var indexMembership = $(".awards-cont").length;
+
     $(".membership-info").on('click','.trash', function () {
 		$(this).closest('.membership-cont').remove();
 		return false;
@@ -145,18 +148,18 @@ Version      : 1.0
 
     $(".add-membership").on('click', function () {
 
-        var membershipcontent = '<div class="row form-row membership-cont">' +
-			'<div class="col-12 col-md-10 col-lg-5">' +
-				'<div class="form-group">' +
-					'<label>Memberships</label>' +
-					'<input type="text" class="form-control">' +
-				'</div>' +
-			'</div>' +
-			'<div class="col-12 col-md-2 col-lg-2">' +
-				'<label class="d-md-block d-sm-none d-none">&nbsp;</label>' +
-				'<a href="#" class="btn btn-danger trash"><i class="far fa-trash-alt"></i></a>' +
-			'</div>' +
-		'</div>';
+        var membershipcontent = `<div class="row form-row membership-cont">
+			<div class="col-12 col-md-10 col-lg-5">
+				<div class="form-group">
+					<label>Memberships</label>
+					<input name="Membership[${indexMembership}].description" type="text" class="form-control">
+				</div>
+			</div>
+			<div class="col-12 col-md-2 col-lg-2">
+				<label class="d-md-block d-sm-none d-none">&nbsp;</label>
+				<a href="#" class="btn btn-danger trash"><i class="far fa-trash-alt"></i></a>
+			</div>
+		</div>`;
 		
         $(".membership-info").append(membershipcontent);
         return false;

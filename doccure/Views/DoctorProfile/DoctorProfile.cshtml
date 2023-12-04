@@ -267,26 +267,27 @@
 					{
 						@for (int i=0;i<user.doctor?.educations.Count;i++)
 						{
+							var  education = user.doctor.educations.ElementAtOrDefault(i);
 							<div class="row form-row education-cont">
 								<div class="col-12 col-md-10 col-lg-11">
 									<div class="row form-row">
 										<div class="col-12 col-md-6 col-lg-4">
-											<input asp-for="Educations[i].Id" type="text"  class="form-control" hidden="hidden">
+											<input asp-for="Educations[i].Id" type="text"  class="form-control" hidden="hidden" value="@education.Id">
 											<div class="form-group">
 												<label>Degree</label>
-												<input asp-for="Educations[i].Degree"  type="text" class="form-control">
+												<input asp-for="Educations[i].Degree" type="text" class="form-control" value="@education.Degree">
 											</div>
 										</div>
 										<div class="col-12 col-md-6 col-lg-4">
 											<div class="form-group">
 												<label>College/Institute</label>
-												<input asp-for="Educations[i].College"  type="text" class="form-control">
+												<input asp-for="Educations[i].College" type="text" class="form-control" value="@education.College">
 											</div>
 										</div>
 										<div class="col-12 col-md-6 col-lg-4">
 											<div class="form-group">
 												<label>Year of Completion</label>
-												<input asp-for="Educations[i].YearofCompletion" type="text" class="form-control">
+												<input asp-for="Educations[i].YearofCompletion" type="text" class="form-control"value="@education.YearofCompletion">
 											</div>
 										</div>
 									</div>
@@ -358,37 +359,111 @@
 		</div>
 		<!-- /Education -->
 		<!-- Experience -->
-		@*<div class="card">
+		<div class="card">
 			<div class="card-body">
 				<h4 class="card-title">Experience</h4>
 				<div class="experience-info">
+					@if (user.doctor?.experiences != null)
+					{
+						@for (int i = 0; i < user.doctor?.experiences.Count; i++)
+						{
+							var experience = user.doctor.experiences.ElementAtOrDefault(i);
+							<div class="row form-row experience-cont">
+								<div class="col-12 col-md-10 col-lg-11">
+									<div class="row form-row">
+										<div class="col-12 col-md-6 col-lg-4">
+											<input asp-for="Experience[i].Id" type="text" class="form-control" hidden="hidden" value="@experience.Id">
+											
+											<div class="form-group">
+												<label>Hospital Name</label>
+												<input asp-for="Experience[i].HospitalName" type="text" class="form-control" value="@experience.HospitalName">
+											</div>
+										</div>
+										<div class="col-12 col-md-6 col-lg-4">
+											<div class="form-group">
+												<label>From</label>
+												<input asp-for="Experience[i].From" type="date" class="form-control" value="@experience.From">
+											</div>
+										</div>
+										<div class="col-12 col-md-6 col-lg-4">
+											<div class="form-group">
+												<label>To</label>
+												<input asp-for="Experience[i].To" type="date" class="form-control" value="@experience.To">
+											</div>
+										</div>
+										<div class="col-12 col-md-6 col-lg-4">
+											<div class="form-group">
+												<label>Designation</label>
+												<input asp-for="Experience[i].Designation" type="text" class="form-control" value="@experience.Designation">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-12 col-md-2 col-lg-1"><label class="d-md-block d-sm-none d-none">&nbsp;</label><a href="#" class="btn btn-danger trash"><i class="far fa-trash-alt"></i></a></div>
+							</div>
+						
+						}
+
+					}
 					<div class="row form-row experience-cont">
 						<div class="col-12 col-md-10 col-lg-11">
 							<div class="row form-row">
-								<div class="col-12 col-md-6 col-lg-4">
-									<div class="form-group">
-										<label>Hospital Name</label>
-										<input type="text" class="form-control">
+								@if (user.doctor?.experiences == null)
+								{
+									<div class="col-12 col-md-6 col-lg-4">
+
+										<div class="form-group">
+											<label>Hospital Name</label>
+											<input asp-for="Experience[0].HospitalName" type="text" class="form-control">
+										</div>
 									</div>
-								</div>
-								<div class="col-12 col-md-6 col-lg-4">
-									<div class="form-group">
-										<label>From</label>
-										<input type="text" class="form-control">
+									<div class="col-12 col-md-6 col-lg-4">
+										<div class="form-group">
+											<label>From</label>
+											<input asp-for="Experience[0].From" type="date" class="form-control">
+										</div>
 									</div>
-								</div>
-								<div class="col-12 col-md-6 col-lg-4">
-									<div class="form-group">
-										<label>To</label>
-										<input type="text" class="form-control">
+									<div class="col-12 col-md-6 col-lg-4">
+										<div class="form-group">
+											<label>To</label>
+											<input asp-for="Experience[0].To" type="date" class="form-control">
+										</div>
 									</div>
-								</div>
-								<div class="col-12 col-md-6 col-lg-4">
-									<div class="form-group">
-										<label>Designation</label>
-										<input type="text" class="form-control">
+									<div class="col-12 col-md-6 col-lg-4">
+										<div class="form-group">
+											<label>Designation</label>
+											<input asp-for="Experience[0].Designation" type="text" class="form-control">
+										</div>
 									</div>
-								</div>
+								}
+								else
+								{
+									int index1 = (int)user.doctor?.experiences.Count;
+									<div class="col-12 col-md-6 col-lg-4">
+										<div class="form-group">
+											<label>Hospital Name</label>
+											<input asp-for="Experience[index1].HospitalName" type="text" class="form-control">
+										</div>
+									</div>
+									<div class="col-12 col-md-6 col-lg-4">
+										<div class="form-group">
+											<label>From</label>
+											<input asp-for="Experience[index1].From" type="date" class="form-control">
+										</div>
+									</div>
+									<div class="col-12 col-md-6 col-lg-4">
+										<div class="form-group">
+											<label>To</label>
+											<input asp-for="Experience[index1].To" type="date" class="form-control">
+										</div>
+									</div>
+									<div class="col-12 col-md-6 col-lg-4">
+										<div class="form-group">
+											<label>Designation</label>
+											<input asp-for="Experience[index1].Designation" type="text" class="form-control">
+										</div>
+									</div>
+								}
 							</div>
 						</div>
 					</div>
@@ -398,26 +473,76 @@
 				</div>
 			</div>
 		</div>
+		
 		<!-- /Experience -->
 		<!-- Awards -->
 		<div class="card">
 			<div class="card-body">
 				<h4 class="card-title">Awards</h4>
 				<div class="awards-info">
-					<div class="row form-row awards-cont">
+					@if (user.doctor?.awards != null)
+					{
+						@for (int i = 0; i < user.doctor?.awards.Count; i++)
+						{
+							var award = user.doctor.awards.ElementAtOrDefault(i);
+							<div class="row form-row awards-cont">
 						<div class="col-12 col-md-5">
+						<input asp-for="Awards[i].Id" type="text" class="form-control" hidden="hidden" value="@award.Id">
+											
 							<div class="form-group">
 								<label>Awards</label>
-								<input type="text" class="form-control">
+								<input asp-for="Awards[i].award" type="text" class="form-control" value="@award.award">
 							</div>
 						</div>
 						<div class="col-12 col-md-5">
 							<div class="form-group">
 								<label>Year</label>
-								<input type="text" class="form-control">
+								<input asp-for="Awards[i].year" type="date" class="form-control" value="@award.year">
 							</div>
 						</div>
 					</div>
+						}
+					}
+					else
+					{
+						@if (user.doctor?.awards == null)
+						{
+							<div class="row form-row awards-cont">
+								<div class="col-12 col-md-5">
+									<div class="form-group">
+										<label>Awards</label>
+										<input asp-for="Awards[0].award" type="text" class="form-control">
+									</div>
+								</div>
+								<div class="col-12 col-md-5">
+									<div class="form-group">
+										<label>Year</label>
+										<input asp-for="Awards[0].year" type="datetime" class="form-control">
+									</div>
+								</div>
+							</div>
+						}
+						else
+						{
+							int index1 = (int)user.doctor?.awards.Count;
+							<div class="row form-row awards-cont">
+								<div class="col-12 col-md-5">
+									<div class="form-group">
+										<label>Awards</label>
+										<input asp-for="Awards[index1].award" type="text" class="form-control">
+									</div>
+								</div>
+								<div class="col-12 col-md-5">
+									<div class="form-group">
+										<label>Year</label>
+										<input asp-for="Awards[index1].year" type="datetime" class="form-control">
+									</div>
+								</div>
+							</div>
+						}
+						
+					}
+					
 				</div>
 				<div class="add-more">
 					<a href="javascript:void(0);" class="add-award"><i class="fa fa-plus-circle"></i> Add More</a>
@@ -430,14 +555,52 @@
 			<div class="card-body">
 				<h4 class="card-title">Memberships</h4>
 				<div class="membership-info">
-					<div class="row form-row membership-cont">
+					@if (user.doctor?.memberships != null)
+					{
+						@for (int i = 0; i < user.doctor?.memberships.Count; i++)
+						{
+							var membership = user.doctor.memberships.ElementAtOrDefault(i);
+							<div class="row form-row membership-cont">
+								<input asp-for="Membership[i].Id" type="text" class="form-control" hidden="hidden" value="@membership.Id">
+
 						<div class="col-12 col-md-10 col-lg-5">
 							<div class="form-group">
 								<label>Memberships</label>
-								<input type="text" class="form-control">
+								<input asp-for="Membership[i].description" type="text" class="form-control" value="@membership.description">
 							</div>
 						</div>
 					</div>
+						}
+					}
+					else
+					{
+						@if (user.doctor?.memberships == null)
+						{
+							<div class="row form-row membership-cont">
+								<div class="col-12 col-md-10 col-lg-5">
+									<div class="form-group">
+										<label>Memberships</label>
+										<input asp-for="Membership[0].description" type="text" class="form-control">
+									</div>
+								</div>
+							</div>
+						}
+						else
+						{
+							int index1 = (int)user.doctor?.memberships.Count;
+							<div class="row form-row membership-cont">
+								<div class="col-12 col-md-10 col-lg-5">
+									<div class="form-group">
+										<label>Memberships</label>
+										<input asp-for="Membership[index1].description" type="text" class="form-control">
+									</div>
+								</div>
+							</div>
+						}
+
+					}
+
+					
 				</div>
 				<div class="add-more">
 					<a href="javascript:void(0);" class="add-membership"><i class="fa fa-plus-circle"></i> Add More</a>
@@ -446,7 +609,7 @@
 		</div>
 		<!-- /Memberships -->
 		<!-- Registrations -->
-		<div class="card">
+		@*<div class="card">
 			<div class="card-body">
 				<h4 class="card-title">Registrations</h4>
 				<div class="registrations-info">
