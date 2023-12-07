@@ -5,6 +5,8 @@ using doccure.Repositories.Interfance;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Transactions;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace doccure.Repositories.Implementaion
 {
@@ -34,61 +36,196 @@ namespace doccure.Repositories.Implementaion
 
 		public async Task<Applicationuser> UpdateUserData(object doctorUpdates, ClaimsPrincipal user)
 		{
-//			DoctorProfileRequest doctorUpdatess = (DoctorProfileRequest)doctorUpdates;
-//			var Doctor = await userManager.Users.Include(a => a.address).Include(a => a.doctor).Include(a => a.doctor.educations).Include(a => a.doctor.experiences).Include(a => a.doctor.awards).Include(a => a.doctor.memberships).Include(a => a.doctor.clinics).FirstOrDefaultAsync(usr => usr.Id == userManager.GetUserId(user));
-//			Doctor.FirstName = doctorUpdatess.FirstName;
-//			Doctor.LastName = doctorUpdatess.LastName;
-//			Doctor.UserName= doctorUpdatess.UserName;
-//			Doctor.Email = doctorUpdatess.Email;
-//			Doctor.DateofBirth = doctorUpdatess.DateofBirth;
-//			Doctor.PhoneNumber = doctorUpdatess.PhoneNmber;
-//			Doctor.Gender= doctorUpdatess.gender=='1'?true:false;
-//			if (Doctor.address == null)
-//			{
-//				Doctor.address = new Address() { 
-//				Address1=doctorUpdatess.Address1.Address1,
-//				Address2= doctorUpdatess.Address1.Address2,
-//				City=doctorUpdatess.Address1.City,
-//				Country=doctorUpdatess.Address1.Country,
-//				PostalCode=doctorUpdatess.Address1.PostalCode,
-//				State=doctorUpdatess.Address1.State
-//				};
-//			}
-//			else
-//			{
-//				Doctor.address.Address1 = doctorUpdatess.Address1.Address1;
-//				Doctor.address.Address2 = doctorUpdatess.Address1.Address2;
-//				Doctor.address.City= doctorUpdatess.Address1.City;
-//				Doctor.address.Country= doctorUpdatess.Address1.Country;
-//				Doctor.address.PostalCode= doctorUpdatess.Address1.PostalCode;
-//				Doctor.address.State= doctorUpdatess.Address1.State;
-//			}
-//			var result = await userManager.UpdateAsync(Doctor);
-//			if (result.Succeeded)
-//			{
-//if (Doctor.doctor == null)
-//			{
-//				Doctor.doctor = new Doctor {
-//					SpecialityId=doctorUpdatess.SpecialityId,
-//					AboutMe=doctorUpdatess.AboutMe,
-//					Specialization=doctorUpdatess.Specialization,
-//					Services = doctorUpdatess.Services,
-//					Price=doctorUpdatess.price,
-//					VideoCall=doctorUpdatess.videocall,
-//				};
-//					result = await userManager.UpdateAsync(Doctor);
-					
-//				}
-//			else
-//			{
-				
+			DoctorProfileRequest doctorUpdatess = (DoctorProfileRequest)doctorUpdates;
+			var Doctor = await userManager.Users.Include(a => a.address).Include(a => a.doctor).Include(a => a.doctor.educations).Include(a => a.doctor.experiences).Include(a => a.doctor.awards).Include(a => a.doctor.memberships).Include(a => a.doctor.clinics).FirstOrDefaultAsync(usr => usr.Id == userManager.GetUserId(user));
+				using(var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+			{
+				try
+				{
+					Doctor.FirstName = doctorUpdatess.FirstName;
+					Doctor.LastName = doctorUpdatess.LastName;
+					Doctor.UserName = doctorUpdatess.UserName;
+					Doctor.Email = doctorUpdatess.Email;
+					Doctor.DateofBirth = doctorUpdatess.DateofBirth;
+					Doctor.PhoneNumber = doctorUpdatess.PhoneNmber;
+					Doctor.Gender = doctorUpdatess.gender == '1' ? true : false;
+					if (Doctor.address == null)
+					{
+						Doctor.address = new Address()
+						{
+							Address1 = doctorUpdatess.Address1.Address1,
+							Address2 = doctorUpdatess.Address1.Address2,
+							City = doctorUpdatess.Address1.City,
+							Country = doctorUpdatess.Address1.Country,
+							PostalCode = doctorUpdatess.Address1.PostalCode,
+							State = doctorUpdatess.Address1.State
+						};
+					}
+					else
+					{
+						Doctor.address.Address1 = doctorUpdatess.Address1.Address1;
+						Doctor.address.Address2 = doctorUpdatess.Address1.Address2;
+						Doctor.address.City = doctorUpdatess.Address1.City;
+						Doctor.address.Country = doctorUpdatess.Address1.Country;
+						Doctor.address.PostalCode = doctorUpdatess.Address1.PostalCode;
+						Doctor.address.State = doctorUpdatess.Address1.State;
+					}
+					var result = await userManager.UpdateAsync(Doctor);
+					if (result.Succeeded)
+					{
+						if (Doctor.doctor == null)
+						{
+							Doctor.doctor = new Doctor
+							{
+								SpecialityId = doctorUpdatess.SpecialityId,
+								AboutMe = doctorUpdatess.AboutMe,
+								Specialization = doctorUpdatess.Specialization,
+								Services = doctorUpdatess.Services,
+								Price = doctorUpdatess.price,
+								VideoCall = doctorUpdatess.videocall,
+							};
+						}
+						else
+						{
+							Doctor.doctor.SpecialityId = doctorUpdatess.SpecialityId;
+							Doctor.doctor.AboutMe = doctorUpdatess.AboutMe;
+							Doctor.doctor.Specialization = doctorUpdatess.Specialization;
+							Doctor.doctor.Services = doctorUpdatess.Services;
+							Doctor.doctor.Price = doctorUpdatess.price;
+							Doctor.doctor.VideoCall = doctorUpdatess.videocall;
 
-//			}
-//				result = await userManager.UpdateAsync(Doctor);
-//			}
-//			//Doctor.SaveAsync();
-			
-			return null;
+						}
+					}
+					else
+					{
+						throw new Exception("can not update user profile");
+					}
+					result = await userManager.UpdateAsync(Doctor);
+					if (result.Succeeded)
+					{
+						foreach(var education in doctorUpdatess.Educations)
+						{
+							var educationdb = Doctor.doctor.educations.FirstOrDefault(e => e.Id == education.Id);
+							if (educationdb != null)
+							{
+								educationdb.Degree = education.Degree;
+								educationdb.College= education.College;
+								educationdb.YearofCompletion= education.YearofCompletion;
+							}
+							else
+							{
+								Doctor.doctor.educations.Add(education);
+							}
+						}
+					}
+					else
+					{
+						throw new Exception("can not update doctor profile");
+					}
+					result = await userManager.UpdateAsync(Doctor);
+					if (result.Succeeded)
+					{
+						foreach (var experience in doctorUpdatess.Experience)
+						{
+							var experiencedb = Doctor.doctor.experiences.FirstOrDefault(e => e.Id == experience.Id);
+							if (experiencedb != null)
+							{
+								experiencedb.From = experience.From;
+								experiencedb.To = experience.To;
+								experiencedb.HospitalName = experience.HospitalName;
+								experiencedb.Designation = experience.Designation;
+
+							}
+							else
+							{
+								Doctor.doctor.experiences.Add(experience);
+							}
+						}
+					}
+					else
+					{
+						throw new Exception("can not update doctor profile");
+					}
+					result = await userManager.UpdateAsync(Doctor);
+					if (result.Succeeded)
+					{
+						foreach (var award in doctorUpdatess.Awards)
+						{
+							var awarddb = Doctor.doctor.awards.FirstOrDefault(e => e.Id == award.Id);
+							if (awarddb != null)
+							{
+								awarddb.award = award.award;
+								awarddb.year = award.year;
+								
+							}
+							else
+							{
+								Doctor.doctor.awards.Add(award);
+							}
+						}
+					}
+					else
+					{
+						throw new Exception("can not update doctor profile");
+					}
+					result = await userManager.UpdateAsync(Doctor);
+					if (result.Succeeded)
+					{
+						foreach (var membership in doctorUpdatess.Membership)
+						{
+							var membershipdb = Doctor.doctor.memberships.FirstOrDefault(e => e.Id == membership.Id);
+							if (membershipdb != null)
+							{
+								membershipdb.description = membership.description;
+								
+							}
+							else
+							{
+								Doctor.doctor.memberships.Add(membership);
+							}
+						}
+					}
+					else
+					{
+						throw new Exception("can not update doctor profile");
+					}
+					result = await userManager.UpdateAsync(Doctor);
+					if (result.Succeeded)
+					{
+						var clinicdb = Doctor.doctor.clinics.FirstOrDefault(e => e.Id == doctorUpdatess.Clinic.Id);
+						if (clinicdb != null)
+						{
+							clinicdb.Address = doctorUpdatess.Clinic.Address;
+							clinicdb.Name=doctorUpdatess.Clinic.Name;
+						}
+						else
+						{
+							Doctor.doctor.clinics.Add(doctorUpdatess.Clinic);
+						}
+					}
+					else
+					{
+						throw new Exception("can not update doctor profile");
+					}
+					result = await userManager.UpdateAsync(Doctor);
+					if (result.Succeeded)
+					{
+
+						scope.Complete();	
+					}
+					else
+					{
+						throw new Exception("can not update doctor profile");
+					}
+				}
+				catch (Exception ex)
+				{
+					Doctor = null;
+					scope.Dispose();
+					
+				}
+			}
+			return Doctor;
 
 		}
 	}

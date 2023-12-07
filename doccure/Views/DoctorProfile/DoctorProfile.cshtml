@@ -68,13 +68,13 @@
 								<option>Select</option>
 								@{if (@user.Gender==true)
 								{
-								<option value="1" select="selected">Male</option>
+								<option value="1" selected>Male</option>
 								}else{
 								<option value="1">Male</option>
 								}}
 								@{if (@user.Gender==false)
 								{
-								<option value="0" select="selected">Female</option>
+								<option value="0" selected>Female</option>
 								}else{
 								<option value="0">Female</option>
 								}}
@@ -92,7 +92,7 @@
 								{
 									if (@speciality.Id.Equals(user?.doctor?.SpecialityId))
 									{
-										<option value="@speciality.Id" select="selected">@speciality.Name</option>
+										<option value="@speciality.Id" selected>@speciality.Name</option>
 									}
 									else
 									{
@@ -107,7 +107,7 @@
 					<div class="col-md-6">
 						<div class="form-group mb-0">
 							<label>Date of Birth</label>
-							<input asp-for="DateofBirth" type="date" class="form-control" value=@user.DateofBirth>
+							<input asp-for="DateofBirth" type="date" class="form-control" value=@user.DateofBirth?.ToString("yyyy-MM-dd")>
 
 						</div>
 					</div>
@@ -133,7 +133,8 @@
 				<div class="row form-row">
 					<div class="col-md-6">
 						<div class="form-group">
-							<label>Clinic Name</label>
+						<input asp-for="Clinic.Id" type="text" class="form-control" value="@user.doctor?.clinics.First().Id" hidden="hidden">	
+						<label>Clinic Name</label>
 							<input asp-for="Clinic.Name" type="text" class="form-control" value="@user.doctor?.clinics.First().Name">
 						</div>
 					</div>
@@ -287,7 +288,7 @@
 										<div class="col-12 col-md-6 col-lg-4">
 											<div class="form-group">
 												<label>Year of Completion</label>
-												<input asp-for="Educations[i].YearofCompletion" type="text" class="form-control"value="@education.YearofCompletion">
+												<input asp-for="Educations[i].YearofCompletion" type="date" class="form-control" value="@education.YearofCompletion.ToString("yyyy-MM-dd")">
 											</div>
 										</div>
 									</div>
@@ -297,60 +298,7 @@
 						}
 					}
 					
-					<div class="row form-row education-cont">
-						<div class="col-12 col-md-10 col-lg-11">
-							<div class="row form-row">
-								
-									
-									@if (user.doctor?.educations == null)
-										{
-									<div class="col-12 col-md-6 col-lg-4">
-										<div class="form-group">
-											<label>Degree</label>
-											<input asp-for="Educations[0].Degree" type="text" class="form-control">
-
-										</div>
-									</div>
-									<div class="col-12 col-md-6 col-lg-4">
-										<div class="form-group">
-											<label>College/Institute</label>
-											<input asp-for="Educations[0].College" type="text" class="form-control">
-										</div>
-									</div>
-									<div class="col-12 col-md-6 col-lg-4">
-										<div class="form-group">
-											<label>Year of Completion</label>
-											<input asp-for="Educations[0].YearofCompletion" type="date" class="form-control">
-										</div>
-									</div>
-
-										}
-										else
-										{
-											int index1 = (int)user.doctor?.educations.Count;
-									<div class="col-12 col-md-6 col-lg-4">
-										<div class="form-group">
-											<label>Degree</label>
-											<input asp-for="Educations[index1].Degree" type="text" class="form-control">
-
-										</div>
-									</div>
-									<div class="col-12 col-md-6 col-lg-4">
-										<div class="form-group">
-											<label>College/Institute</label>
-											<input asp-for="Educations[index1].College" type="text" class="form-control">
-										</div>
-									</div>
-									<div class="col-12 col-md-6 col-lg-4">
-										<div class="form-group">
-											<label>Year of Completion</label>
-											<input asp-for="Educations[index1].YearofCompletion" type="date" class="form-control">
-										</div>
-									</div>
-                                }
-							</div>
-						</div>
-					</div>
+					
 				</div>
 				<div class="add-more">
 					<a href="javascript:void(0);" class="add-education"><i class="fa fa-plus-circle"></i> Add More</a>
@@ -382,13 +330,13 @@
 										<div class="col-12 col-md-6 col-lg-4">
 											<div class="form-group">
 												<label>From</label>
-												<input asp-for="Experience[i].From" type="date" class="form-control" value="@experience.From">
+												<input asp-for="Experience[i].From" type="date" class="form-control" value="@experience.From.ToString("yyyy-MM-dd")">
 											</div>
 										</div>
 										<div class="col-12 col-md-6 col-lg-4">
 											<div class="form-group">
 												<label>To</label>
-												<input asp-for="Experience[i].To" type="date" class="form-control" value="@experience.To">
+												<input asp-for="Experience[i].To" type="date" class="form-control" value="@experience.To.ToString("yyyy-MM-dd")">
 											</div>
 										</div>
 										<div class="col-12 col-md-6 col-lg-4">
@@ -405,68 +353,7 @@
 						}
 
 					}
-					<div class="row form-row experience-cont">
-						<div class="col-12 col-md-10 col-lg-11">
-							<div class="row form-row">
-								@if (user.doctor?.experiences == null)
-								{
-									<div class="col-12 col-md-6 col-lg-4">
-
-										<div class="form-group">
-											<label>Hospital Name</label>
-											<input asp-for="Experience[0].HospitalName" type="text" class="form-control">
-										</div>
-									</div>
-									<div class="col-12 col-md-6 col-lg-4">
-										<div class="form-group">
-											<label>From</label>
-											<input asp-for="Experience[0].From" type="date" class="form-control">
-										</div>
-									</div>
-									<div class="col-12 col-md-6 col-lg-4">
-										<div class="form-group">
-											<label>To</label>
-											<input asp-for="Experience[0].To" type="date" class="form-control">
-										</div>
-									</div>
-									<div class="col-12 col-md-6 col-lg-4">
-										<div class="form-group">
-											<label>Designation</label>
-											<input asp-for="Experience[0].Designation" type="text" class="form-control">
-										</div>
-									</div>
-								}
-								else
-								{
-									int index1 = (int)user.doctor?.experiences.Count;
-									<div class="col-12 col-md-6 col-lg-4">
-										<div class="form-group">
-											<label>Hospital Name</label>
-											<input asp-for="Experience[index1].HospitalName" type="text" class="form-control">
-										</div>
-									</div>
-									<div class="col-12 col-md-6 col-lg-4">
-										<div class="form-group">
-											<label>From</label>
-											<input asp-for="Experience[index1].From" type="date" class="form-control">
-										</div>
-									</div>
-									<div class="col-12 col-md-6 col-lg-4">
-										<div class="form-group">
-											<label>To</label>
-											<input asp-for="Experience[index1].To" type="date" class="form-control">
-										</div>
-									</div>
-									<div class="col-12 col-md-6 col-lg-4">
-										<div class="form-group">
-											<label>Designation</label>
-											<input asp-for="Experience[index1].Designation" type="text" class="form-control">
-										</div>
-									</div>
-								}
-							</div>
-						</div>
-					</div>
+				
 				</div>
 				<div class="add-more">
 					<a href="javascript:void(0);" class="add-experience"><i class="fa fa-plus-circle"></i> Add More</a>
@@ -497,51 +384,17 @@
 						<div class="col-12 col-md-5">
 							<div class="form-group">
 								<label>Year</label>
-								<input asp-for="Awards[i].year" type="date" class="form-control" value="@award.year">
+								<input asp-for="Awards[i].year" type="date" class="form-control" value="@award.year.ToString("yyyy-MM-dd")">
 							</div>
 						</div>
+						<div class="col-12 col-md-2">
+				<label class="d-md-block d-sm-none d-none">&nbsp;</label>
+				<a href="#" class="btn btn-danger trash"><i class="far fa-trash-alt"></i></a>
+			</div>
 					</div>
 						}
 					}
-					else
-					{
-						@if (user.doctor?.awards == null)
-						{
-							<div class="row form-row awards-cont">
-								<div class="col-12 col-md-5">
-									<div class="form-group">
-										<label>Awards</label>
-										<input asp-for="Awards[0].award" type="text" class="form-control">
-									</div>
-								</div>
-								<div class="col-12 col-md-5">
-									<div class="form-group">
-										<label>Year</label>
-										<input asp-for="Awards[0].year" type="datetime" class="form-control">
-									</div>
-								</div>
-							</div>
-						}
-						else
-						{
-							int index1 = (int)user.doctor?.awards.Count;
-							<div class="row form-row awards-cont">
-								<div class="col-12 col-md-5">
-									<div class="form-group">
-										<label>Awards</label>
-										<input asp-for="Awards[index1].award" type="text" class="form-control">
-									</div>
-								</div>
-								<div class="col-12 col-md-5">
-									<div class="form-group">
-										<label>Year</label>
-										<input asp-for="Awards[index1].year" type="datetime" class="form-control">
-									</div>
-								</div>
-							</div>
-						}
-						
-					}
+					
 					
 				</div>
 				<div class="add-more">
@@ -569,36 +422,14 @@
 								<input asp-for="Membership[i].description" type="text" class="form-control" value="@membership.description">
 							</div>
 						</div>
+								<div class="col-12 col-md-2 col-lg-2">
+									<label class="d-md-block d-sm-none d-none">&nbsp;</label>
+									<a href="#" class="btn btn-danger trash"><i class="far fa-trash-alt"></i></a>
+								</div>
 					</div>
 						}
 					}
-					else
-					{
-						@if (user.doctor?.memberships == null)
-						{
-							<div class="row form-row membership-cont">
-								<div class="col-12 col-md-10 col-lg-5">
-									<div class="form-group">
-										<label>Memberships</label>
-										<input asp-for="Membership[0].description" type="text" class="form-control">
-									</div>
-								</div>
-							</div>
-						}
-						else
-						{
-							int index1 = (int)user.doctor?.memberships.Count;
-							<div class="row form-row membership-cont">
-								<div class="col-12 col-md-10 col-lg-5">
-									<div class="form-group">
-										<label>Memberships</label>
-										<input asp-for="Membership[index1].description" type="text" class="form-control">
-									</div>
-								</div>
-							</div>
-						}
-
-					}
+					
 
 					
 				</div>
