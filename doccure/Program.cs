@@ -26,13 +26,22 @@ namespace doccure
             builder.Services.AddScoped<IUserProfileSettingsService,UserProfileSettingsService>();
             builder.Services.AddScoped<IUserProfileSettingsService,DoctorProfileSettingsService>();
             builder.Services.AddScoped<ISpecalityService,SpecalityService>();
+            builder.Services.AddScoped<IDeleteEducation, DeleteEducationService>();
 			// builder.Services.AddScoped<IUserAuthticationService, UserAuthticationService>();
 
 			//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
 			//     .AddEntityFrameworkStores<ApplicationDbContext>();
 			builder.Services.AddControllersWithViews();
-
-            var app = builder.Build();
+   //         builder.Services.AddCors(options =>
+			//{
+			//	options.AddPolicy("AllowAll", builder =>
+			//	{
+			//		builder.AllowAnyOrigin()
+			//			   .AllowAnyMethod()
+			//			   .AllowAnyHeader();
+			//	});
+			//});
+			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -50,7 +59,8 @@ namespace doccure
             app.UseStaticFiles();
 
             app.UseRouting();
-            app.UseAuthentication();
+			//app.UseCors("AllowAll");
+			app.UseAuthentication();
             app.UseAuthorization();
             
 

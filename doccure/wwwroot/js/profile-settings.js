@@ -23,7 +23,34 @@ Version      : 1.0
 	// Education Add More
 	
     $(".education-info").on('click','.trash', function () {
-		$(this).closest('.education-cont').remove();
+		var education = $(this).closest('.education-cont')//.remove();
+		var EducationID = education.find(`input[type="text"].EducationID`).val()
+		if (EducationID !== undefined) {
+			$.ajax({
+				url: `/DeleteEducation/DeleteEducation/${EducationID}`,
+				type: 'DELETE',
+				contentType: false,
+				processData: false,
+				cache: false,
+				xhrFields: {
+					withCredentials: true
+				},
+				success: function (response) {
+					// Handle the success response
+					education.remove();
+					console.log('Education data sent successfully.');
+					// Perform any additional actions on success, such as showing a success message or redirecting to another page
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					// Handle the error response
+					console.error('Failed to send education data.');
+					// Handle the error case, such as showing an error message to the user
+				}
+			});
+		} else {
+			education.remove();
+		}
+
 		return false;
     });
 	$(".add-education").on('click', function () {
