@@ -161,7 +161,33 @@ Version      : 1.0
 	// Awards Add More
 	
     $(".awards-info").on('click','.trash', function () {
-		$(this).closest('.awards-cont').remove();
+		var award = $(this).closest('.awards-cont')//.remove();
+		var AwardId = award.find(`input[type="text"].AwardId`).val()
+		if (AwardId !== undefined) {
+			$.ajax({
+				url: `/DeleteAward/DeleteAward/${AwardId}`,
+				type: 'DELETE',
+				contentType: false,
+				processData: false,
+				cache: false,
+				xhrFields: {
+					withCredentials: true
+				},
+				success: function (response) {
+					// Handle the success response
+					award.remove();
+					console.log('Award data sent successfully.');
+					// Perform any additional actions on success, such as showing a success message or redirecting to another page
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					// Handle the error response
+					console.error('Failed to send Award data.');
+					// Handle the error case, such as showing an error message to the user
+				}
+			});
+		} else {
+			award.remove();
+		}
 		return false;
     });
 
@@ -193,7 +219,33 @@ Version      : 1.0
 	// Membership Add More
 	
     $(".membership-info").on('click','.trash', function () {
-		$(this).closest('.membership-cont').remove();
+		var membership = $(this).closest('.membership-cont')//.remove();
+		var MembershipId = membership.find(`input[type="text"].MembershipId`).val()
+		if (MembershipId !== undefined) {
+			$.ajax({
+				url: `/DeleteMembership/DeleteMembership/${MembershipId}`,
+				type: 'DELETE',
+				contentType: false,
+				processData: false,
+				cache: false,
+				xhrFields: {
+					withCredentials: true
+				},
+				success: function (response) {
+					// Handle the success response
+					membership.remove();
+					console.log('Membership data sent successfully.');
+					// Perform any additional actions on success, such as showing a success message or redirecting to another page
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					// Handle the error response
+					console.error('Membership to send Award data.');
+					// Handle the error case, such as showing an error message to the user
+				}
+			});
+		} else {
+			membership.remove();
+		}
 		return false;
     });
 

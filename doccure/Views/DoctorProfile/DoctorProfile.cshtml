@@ -374,7 +374,7 @@
 							var award = user.doctor.awards.ElementAtOrDefault(i);
 							<div class="row form-row awards-cont">
 						<div class="col-12 col-md-5">
-						<input asp-for="Awards[i].Id" type="text" class="form-control" hidden="hidden" value="@award.Id">
+						<input asp-for="Awards[i].Id" type="text" class="form-control AwardId" hidden="hidden" value="@award.Id">
 											
 							<div class="form-group">
 								<label>Awards</label>
@@ -414,7 +414,7 @@
 						{
 							var membership = user.doctor.memberships.ElementAtOrDefault(i);
 							<div class="row form-row membership-cont">
-								<input asp-for="Membership[i].Id" type="text" class="form-control" hidden="hidden" value="@membership.Id">
+								<input asp-for="Membership[i].Id" type="text" class="form-control MembershipId" hidden="hidden" value="@membership.Id">
 
 						<div class="col-12 col-md-10 col-lg-5">
 							<div class="form-group">
