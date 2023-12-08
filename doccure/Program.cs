@@ -27,6 +27,7 @@ namespace doccure
             builder.Services.AddScoped<IUserProfileSettingsService,DoctorProfileSettingsService>();
             builder.Services.AddScoped<ISpecalityService,SpecalityService>();
             builder.Services.AddScoped<IDeleteEducation, DeleteEducationService>();
+			builder.Services.AddScoped<IDeleteExperience, DeleteExperienceService>();
 			// builder.Services.AddScoped<IUserAuthticationService, UserAuthticationService>();
 
 			//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)

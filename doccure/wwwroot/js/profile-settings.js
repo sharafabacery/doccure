@@ -88,8 +88,34 @@ Version      : 1.0
 	
 	// Experience Add More
 	
-    $(".experience-info").on('click','.trash', function () {
-		$(this).closest('.experience-cont').remove();
+	$(".experience-info").on('click','.trash', function () {
+		var experience = $(this).closest('.experience-cont')//.remove();
+		var ExperienceID = experience.find(`input[type="text"].ExperienceID`).val()
+		if (ExperienceID !== undefined) {
+			$.ajax({
+				url: `/DeleteExperience/DeleteExperience/${ExperienceID}`,
+				type: 'DELETE',
+				contentType: false,
+				processData: false,
+				cache: false,
+				xhrFields: {
+					withCredentials: true
+				},
+				success: function (response) {
+					// Handle the success response
+					experience.remove();
+					console.log('experience data sent successfully.');
+					// Perform any additional actions on success, such as showing a success message or redirecting to another page
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					// Handle the error response
+					console.error('Failed to send experience data.');
+					// Handle the error case, such as showing an error message to the user
+				}
+			});
+		} else {
+			experience.remove();
+		}
 		return false;
     });
 
