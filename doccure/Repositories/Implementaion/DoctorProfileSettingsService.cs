@@ -29,9 +29,39 @@ namespace doccure.Repositories.Implementaion
 			//throw new NotImplementedException();
 		}
 
-		public Task<Applicationuser> UpdatePassword(UpdatePasswordRequset updatePasswordRequset, ClaimsPrincipal userClamis)
+		public async Task<Applicationuser> UpdatePassword(UpdatePasswordRequset updatePasswordRequset, ClaimsPrincipal userClamis)
 		{
-			throw new NotImplementedException();
+			var UserData = await userManager.GetUserAsync(userClamis);
+			if (UserData == null)
+			{
+				UserData = null;
+			}
+			else
+			{
+				if (updatePasswordRequset.ConfirmPassword != updatePasswordRequset.NewPassword)
+				{
+					UserData = null;
+				}
+				else
+				{
+					bool IsPassword = await userManager.CheckPasswordAsync(UserData, updatePasswordRequset.OldPassword);
+					if (IsPassword)
+					{
+						var usernewPassword = await userManager.ChangePasswordAsync(UserData, updatePasswordRequset.OldPassword, updatePasswordRequset.NewPassword);
+						if (!usernewPassword.Succeeded)
+						{
+							UserData = null;
+						}
+
+
+					}
+					else
+					{
+						UserData = null;
+					}
+				}
+			}
+			return UserData;
 		}
 
 		public async Task<Applicationuser> UpdateUserData(object doctorUpdates, ClaimsPrincipal user)

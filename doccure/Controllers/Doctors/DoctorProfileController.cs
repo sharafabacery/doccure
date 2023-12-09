@@ -49,5 +49,36 @@ namespace doccure.Controllers.Doctors
 			}
 			return View();
 		}
+		public async Task<IActionResult> DoctorPasswordUpdated()
+		{
+			var user = await userProfileSettingsService.GetUserData(User);
+			if (user == null)
+			{
+				return NotFound();
+			}
+			else
+			{
+				ViewBag.User = user;
+			}
+			return View();
+		}
+
+		[HttpPost]
+
+		public async Task<IActionResult> DoctorPasswordUpdated(UpdatePasswordRequset updatePasswordRequset)
+		{
+			var result = await userProfileSettingsService.UpdatePassword(updatePasswordRequset, User);
+			if (result == null)
+			{
+				TempData["message"] = "Cant update the password";
+
+				return RedirectToAction("DoctorPasswordUpdated", "DoctorProfile");
+			}
+			else
+			{
+				ViewBag.User = result;
+				return RedirectToAction("DoctorPasswordUpdated", "DoctorProfile");
+			}
+		}
 	}
 }
