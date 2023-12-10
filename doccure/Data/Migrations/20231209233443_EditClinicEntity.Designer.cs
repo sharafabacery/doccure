@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using doccure.Data;
 
@@ -11,9 +12,11 @@ using doccure.Data;
 namespace doccure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231209233443_EditClinicEntity")]
+    partial class EditClinicEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -325,9 +328,8 @@ namespace doccure.Data.Migrations
                     b.Property<int>("FromDay")
                         .HasColumnType("int");
 
-                    b.Property<string>("FromTime")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("FromTime")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -336,9 +338,8 @@ namespace doccure.Data.Migrations
                     b.Property<int>("ToDay")
                         .HasColumnType("int");
 
-                    b.Property<string>("ToTime")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ToTime")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
