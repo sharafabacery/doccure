@@ -4,6 +4,7 @@
 @{
 	var user = (Applicationuser)ViewData["User"];
 	var specialities = (List<Speciality>)ViewData["Specialities"];
+	var week = new List<string>() { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
 	//var useraddress = user.address;
 
 }
@@ -142,6 +143,56 @@
 						<div class="form-group">
 							<label>Clinic Address</label>
 							<input asp-for="Clinic.Address" type="text" class="form-control" value="@user.doctor?.clinics.First().Address">
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Clinic Start Day Work</label>
+							<select class="form-control select" asp-for="Clinic.FromDay">
+								@for (int i=0;i<week.Count;i++)
+								{
+									if (@user.doctor?.clinics.First().FromDay==i)
+									{
+										<option value="@i" selected>@week[i]</option>
+									}
+									else
+									{
+										<option value="@i">@week[i]</option>
+									}
+
+								}
+							</select>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Clinic Start Day Work</label>
+							<select class="form-control select" asp-for="Clinic.ToDay">
+								@for (int i = 0; i < week.Count; i++)
+								{
+									if (@user.doctor?.clinics.First().ToDay == i)
+									{
+										<option value="@i" selected>@week[i]</option>
+									}
+									else
+									{
+										<option value="@i">@week[i]</option>
+									}
+
+								}
+							</select>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Clinic Start Time Work</label>
+							<input asp-for="Clinic.FromTime" type="time" class="form-control" value="@user.doctor?.clinics.First().FromTime?.ToString()">
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Clinic Start Time Work</label>
+							<input asp-for="Clinic.ToTime" type="time" class="form-control" value="@user.doctor?.clinics.First().ToTime?.ToString()">
 						</div>
 					</div>
 					@*<div class="col-md-12">

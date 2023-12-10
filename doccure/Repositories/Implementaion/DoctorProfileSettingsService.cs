@@ -227,6 +227,10 @@ namespace doccure.Repositories.Implementaion
 						{
 							clinicdb.Address = doctorUpdatess.Clinic.Address;
 							clinicdb.Name=doctorUpdatess.Clinic.Name;
+							clinicdb.FromDay = doctorUpdatess.Clinic.FromDay;
+							clinicdb.ToDay = doctorUpdatess.Clinic.ToDay;
+							clinicdb.FromTime = doctorUpdatess.Clinic.FromTime;
+							clinicdb.ToTime = doctorUpdatess.Clinic.ToTime;
 						}
 						else
 						{
