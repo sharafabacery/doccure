@@ -12,7 +12,9 @@
         public string FromTime { get; set; }
         public string ToTime { get; set; }
         public Doctor doctor { get; set; } = null!;
-        public ICollection<ClinicImage> clinicImages { get; } = new List<ClinicImage>(); // Collection navigation containing dependents
+		public ICollection<ScheduleTiming> scheduleTiming { get; } = new List<ScheduleTiming>(); // Collection navigation containing dependents
+
+		public ICollection<ClinicImage> clinicImages { get; } = new List<ClinicImage>(); // Collection navigation containing dependents
 
     }
 }

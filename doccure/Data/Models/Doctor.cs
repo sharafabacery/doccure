@@ -19,5 +19,6 @@ namespace doccure.Data.Models
         public ICollection<Awards> awards { get; } = new List<Awards>(); // Collection navigation containing dependents
         public ICollection<Membership> memberships { get; } = new List<Membership>(); // Collection navigation containing dependents
         public ICollection<Clinic> clinics { get; } = new List<Clinic>(); // Collection navigation containing dependents
-    }
+		
+	}
 }
