@@ -6,7 +6,8 @@
 		public DateTime DateSchedule { get; set; }
 
 		public int Day { get; set; }
-		public string Time { get; set; }
+		public string StartTime { get; set; }
+		public string EndTime { get; set; }
 		
 		public int ClinicId { get; set; }
 		public Clinic Clinic { get; set; } = null!;
