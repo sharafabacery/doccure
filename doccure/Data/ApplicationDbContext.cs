@@ -20,5 +20,6 @@ namespace doccure.Data
         public DbSet<Membership> Memberships { set; get; }
         public DbSet<Clinic> Clinics { set; get; }
         public DbSet<ClinicImage> ClinicImages { set; get; }
+        public DbSet<ScheduleTiming> ScheduleTiming { set; get; }
     }
 }
