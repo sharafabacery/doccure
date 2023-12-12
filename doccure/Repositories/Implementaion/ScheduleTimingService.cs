@@ -83,9 +83,13 @@ namespace doccure.Repositories.Implementaion
 		{
 			var UserSlots = await userManager.Users
 				.Include(c => c.doctor)
-				.Include(c => c.doctor.clinics.FirstOrDefault())
-				.Include(c => c.doctor.clinics.FirstOrDefault().scheduleTiming.GroupBy(e=>e.Day))
-				.FirstOrDefaultAsync(usr => usr.Id == userManager.GetUserId(user));
+				.Include(c => c.doctor.clinics)
+				.ThenInclude(c=>c.scheduleTiming)
+				//.OrderBy(c=>c.doctor.clinics.s)
+				//.Include(c => c.doctor.clinics.FirstOrDefault().scheduleTiming.GroupBy(e=>e.Day))
+				.FirstOrDefaultAsync(usr => usr.Id == userManager.GetUserId(user))
+				//.GroupBy(c=>c.doctor.clinics.FirstOrDefault().scheduleTiming)
+				;
 			return UserSlots;
 		}
 
