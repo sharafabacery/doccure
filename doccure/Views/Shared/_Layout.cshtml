@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - doccure</title>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 	
 	<!-- Favicons -->
 	<link type="image/x-icon" href="~/favicon.ico" rel="icon">
@@ -270,8 +269,15 @@
 			<!-- /Footer Bottom -->
 
 		</footer>
+
 		<!-- /Footer -->
-		<script src="~/js/jquery.min.js"></script>
+		
+	</div>
+	@RenderSection("AddTimeSlot", required: false)
+	@RenderSection("EditTimeSlot", required: false)
+
+
+	<script src="~/js/jquery.min.js"></script>
 		<script src="~/js/popper.min.js"></script>
 		<script src="~/js/bootstrap.min.js"></script>
 
@@ -291,6 +297,5 @@
 		<script src="~/js/slick.js"></script>
         <script src="~/js/script.js"></script>
 		<!-- await RenderSectionAsync("Scripts", required: false)-->
-	</div>
 </body>
 </html>

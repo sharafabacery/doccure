@@ -5,6 +5,7 @@ using doccure.Repositories.Interfance;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace doccure.Repositories.Implementaion
 {
@@ -83,11 +84,12 @@ namespace doccure.Repositories.Implementaion
 		{
 			var UserSlots = await userManager.Users
 				.Include(c => c.doctor)
+				.Include(c => c.doctor.Speciality)
 				.Include(c => c.doctor.clinics)
-				.ThenInclude(c=>c.scheduleTiming)
-				//.OrderBy(c=>c.doctor.clinics.s)
-				//.Include(c => c.doctor.clinics.FirstOrDefault().scheduleTiming.GroupBy(e=>e.Day))
-				.FirstOrDefaultAsync(usr => usr.Id == userManager.GetUserId(user))
+				.ThenInclude(c => c.scheduleTiming)
+				.FirstOrDefaultAsync(usr => usr.Id == userManager.GetUserId(user));
+
+				UserSlots.doctor?.clinics?.OrderBy(e => e.scheduleTiming.OrderBy(c=>c.Day));
 				//.GroupBy(c=>c.doctor.clinics.FirstOrDefault().scheduleTiming)
 				;
 			return UserSlots;
