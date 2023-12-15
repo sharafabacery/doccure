@@ -24,18 +24,38 @@
 													<div class="col-lg-4">
 														<div class="form-group">               
 															<label>Timing Slot Duration</label>
-															<select class="select form-control">
-																<option selected="selected">-</option>
-																<option>15 mins</option>
-																<option >30 mins</option>  
-																<option>45 mins</option>
-																<option>1 Hour</option>
+															<select class="select form-control" id="duration">
+																<option value="15" selected="selected">15 mins</option>
+																<option value="30">30 mins</option>  
+																<option value="45">45 mins</option>
+																<option value="60">1 Hour</option>
 															</select>
 														</div>
 													</div>
 
-												</div>     
-												<div class="row">
+												</div>
+									<div class="row">
+
+										<div class="col-lg-4">
+											<div class="form-group">
+												<label>choose Clinic</label>
+												<select class="select form-control" id="clinic">
+													@{
+														if(user.doctor.clinics.Any()){
+															@foreach (var item in user.doctor.clinics)
+															{
+																<option value="@item.Id" >@item.Name</option>
+															}
+														}
+														
+													}
+													
+												</select>
+											</div>
+										</div>
+
+									</div>
+									<div class="row">
 													<div class="col-md-12">
 														<div class="card schedule-widget mb-0">
 
