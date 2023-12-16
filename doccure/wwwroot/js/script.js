@@ -147,7 +147,46 @@ Version      : 1.0
 	if($('[data-toggle="tooltip"]').length > 0 ){
 		$('[data-toggle="tooltip"]').tooltip();
 	}
-	
+	// Show Doctor Schedule Timing by Clinic
+	$("#clinic_id_slots").change(function () {
+		var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+		var dayHtml = { "Sunday":"", "Monday":"", "Tuesday":"", "Wednesday":"", "Thursday":"", "Friday":"", "Saturday":"" }
+		var result=``
+		var ClinicId = $(this).val()
+		if (ClinicId.empty()) {
+			return;
+		}
+		$.ajax({
+			url: `/Doctor/ScheduleTiming/GetSlotsofClinic/${ClinicId}`,
+			type: 'GET',
+			contentType: false,
+			processData: false,
+			cache: false,
+			xhrFields: {
+				withCredentials: true
+			},
+			success: function (response) {
+				// Handle the success response
+				console.log(response)
+
+				// Perform any additional actions on success, such as showing a success message or redirecting to another page
+			},
+			error: function (xhr, textStatus, errorThrown) {
+				days.forEach((day) => {
+					result += `<div id="${day}_sunday" class="tab-pane fade">
+								 <h4 class="card-title d-flex justify-content-between">
+									 <span>Time Slots</span> 
+									 <a class="edit-link" data-toggle="modal" href="#add_time_slot"><i class="fa fa-plus-circle"></i> Add Slot</a>
+									 </h4>
+									<p class="text-muted mb-0">Not Available</p>
+									</div>`
+				})
+			}
+		});
+		$('.schedule-cont').empty()
+		$('.schedule-cont').append(result)
+		
+	})
 	// Add More Hours
 	
     $(".hours-info").on('click','.trash', function () {

@@ -71,6 +71,17 @@ namespace doccure.Repositories.Implementaion
 			}
 		}
 
+		public async Task<Applicationuser> GetTimingSlotByClinicId(int ClinicId, ClaimsPrincipal user)
+		{
+			var UserSlots = await userManager.Users
+				.Include(c => c.doctor)
+				.Include(c => c.doctor.clinics)
+				.ThenInclude(c=>c.scheduleTiming)
+				.FirstOrDefaultAsync(usr => usr.Id == userManager.GetUserId(user));
+			//UserSlots.doctor.clinics.Where(c => c.Id == ClinicId);
+			return UserSlots;
+		}
+
 		public async Task<Applicationuser> GetTimingSlotofDay(int day, ClaimsPrincipal user)
 		{
 			var UserSlots = await userManager.Users

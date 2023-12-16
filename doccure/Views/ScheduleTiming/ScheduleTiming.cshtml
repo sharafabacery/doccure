@@ -39,7 +39,8 @@
 										<div class="col-lg-4">
 											<div class="form-group">
 												<label>choose Clinic</label>
-												<select class="select form-control" id="clinic">
+												<select class="select form-control" id="clinic_id_slots">
+													<option option="" selected>_</option>
 													@{
 														if(user.doctor.clinics.Any()){
 															@foreach (var item in user.doctor.clinics)
@@ -104,6 +105,7 @@
 																	</h4>
 																	<p class="text-muted mb-0">Not Available</p>
 																</div>
+
 																<!-- /Sunday Slot -->
 
 																<!-- Monday Slot -->

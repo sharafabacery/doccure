@@ -31,6 +31,7 @@ namespace doccure
 			builder.Services.AddScoped<IDeleteAwardService, DeleteAwaradService>();
 			builder.Services.AddScoped<IDeleteMembershipService, DeleteMembershipService>();
 			builder.Services.AddScoped<IScheduleTimingService, ScheduleTimingService>();
+			builder.Services.AddScoped<IDoctorClinicService, DoctorClinicService>();
 			// builder.Services.AddScoped<IUserAuthticationService, UserAuthticationService>();
 
 			//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
