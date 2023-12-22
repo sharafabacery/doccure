@@ -17,6 +17,7 @@ namespace doccure.Controllers.Doctors
 			this.scheduleTimingService = scheduleTimingService;
 			this.doctorClinicService = doctorClinicService;
 		}
+		[Route("")]
 		public async Task<IActionResult> ScheduleTiming()
 		{
 			var user =await doctorClinicService.GetDoctorClinics(User);
@@ -31,7 +32,7 @@ namespace doccure.Controllers.Doctors
 			}
 			
 		}
-		[HttpGet]
+		[Route("/Doctor/ScheduleTiming/GetSlotsofClinic/{ClinicId}")]
 		public async Task<IActionResult> GetSlotsofClinic(int ClinicId)
 		{
 			var UserSlots=await scheduleTimingService.GetTimingSlotByClinicId(ClinicId,User);
