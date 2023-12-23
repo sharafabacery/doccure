@@ -40,7 +40,7 @@ namespace doccure.Repositories.Implementaion
 				//UserSlots.doctor.clinics.FirstOrDefault().scheduleTiming.Add(s);
 			}
 			var result = await applicationDbContext.SaveChangesAsync();
-			if (result==1)
+			if (result>0)
 			{
 				return User;
 			}

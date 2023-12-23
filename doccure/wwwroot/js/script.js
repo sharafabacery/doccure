@@ -150,7 +150,7 @@ Version      : 1.0
 	}
 	// Show Doctor Schedule Timing by Clinic
 	$("#clinic_id_slots").change(function () {
-		var dayHtml = { "Sunday":"", "Monday":"", "Tuesday":"", "Wednesday":"", "Thursday":"", "Friday":"", "Saturday":"" }
+		var dayHtml = { "sunday":"", "monday":"", "tuesday":"", "wednesday":"", "thursday":"", "friday":"", "saturday":"" }
 		var result=``
 		var ClinicId = $(this).val()
 		if (ClinicId == "_") {
@@ -196,14 +196,37 @@ Version      : 1.0
 			.then(data => {
 				// Handle the response data
 				console.log(data);
-				days.forEach((day) => {
-					result += `<div id="slot_${day}" class="tab-pane fade">
+				days.forEach((day, index) => {
+					var dayInOrder = data.filter((d) => d.day == index)
+					if (dayInOrder.length == 0) {
+						result += `<div id="slot_${day}" class="tab-pane fade">
 								 <h4 class="card-title d-flex justify-content-between">
 									 <span>Time Slots</span> 
 									 <a class="edit-link ${day} addTimeSlotModel" data-toggle="modal" href="#add_time_slot"><i class="fa fa-plus-circle"></i> Add Slot</a>
 									 </h4>
 									<p class="text-muted mb-0">Not Available</p>
 									</div>`
+					} else {
+						var subResult = ``
+						dayInOrder.forEach((cc) => {
+							subResult += `<div class="doc-slot-list">
+																			${cc.startTime} - ${cc.endTime}
+																			<a href="javascript:void(0)" class="delete_schedule">
+																				<i class="fa fa-times"></i>
+																			</a>
+																		</div>`
+						})
+						result +=`<div id="slot_${day}" class="tab-pane fade show active">
+																	<h4 class="card-title d-flex justify-content-between">
+																		<span>Time Slots</span> 
+																		<a class="edit-link" data-toggle="modal" href="#edit_time_slot"><i class="fa fa-edit mr-1"></i>Edit</a>
+																	</h4>
+<div class="doc-times">${subResult}</div>
+																	
+
+																</div>`
+					}
+					
 				})
 				$('.schedule-cont').empty()
 				$('.schedule-cont').append(result)
