@@ -52,7 +52,7 @@ namespace doccure.Controllers.Doctors
 		public async Task<IActionResult> GetSlotsofClinic(int ClinicId)
 		{
 			var UserSlots=await scheduleTimingService.GetTimingSlotByClinicId(ClinicId,User);
-			if (UserSlots == null || UserSlots.doctor?.clinics?.FirstOrDefault()?.scheduleTiming.Count==0)
+			if (UserSlots == null ||UserSlots.Count==0)
 			{
 				return NotFound();
 			}

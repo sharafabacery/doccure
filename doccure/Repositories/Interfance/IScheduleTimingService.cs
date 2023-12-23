@@ -10,7 +10,7 @@ namespace doccure.Repositories.Interfance
 		public Task<Applicationuser> UpdateTimingSlot(ScheduleTimingSlotRequest scheduleTimingSlotRequest, ClaimsPrincipal user);
 		public Task<Applicationuser> GetTimingSlotofDay(int Day, ClaimsPrincipal user);
 		public Task<Applicationuser> GetTimingSlotofDoctor(ClaimsPrincipal user);
-		public Task<Applicationuser> GetTimingSlotByClinicId(int ClinicId, ClaimsPrincipal user);
+		public Task<List<ScheduleTiming>> GetTimingSlotByClinicId(int ClinicId, ClaimsPrincipal user);
 		public Task<bool> DeleteTimingSlotById(int Id,ClaimsPrincipal user);
 
 	}

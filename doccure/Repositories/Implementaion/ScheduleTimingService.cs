@@ -77,13 +77,10 @@ namespace doccure.Repositories.Implementaion
 			}
 		}
 
-		public async Task<Applicationuser> GetTimingSlotByClinicId(int ClinicId, ClaimsPrincipal user)
+		public async Task<List<ScheduleTiming>> GetTimingSlotByClinicId(int ClinicId, ClaimsPrincipal user)
 		{
-			var UserSlots = await userManager.Users
-				.Include(c => c.doctor)
-				.Include(c => c.doctor.clinics)
-				.ThenInclude(c=>c.scheduleTiming)
-				.FirstOrDefaultAsync(usr => usr.Id == userManager.GetUserId(user));
+			var UserSlots = await applicationDbContext.ScheduleTiming.FromSql($"SELECT S.*\r\nFROM  [dbo].[Doctor] D\r\nLEFT JOIN [dbo].[Clinics] C\r\nON C.DoctorId=D.Id\r\nLEFT JOIN [dbo].[ScheduleTiming] S\r\nON S.ClinicId=C.Id\r\nWHERE D.applicationuserId={userManager.GetUserId(user)} AND C.Id={ClinicId} ORDER BY S.Day,S.StartTime")
+																	.ToListAsync();
 			//UserSlots.doctor.clinics.Where(c => c.Id == ClinicId);
 			return UserSlots;
 		}

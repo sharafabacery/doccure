@@ -196,6 +196,17 @@ Version      : 1.0
 			.then(data => {
 				// Handle the response data
 				console.log(data);
+				days.forEach((day) => {
+					result += `<div id="slot_${day}" class="tab-pane fade">
+								 <h4 class="card-title d-flex justify-content-between">
+									 <span>Time Slots</span> 
+									 <a class="edit-link ${day} addTimeSlotModel" data-toggle="modal" href="#add_time_slot"><i class="fa fa-plus-circle"></i> Add Slot</a>
+									 </h4>
+									<p class="text-muted mb-0">Not Available</p>
+									</div>`
+				})
+				$('.schedule-cont').empty()
+				$('.schedule-cont').append(result)
 			})
 			.catch(error => {
 				
@@ -278,12 +289,12 @@ Version      : 1.0
     });
 
     $(".add-hours").on('click', function () {
-		var indexHoursInfo = $(".hours-info-v2").length-1;
+		var indexHoursInfo = $(".hours-cont").length;
 
 		var clinic = JSON.parse(localStorage.getItem('clinic'))
 		var r3 = createOptionsTime(clinic['fromTime'], clinic['toTime'], $('#duration').val())
 		var hourscontent = '<div class="hours-cont">'
-		hourscontent += `<div class="row form-row hours-cont">
+		hourscontent += `<div class="row form-row ">
 			<div class="col-12 col-md-10">
 			<div class="row form-row">
 					<div class="col-12 col-md-6">
