@@ -278,16 +278,36 @@ Version      : 1.0
     });
 
     $(".add-hours").on('click', function () {
+		var indexHoursInfo = $(".hours-info").length;
+
 		var clinic = JSON.parse(localStorage.getItem('clinic'))
 		var r3 = createOptionsTime(clinic['fromTime'], clinic['toTime'], $('#duration').val())
-
-		var hourscontent = `<div class="row form-row hours-cont">
+		var hourscontent = ''
+		hourscontent += `<div class="row form-row hours-cont">
+			<div class="col-12 col-md-10">
+			<div class="row form-row">
+					<div class="col-12 col-md-6">
+						<div class="form-group">
+<label>Nmber of day of week</label>
+				<input type="number" class="form-control" name="scheduleTimings[${indexHoursInfo}].Day" value=${$('input[name="Day"]').val()} readonly>
+			</div>
+			</div>
+				<div class="col-12 col-md-6">
+						<div class="form-group">
+<label>Clinic Id</label>
+				<input type="number" class="form-control" name="scheduleTimings[${indexHoursInfo}].ClinicId" value=${clinic['id']} readonly>
+			</div>
+			</div>
+			</div>
+			</div>
+			</div>`
+		hourscontent += `<div class="row form-row hours-cont">
 			<div class="col-12 col-md-10">
 				<div class="row form-row">
 					<div class="col-12 col-md-6">
 						<div class="form-group">
 							<label>Start Time</label>
-							<select class="form-control">
+							<select class="form-control" name="scheduleTimings[${indexHoursInfo}].StartTime">
 								${r3}
 							</select>
 						</div>
@@ -295,7 +315,7 @@ Version      : 1.0
 					<div class="col-12 col-md-6">
 					<div class="form-group">
 							<label>End Time</label>
-							<select class="form-control">
+							<select class="form-control" name="scheduleTimings[${indexHoursInfo}].EndTime">
 							${r3}
 							</select>
 						</div>
