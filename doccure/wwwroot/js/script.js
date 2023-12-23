@@ -272,17 +272,17 @@ Version      : 1.0
 	}
 	// Add More Hours
 	
-    $(".hours-info").on('click','.trash', function () {
+	$(".hours-info-v2").on('click','.trash', function () {
 		$(this).closest('.hours-cont').remove();
 		return false;
     });
 
     $(".add-hours").on('click', function () {
-		var indexHoursInfo = $(".hours-info").length;
+		var indexHoursInfo = $(".hours-info-v2").length-1;
 
 		var clinic = JSON.parse(localStorage.getItem('clinic'))
 		var r3 = createOptionsTime(clinic['fromTime'], clinic['toTime'], $('#duration').val())
-		var hourscontent = ''
+		var hourscontent = '<div class="hours-cont">'
 		hourscontent += `<div class="row form-row hours-cont">
 			<div class="col-12 col-md-10">
 			<div class="row form-row">
@@ -301,7 +301,7 @@ Version      : 1.0
 			</div>
 			</div>
 			</div>`
-		hourscontent += `<div class="row form-row hours-cont">
+		hourscontent += `<div class="row form-row">
 			<div class="col-12 col-md-10">
 				<div class="row form-row">
 					<div class="col-12 col-md-6">
@@ -324,8 +324,8 @@ Version      : 1.0
 			</div>
 			<div class="col-12 col-md-2"><label class="d-md-block d-sm-none d-none">&nbsp;</label><a href="#" class="btn btn-danger trash"><i class="far fa-trash-alt"></i></a></div>
 		</div>`;
-		
-        $(".hours-info").append(hourscontent);
+		hourscontent +="	</div>"
+		$(".hours-info-v2").append(hourscontent);
         return false;
     });
 	

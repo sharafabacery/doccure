@@ -21,22 +21,28 @@ namespace doccure.Repositories.Implementaion
 		}
 		public async Task<Applicationuser> AddTimingSlot(ScheduleTimingSlotRequest scheduleTimingSlotRequest, ClaimsPrincipal user)
 		{
-			var UserSlots = await userManager.Users
+			var User = await userManager.Users
 				.Include(c => c.doctor)
-				.Include(c=> c.doctor.clinics.FirstOrDefault().scheduleTiming.Where(e => e.Day == scheduleTimingSlotRequest.Day))
+				//.Include(c=> c.doctor.clinics.FirstOrDefault().scheduleTiming.Where(e => e.Day == scheduleTimingSlotRequest.Day))
 				.FirstOrDefaultAsync(usr => usr.Id == userManager.GetUserId(user));
-			if(UserSlots == null)
+			if(User == null||User.doctor==null)
+			{
+				return null;
+			}
+			var Clinic=await applicationDbContext.Clinics.Include(c => c.scheduleTiming).FirstOrDefaultAsync(c=>c.doctor.Id==User.doctor.Id);
+			if (Clinic == null)
 			{
 				return null;
 			}
 			foreach (var s in scheduleTimingSlotRequest.scheduleTimings)
 			{
-				UserSlots.doctor.clinics.FirstOrDefault().scheduleTiming.Add(s);
+				Clinic.scheduleTiming.Add(s);
+				//UserSlots.doctor.clinics.FirstOrDefault().scheduleTiming.Add(s);
 			}
-			var  result = await userManager.UpdateAsync(UserSlots);
-			if (result.Succeeded)
+			var result = await applicationDbContext.SaveChangesAsync();
+			if (result==1)
 			{
-				return UserSlots;
+				return User;
 			}
 			else
 			{
