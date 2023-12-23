@@ -143,20 +143,42 @@ Version      : 1.0
 	}*/
 	
 	// Tooltip
-	
+	var days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
+
 	if($('[data-toggle="tooltip"]').length > 0 ){
 		$('[data-toggle="tooltip"]').tooltip();
 	}
 	// Show Doctor Schedule Timing by Clinic
 	$("#clinic_id_slots").change(function () {
-		var days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
 		var dayHtml = { "Sunday":"", "Monday":"", "Tuesday":"", "Wednesday":"", "Thursday":"", "Friday":"", "Saturday":"" }
 		var result=``
 		var ClinicId = $(this).val()
 		if (ClinicId == "_") {
 			return;
 		}
-		console.log(ClinicId)
+		fetch(`/Clinic/Index/${ClinicId}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		})
+			.then(response => {
+				if (response.ok) {
+					return response.json();
+				} else {
+					throw new Error('Error: ' + response.status);
+				}
+			})
+			.then(data => {
+				// Handle the response data
+				localStorage.setItem('clinic', JSON.stringify(data))
+				
+			})
+			.catch(error => {
+				console.log(error)
+			});
+
 		fetch(`/Doctor/ScheduleTiming/GetSlotsofClinic/${ClinicId}`, {
 			method: 'GET',
 			headers: {
@@ -182,18 +204,72 @@ Version      : 1.0
 					result += `<div id="slot_${day}" class="tab-pane fade">
 								 <h4 class="card-title d-flex justify-content-between">
 									 <span>Time Slots</span> 
-									 <a class="edit-link" data-toggle="modal" href="#add_time_slot"><i class="fa fa-plus-circle"></i> Add Slot</a>
+									 <a class="edit-link ${day} addTimeSlotModel" data-toggle="modal" href="#add_time_slot"><i class="fa fa-plus-circle"></i> Add Slot</a>
 									 </h4>
 									<p class="text-muted mb-0">Not Available</p>
 									</div>`
 				})
-				console.log(result)
 				$('.schedule-cont').empty()
 				$('.schedule-cont').append(result)
 			});
 		
 		
 	})
+	$(document).on('click', '.addTimeSlotModel', function (e) {
+		var dayIndex = -1
+		days.forEach(function (day, index) {
+			if ($(e.target).hasClass(day)) {
+				dayIndex = index;
+			}
+		})
+		$('input[name="Day"]').val(`${dayIndex}`)
+		$('.daySelected').text(days[dayIndex])
+		/*$('.startDate').empty()
+		$('.EndDate').empty()
+		var clinic = JSON.parse( localStorage.getItem('clinic'))
+		var r3=createOptionsTime(clinic['fromTime'], clinic['toTime'], $('#duration').val())
+		$('.startDate').append(r3)
+		$('.EndDate').append(r3)*/
+	});
+	function createOptionsTime(startTime, endTime, diff) {
+		var options = ``
+		var dateX = new Date();
+		var dateY = new Date();
+
+		// Set the hours and minutes for x
+		var [hoursX, minutesX] = startTime.split(":");
+		dateX.setFullYear(2023,12,12)
+		dateX.setHours(parseInt(hoursX, 10));
+		dateX.setMinutes(parseInt(minutesX, 10));
+
+		var [hoursY, minutesY] = endTime.split(":");
+		dateY.setFullYear(2023, 12, 12)
+
+		dateY.setHours(parseInt(hoursY, 10));
+		dateY.setMinutes(parseInt(minutesY, 10));
+		if (dateX >= dateY) {
+			console.log("x is already greater than or equal to y");
+		} else {
+			// Keep adding 15 minutes to x until it reaches or exceeds y
+			while (dateX < dateY) {
+				var resultHours = dateX.getHours().toString().padStart(2, "0");
+				var resultMinutes = dateX.getMinutes().toString().padStart(2, "0");
+				var result2 = resultHours + ":" + resultMinutes;
+				options += `<option value='${result2}'>${result2}</option>`
+				dateX.setTime(dateX.getTime() + diff*60*1000);
+			}
+			var resultHours = dateY.getHours().toString().padStart(2, "0");
+			var resultMinutes = dateY.getMinutes().toString().padStart(2, "0");
+			var result2 = resultHours + ":" + resultMinutes;
+
+			options += `<option value='${result2}'>${result2}</option>`
+
+
+		}
+		return options
+		
+
+	}
 	// Add More Hours
 	
     $(".hours-info").on('click','.trash', function () {
@@ -202,38 +278,32 @@ Version      : 1.0
     });
 
     $(".add-hours").on('click', function () {
-		
-		var hourscontent = '<div class="row form-row hours-cont">' +
-			'<div class="col-12 col-md-10">' +
-				'<div class="row form-row">' +
-					'<div class="col-12 col-md-6">' +
-						'<div class="form-group">' +
-							'<label>Start Time</label>' +
-							'<select class="form-control">' +
-								'<option>-</option>' +
-								'<option>12.00 am</option>' +
-								'<option>12.30 am</option>' + 
-								'<option>1.00 am</option>' +
-								'<option>1.30 am</option>' +
-							'</select>' +
-						'</div>' +
-					'</div>' +
-					'<div class="col-12 col-md-6">' +
-						'<div class="form-group">' +
-							'<label>End Time</label>' +
-							'<select class="form-control">' +
-								'<option>-</option>' +
-								'<option>12.00 am</option>' +
-								'<option>12.30 am</option>' +
-								'<option>1.00 am</option>' +
-								'<option>1.30 am</option>' +
-							'</select>' +
-						'</div>' +
-					'</div>' +
-				'</div>' +
-			'</div>' +
-			'<div class="col-12 col-md-2"><label class="d-md-block d-sm-none d-none">&nbsp;</label><a href="#" class="btn btn-danger trash"><i class="far fa-trash-alt"></i></a></div>' +
-		'</div>';
+		var clinic = JSON.parse(localStorage.getItem('clinic'))
+		var r3 = createOptionsTime(clinic['fromTime'], clinic['toTime'], $('#duration').val())
+
+		var hourscontent = `<div class="row form-row hours-cont">
+			<div class="col-12 col-md-10">
+				<div class="row form-row">
+					<div class="col-12 col-md-6">
+						<div class="form-group">
+							<label>Start Time</label>
+							<select class="form-control">
+								${r3}
+							</select>
+						</div>
+					</div>
+					<div class="col-12 col-md-6">
+					<div class="form-group">
+							<label>End Time</label>
+							<select class="form-control">
+							${r3}
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 col-md-2"><label class="d-md-block d-sm-none d-none">&nbsp;</label><a href="#" class="btn btn-danger trash"><i class="far fa-trash-alt"></i></a></div>
+		</div>`;
 		
         $(".hours-info").append(hourscontent);
         return false;

@@ -1,4 +1,7 @@
-﻿<div class="modal fade custom-modal" id="add_time_slot">
+﻿@using doccure.Data.Models;
+@model doccure.Data.RequestModels.ScheduleTimingSlotRequest;
+
+<div class="modal fade custom-modal" id="add_time_slot">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -8,15 +11,23 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<form>
+				<form asp-action="ScheduleTiming" asp-controller="ScheduleTiming">
 					<div class="hours-info">
 						<div class="row form-row hours-cont">
 							<div class="col-12 col-md-10">
+
 								<div class="row form-row">
+									<div class="form-group">
+										<label>Day</label>
+										<p class="daySelected"></p>
+										<input type="number" class="form-control" asp-for="Day" value="" readonly>
+									</div>
+								</div>
+									@*<div class="row form-row">
 									<div class="col-12 col-md-6">
 										<div class="form-group">
 											<label>Start Time</label>
-											<select class="form-control">
+											<select class="form-control startDate" name="">
 												<option>-</option>
 												<option>12.00 am</option>
 												<option>12.30 am</option>
@@ -28,7 +39,7 @@
 									<div class="col-12 col-md-6">
 										<div class="form-group">
 											<label>End Time</label>
-											<select class="form-control">
+											<select class="form-control EndDate">
 												<option>-</option>
 												<option>12.00 am</option>
 												<option>12.30 am</option>
@@ -37,7 +48,7 @@
 											</select>
 										</div>
 									</div>
-								</div>
+								</div>*@
 							</div>
 						</div>
 					</div>

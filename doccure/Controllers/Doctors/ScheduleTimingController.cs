@@ -1,4 +1,5 @@
-﻿using doccure.Repositories.Interfance;
+﻿using doccure.Data.RequestModels;
+using doccure.Repositories.Interfance;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
@@ -31,6 +32,21 @@ namespace doccure.Controllers.Doctors
 				return View();
 			}
 			
+		}
+		[Route("")]
+		[HttpPost]
+		public async Task<IActionResult> ScheduleTiming(ScheduleTimingSlotRequest scheduleTimingSlotRequest)
+		{
+			var result = await scheduleTimingService.AddTimingSlot(scheduleTimingSlotRequest, User);
+			if (result == null)
+			{
+				return RedirectToAction("DoctorProfile", "DoctorProfile");
+			}
+			else
+			{
+
+				return RedirectToAction("ScheduleTiming", "ScheduleTiming");
+			}
 		}
 		[Route("/Doctor/ScheduleTiming/GetSlotsofClinic/{ClinicId}")]
 		public async Task<IActionResult> GetSlotsofClinic(int ClinicId)
