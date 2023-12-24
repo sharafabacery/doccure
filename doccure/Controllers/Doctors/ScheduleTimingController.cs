@@ -89,6 +89,22 @@ namespace doccure.Controllers.Doctors
 				return Ok(UserSlots);
 			}
 		}
+		[Route("/Doctor/ScheduleTiming/DeleteSlotById/{id}")]
+
+		[HttpDelete]
+		public async Task<IActionResult> DeleteSlotById(int id)
+		{
+
+			var DeletedSlot = await scheduleTimingService.DeleteTimingSlotById(id, User);
+			if (DeletedSlot == true)
+			{
+				return Ok();
+			}
+			else
+			{
+				return NotFound();
+			}
+		}
 
 	}
 }

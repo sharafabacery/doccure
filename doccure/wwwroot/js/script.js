@@ -209,8 +209,10 @@ Version      : 1.0
                         var subResult = ``
                         dayInOrder.forEach((cc) => {
                             subResult += `<div class="doc-slot-list">
+<input type="number" class="form-control " name="Id" value=${cc.id}  style="display: none;">
 																			${cc.startTime} - ${cc.endTime}
-																			<a href="javascript:void(0)" class="delete_schedule">
+																			<a class="delete_schedule">
+
 																				<i class="fa fa-times"></i>
 																			</a>
 																		</div>`
@@ -250,8 +252,9 @@ Version      : 1.0
     })
     $(document).on('click', '.addTimeSlotModel', function (e) {
         var dayIndex = -1
+        var targetAdd = $(e.target)
         days.forEach(function (day, index) {
-            if ($(e.target).hasClass(day)) {
+            if (targetAdd.hasClass(day)) {
                 dayIndex = index;
             }
         })
@@ -298,14 +301,14 @@ Version      : 1.0
                 var clinic = JSON.parse(localStorage.getItem('clinic'))
                 var resultRetured = '<div class="hours-cont-edit">'
                 data.forEach((slot, indexSlot) => {
-                    resultRetured += `<div class="row form-row ">
+                    resultRetured += `<div class="hours-cont-delete"><div class="row form-row ">
 			<div class="col-12 col-md-10">
 			<div class="row form-row">
 					<div class="col-12 col-md-6">
 						<div class="form-group">
 <label>Nmber of day of week</label>
 				<input type="number" class="form-control" name="scheduleTimings[${indexSlot}].Day" value=${$('input[name="Day"]').val()} readonly>
-				<input type="number" class="form-control" name="scheduleTimings[${indexSlot}].Id" value=${slot.id} hidden>
+				<input type="number" class="form-control slotid" name="scheduleTimings[${indexSlot}].Id" value=${slot.id}  style="display: none;">
 			</div>
 			</div>
 				<div class="col-12 col-md-6">
@@ -342,12 +345,13 @@ Version      : 1.0
 				</div>
 			</div>
 			<div class="col-12 col-md-2"><label class="d-md-block d-sm-none d-none">&nbsp;</label><a href="#" class="btn btn-danger trash"><i class="far fa-trash-alt"></i></a></div>
-		</div>`
+		</div></div>`
                 })
                 resultRetured += "	</div>"
                 $(".hours-info-v3").empty();
                 $(".hours-info-v3").append(resultRetured);
             })
+
 
     })
     function createOptionsTime(startTime, endTime, diff, selectedStartTime = '', selectedEndTime = '') {
@@ -401,9 +405,63 @@ Version      : 1.0
 
 
     }
+    $(document).on('click', '.doc-times', function (e) {
+        var slotListJs = $(e.target).closest('.doc-slot-list');
+        var SlotListID = slotListJs.find(`input[name="Id"]`).val()
+        if (SlotListID !== undefined) {
+            $.ajax({
+                url: `/Doctor/ScheduleTiming/DeleteSlotById/${SlotListID}`,
+                type: 'DELETE',
+                contentType: false,
+                processData: false,
+                cache: false,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (response) {
+                    // Handle the success response
+                    slotListJs.remove();
+                    console.log('Slot data sent successfully.');
+                    // Perform any additional actions on success, such as showing a success message or redirecting to another page
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    // Handle the error response
+                    console.error('Failed to send Slot data.');
+                    // Handle the error case, such as showing an error message to the user
+                }
+            });
+        } 
+        return false;
+    })
     // Add More Hours
     $(".hours-info-v3").on('click', '.trash', function () {
-        $(this).closest('.hours-cont-edit').remove();
+        var slotJs = $(this).closest('.hours-cont-delete');
+        var SlotID = slotJs.find(`input[type="number"].slotid`).val()
+        if (SlotID !== undefined) {
+            $.ajax({
+                url: `/Doctor/ScheduleTiming/DeleteSlotById/${SlotID}`,
+                type: 'DELETE',
+                contentType: false,
+                processData: false,
+                cache: false,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (response) {
+                    // Handle the success response
+                    slotJs.remove();
+                    console.log('Slot data sent successfully.');
+                    // Perform any additional actions on success, such as showing a success message or redirecting to another page
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    // Handle the error response
+                    console.error('Failed to send Slot data.');
+                    // Handle the error case, such as showing an error message to the user
+                }
+            });
+        } else {
+            slotJs.remove();
+        }
         return false;
     });
     $(".hours-info-v2").on('click', '.trash', function () {

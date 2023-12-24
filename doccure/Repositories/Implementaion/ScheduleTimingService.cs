@@ -56,13 +56,13 @@ namespace doccure.Repositories.Implementaion
 									.Include(a=>a.doctor.clinics)
 									.FirstOrDefaultAsync(usr => usr.Id == userManager.GetUserId(user));
 			var slot = await applicationDbContext.ScheduleTiming.FirstOrDefaultAsync(e => e.Id == Id);
-			if (User == null || slot == null)
+			if (User == null || slot == null||User.doctor==null)
 			{
 				return false;
 			}
 			else
 			{
-				if (slot.ClinicId == User.doctor.clinics.FirstOrDefault().Id)
+				if (User.doctor.clinics.FirstOrDefault(c=>c.Id==slot.ClinicId)!=null)
 				{
 					applicationDbContext.Remove(slot);
 					await applicationDbContext.SaveChangesAsync();
