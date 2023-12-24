@@ -269,6 +269,7 @@ Version      : 1.0
         $('.EndDate').append(r3)*/
     });
     $(document).on('click', '.editTimeSlotModel', function (e) {
+        setTimeout(() => { },5000)
         var dayIndexEdit = -1
         var ClinicId = $("#clinic_id_slots").val()
         var target = $(e.target)
@@ -351,7 +352,7 @@ Version      : 1.0
                 $(".hours-info-v3").empty();
                 $(".hours-info-v3").append(resultRetured);
             })
-
+        return true;
 
     })
     function createOptionsTime(startTime, endTime, diff, selectedStartTime = '', selectedEndTime = '') {
