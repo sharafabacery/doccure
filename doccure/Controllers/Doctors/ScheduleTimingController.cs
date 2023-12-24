@@ -48,6 +48,22 @@ namespace doccure.Controllers.Doctors
 				return RedirectToAction("ScheduleTiming", "ScheduleTiming");
 			}
 		}
+		[Route("/Doctor/ScheduleTiming/ScheduleTimingEdited")]
+		[HttpPost]
+		public async Task<IActionResult> ScheduleTimingEdited(ScheduleTimingSlotRequest scheduleTimingSlotRequest)
+		{
+			var result = await scheduleTimingService.UpdateTimingSlot(scheduleTimingSlotRequest, User);
+			if (result == null)
+			{
+				TempData["message"] = "can not edit time slots";
+				return RedirectToAction("ScheduleTiming", "ScheduleTiming");
+			}
+			else
+			{
+
+				return RedirectToAction("ScheduleTiming", "ScheduleTiming");
+			}
+		}
 		[Route("/Doctor/ScheduleTiming/GetSlotsofClinic/{ClinicId}")]
 		public async Task<IActionResult> GetSlotsofClinic(int ClinicId)
 		{
@@ -61,5 +77,18 @@ namespace doccure.Controllers.Doctors
 				return Ok(UserSlots);
 			}
 		}
+		[Route("/Doctor/ScheduleTiming/GetTimingSlotofDay/{ClinicId}/{day}")]
+		public async Task<IActionResult> GetTimingSlotofDay(int ClinicId,int day) {
+			var UserSlots=await scheduleTimingService.GetTimingSlotofDay(day,ClinicId,User);
+			if (UserSlots == null || UserSlots.Count == 0)
+			{
+				return NotFound();
+			}
+			else
+			{
+				return Ok(UserSlots);
+			}
+		}
+
 	}
 }

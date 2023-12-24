@@ -85,12 +85,11 @@ namespace doccure.Repositories.Implementaion
 			return UserSlots;
 		}
 
-		public async Task<Applicationuser> GetTimingSlotofDay(int day, ClaimsPrincipal user)
+		public async Task<List<ScheduleTiming>> GetTimingSlotofDay(int day,int clinicId, ClaimsPrincipal user)
 		{
-			var UserSlots = await userManager.Users
-				.Include(c => c.doctor)
-				.Include(c => c.doctor.clinics.FirstOrDefault().scheduleTiming.Where(e => e.Day == day))
-				.FirstOrDefaultAsync(usr => usr.Id == userManager.GetUserId(user));
+			var UserSlots = await applicationDbContext.ScheduleTiming.FromSql($"SELECT S.*\r\nFROM  [dbo].[Doctor] D\r\nLEFT JOIN [dbo].[Clinics] C\r\nON C.DoctorId=D.Id\r\nLEFT JOIN [dbo].[ScheduleTiming] S\r\nON S.ClinicId=C.Id\r\nWHERE D.applicationuserId={userManager.GetUserId(user)} AND C.Id={clinicId} AND S.Day={day} ORDER BY S.Day,S.StartTime")
+																	.ToListAsync();
+			//UserSlots.doctor.clinics.Where(c => c.Id == ClinicId);
 			return UserSlots;
 		}
 
@@ -109,27 +108,32 @@ namespace doccure.Repositories.Implementaion
 			return UserSlots;
 		}
 
-		public async Task<Applicationuser> UpdateTimingSlot(ScheduleTimingSlotRequest scheduleTimingSlotRequest, ClaimsPrincipal user)
+		public async Task<List<ScheduleTiming>> UpdateTimingSlot(ScheduleTimingSlotRequest scheduleTimingSlotRequest, ClaimsPrincipal user)
 		{
-			var UserSlots = await userManager.Users
-				.Include(c => c.doctor)
-				.Include(c => c.doctor.clinics.FirstOrDefault().scheduleTiming.Where(e => e.Day == scheduleTimingSlotRequest.Day))
-				.FirstOrDefaultAsync(usr => usr.Id == userManager.GetUserId(user));
+			var UserSlots = await applicationDbContext.ScheduleTiming.FromSql($"SELECT S.*\r\nFROM  [dbo].[Doctor] D\r\nLEFT JOIN [dbo].[Clinics] C\r\nON C.DoctorId=D.Id\r\nLEFT JOIN [dbo].[ScheduleTiming] S\r\nON S.ClinicId=C.Id\r\nWHERE D.applicationuserId={userManager.GetUserId(user)} AND C.Id={scheduleTimingSlotRequest.ClinicId} AND S.Day={scheduleTimingSlotRequest.Day} ORDER BY S.Day,S.StartTime")
+																	.ToListAsync();
+			var SlotsAdded =new List<ScheduleTiming>();
 			if (UserSlots == null)
 			{
 				return null;
 			}
 			foreach (var s in scheduleTimingSlotRequest.scheduleTimings)
 			{
-				var slot = UserSlots.doctor.clinics.FirstOrDefault().scheduleTiming.FirstOrDefault(e=>e.Id==s.Id);
+				var slot = UserSlots.FirstOrDefault(u=>u.Id== s.Id);
 				if (slot != null)
 				{
 					slot.StartTime=s.StartTime;
 					slot.EndTime=s.EndTime;
 				}
+				else
+				{
+					SlotsAdded.Add(s);
+				}
 			}
-			var result = await userManager.UpdateAsync(UserSlots);
-			if (result.Succeeded)
+			await applicationDbContext.AddRangeAsync(SlotsAdded);
+
+			var result = await applicationDbContext.SaveChangesAsync();
+			if (result > 0)
 			{
 				return UserSlots;
 			}
