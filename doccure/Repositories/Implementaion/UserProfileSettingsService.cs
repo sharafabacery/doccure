@@ -15,18 +15,18 @@ namespace doccure.Repositories.Implementaion
 		private readonly UserManager<Applicationuser> userManager;
 		private readonly RoleManager<IdentityRole> roleManager;
 		private readonly ApplicationDbContext applicationDbContext;
+		private readonly IFileService fileService;
 
-		public UserProfileSettingsService(UserManager<Applicationuser> userManager, RoleManager<IdentityRole> roleManager,ApplicationDbContext applicationDbContext)
+		public UserProfileSettingsService(UserManager<Applicationuser> userManager, RoleManager<IdentityRole> roleManager,ApplicationDbContext applicationDbContext,IFileService fileService)
 		{
 			this.userManager = userManager;
 			this.roleManager = roleManager;
 			this.applicationDbContext = applicationDbContext;
+			this.fileService = fileService;
 		}
 		public async Task<Applicationuser> GetUserData(ClaimsPrincipal user)
 		{
-			var UserData =await  userManager.GetUserAsync(user);
-			var userAddress = await applicationDbContext.Address.FirstOrDefaultAsync(e => e.applicationuserId == UserData.Id);
-			UserData.address = userAddress;
+			var UserData = await userManager.Users.Include(a => a.address).FirstOrDefaultAsync(usr => usr.Id == userManager.GetUserId(user));
 			return UserData;
 
 		}
@@ -76,13 +76,23 @@ namespace doccure.Repositories.Implementaion
 			}
 			else
 			{
-				var userAddress =  await applicationDbContext.Address.FirstOrDefaultAsync(e => e.applicationuserId == UserData.Id);
+				var userAddress =  await applicationDbContext.Address.FirstOrDefaultAsync(e => e.applicationuserId == userManager.GetUserId(userClamis));
 			UserData.FirstName = user.FirstName;
 			UserData.LastName=user.LastName;
 			UserData.Email = user.Email;
 			UserData.PhoneNumber = user.PhoneNmber;
 			UserData.DateofBirth = user.DateofBirth;
 			UserData.BloodGroup = user.BloodGroup;
+			string UserImage = fileService.SaveFile(user.ImageFile);
+				if (UserImage == "")
+				{
+					UserData.Image = UserData.Image;
+				}
+				else
+				{
+					UserData.Image = UserImage;
+				}
+
 			if (userAddress != null)
 			{
 
@@ -98,6 +108,7 @@ namespace doccure.Repositories.Implementaion
 			{
 					userAddress = user.Address1;
 			}
+
 			var result=	await userManager.UpdateAsync(UserData);
 				applicationDbContext.Address.Update(userAddress);
 				if (result.Succeeded)

@@ -9,23 +9,40 @@ namespace doccure
 {
     public class Program
     {
-        public static void Main(string[] args)
+		public delegate IUserProfileSettingsService ServiceResolver(string key);
+		public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+			
+			// Add services to the container.
+			var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-            // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+			
+		builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddIdentity<Applicationuser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
 
             builder.Services.ConfigureApplicationCookie(op => op.LoginPath = "/UserAuthuntication/Login");
+            
             builder.Services.AddScoped<IUserAuthenticationService, UserAuthunticationService>();
-            builder.Services.AddScoped<IUserProfileSettingsService,UserProfileSettingsService>();
-            builder.Services.AddScoped<IUserProfileSettingsService,DoctorProfileSettingsService>();
-            builder.Services.AddScoped<ISpecalityService,SpecalityService>();
+            builder.Services.AddScoped<UserProfileSettingsService>();
+            builder.Services.AddScoped<DoctorProfileSettingsService>();
+			builder.Services.AddScoped<ServiceResolver>(serviceProvider => key =>
+			{
+				switch (key)
+				{
+					case "Patient":
+						return serviceProvider.GetService<UserProfileSettingsService>();
+					case "Doctor":
+						return serviceProvider.GetService<DoctorProfileSettingsService>();
+					
+					default:
+						throw new KeyNotFoundException(); // or maybe return null, up to you
+				}
+			});
+			builder.Services.AddScoped<ISpecalityService,SpecalityService>();
             builder.Services.AddScoped<IDeleteEducation, DeleteEducationService>();
 			builder.Services.AddScoped<IDeleteExperience, DeleteExperienceService>();
 			builder.Services.AddScoped<IDeleteAwardService, DeleteAwaradService>();
@@ -33,6 +50,7 @@ namespace doccure
 			builder.Services.AddScoped<IScheduleTimingService, ScheduleTimingService>();
 			builder.Services.AddScoped<IDoctorClinicService, DoctorClinicService>();
 			builder.Services.AddScoped<IClinicService, ClinicService>();
+			builder.Services.AddScoped<IFileService, ImageService>();
 			// builder.Services.AddScoped<IUserAuthticationService, UserAuthticationService>();
 
 			//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)

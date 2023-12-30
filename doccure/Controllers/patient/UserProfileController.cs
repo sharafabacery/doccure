@@ -2,6 +2,7 @@
 using doccure.Repositories.Interfance;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static doccure.Program;
 
 namespace doccure.Controllers.patient
 {
@@ -10,9 +11,9 @@ namespace doccure.Controllers.patient
 	{
 		private readonly IUserProfileSettingsService userProfileSettingsService;
 
-		public UserProfileController(IUserProfileSettingsService userProfileSettingsService)
+		public UserProfileController(ServiceResolver serviceAccessor)
 		{
-			this.userProfileSettingsService = userProfileSettingsService;
+			this.userProfileSettingsService = serviceAccessor("Patient");
 		}
 		[HttpGet]
 		public async Task< IActionResult> UserProfile()

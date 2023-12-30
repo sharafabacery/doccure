@@ -15,12 +15,14 @@ namespace doccure.Repositories.Implementaion
 		private readonly UserManager<Applicationuser> userManager;
 		private readonly RoleManager<IdentityRole> roleManager;
 		private readonly ApplicationDbContext applicationDbContext;
+		private readonly IFileService fileService;
 
-		public DoctorProfileSettingsService(UserManager<Applicationuser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext applicationDbContext)
+		public DoctorProfileSettingsService(UserManager<Applicationuser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext applicationDbContext, IFileService fileService)
 		{
 			this.userManager = userManager;
 			this.roleManager = roleManager;
 			this.applicationDbContext = applicationDbContext;
+			this.fileService = fileService;
 		}
 		public async Task<Applicationuser> GetUserData(ClaimsPrincipal user)
 		{
@@ -79,6 +81,16 @@ namespace doccure.Repositories.Implementaion
 					Doctor.DateofBirth = doctorUpdatess.DateofBirth;
 					Doctor.PhoneNumber = doctorUpdatess.PhoneNmber;
 					Doctor.Gender = doctorUpdatess.gender == '1' ? true : false;
+					string DoctorImage = fileService.SaveFile(doctorUpdatess.ImageFile);
+					if (DoctorImage == "")
+					{
+						Doctor.Image = Doctor.Image;
+					}
+					else
+					{
+						Doctor.Image = DoctorImage;
+					}
+
 					if (Doctor.address == null)
 					{
 						Doctor.address = new Address()

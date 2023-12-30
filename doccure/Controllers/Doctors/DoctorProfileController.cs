@@ -2,6 +2,7 @@
 using doccure.Repositories.Interfance;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static doccure.Program;
 
 namespace doccure.Controllers.Doctors
 {
@@ -11,8 +12,8 @@ namespace doccure.Controllers.Doctors
 		private readonly IUserProfileSettingsService userProfileSettingsService;
 		private readonly ISpecalityService specalityService;
 
-		public DoctorProfileController(IUserProfileSettingsService userProfileSettingsService,ISpecalityService specalityService) {
-			this.userProfileSettingsService = userProfileSettingsService;
+		public DoctorProfileController(ServiceResolver serviceAccessor, ISpecalityService specalityService) {
+			this.userProfileSettingsService = serviceAccessor("Doctor");
 			this.specalityService = specalityService;
 		}
 		[HttpGet]

@@ -10,7 +10,9 @@ namespace doccure.Data.RequestModels
 
 		public DateTime DateofBirth { get; set; }
 		public string? BloodGroup { get; set; }
-		public string PhoneNmber { get; set; }
+		public string? Image { get; set; }
+		public IFormFile? ImageFile { get; set; }
+		public string? PhoneNmber { get; set; }
 		public Address Address1 { get; set; }
 		
 	}
