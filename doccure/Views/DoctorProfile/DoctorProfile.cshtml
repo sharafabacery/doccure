@@ -202,22 +202,29 @@
 							<input asp-for="Clinic.ToTime" type="time" class="form-control" value="@user.doctor?.clinics.First().ToTime?.ToString()">
 						</div>
 					</div>
-					@*<div class="col-md-12">
+					<div class="col-md-12">
 					<div class="form-group">
 					<label>Clinic Images</label>
-					<form action="#" class="dropzone"></form>
+					
+						@{
+							<input asp-asp-for="ClinicImages[]" type="file" class="" multiple />
+							
+						}
+										//<form action="#" class="dropzone"></form>
+					
 					</div>
-					<div class="upload-wrap">
-					<div class="upload-images">
-					<img src="assets/img/features/feature-01.jpg" alt="Upload Image">
-					<a href="javascript:void(0);" class="btn btn-icon btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
+					@{//<div class="upload-wrap">
+					//<div class="upload-images">
+					//<img src="assets/img/features/feature-01.jpg" alt="Upload Image">
+					//<a href="javascript:void(0);" class="btn btn-icon btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
+					//</div>
+					//<div class="upload-images">
+					//<img src="assets/img/features/feature-02.jpg" alt="Upload Image">
+					//<a href="javascript:void(0);" class="btn btn-icon btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
+					//</div>
+					//</div>
+					}
 					</div>
-					<div class="upload-images">
-					<img src="assets/img/features/feature-02.jpg" alt="Upload Image">
-					<a href="javascript:void(0);" class="btn btn-icon btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
-					</div>
-					</div>
-					</div>*@
 				</div>
 			</div>
 		</div>
