@@ -69,14 +69,13 @@ namespace doccure.Repositories.Implementaion
 		public async Task<Applicationuser> UpdateUserData(object userr, ClaimsPrincipal userClamis)
 		{
 			var user = (UserProfileRequest)userr;
-			var UserData = await userManager.GetUserAsync(userClamis);
-			if(UserData == null)
+			var UserData= await userManager.Users.Include(a => a.address).FirstOrDefaultAsync(usr => usr.Id == userManager.GetUserId(userClamis));
+			if (UserData == null)
 			{
 				return null;
 			}
 			else
 			{
-				var userAddress =  await applicationDbContext.Address.FirstOrDefaultAsync(e => e.applicationuserId == userManager.GetUserId(userClamis));
 			UserData.FirstName = user.FirstName;
 			UserData.LastName=user.LastName;
 			UserData.Email = user.Email;
@@ -93,24 +92,28 @@ namespace doccure.Repositories.Implementaion
 					UserData.Image = UserImage;
 				}
 
-			if (userAddress != null)
-			{
+				if (UserData.address == null)
+				{
+					UserData.address = new Address()
+					{
+						Address1 = user.Address1.Address1,
+						City = user.Address1.City,
+						Country = user.Address1.Country,
+						PostalCode = user.Address1.PostalCode,
+						State = user.Address1.State
+					};
+				}
+				else
+				{
+					UserData.address.Address1 = user.Address1.Address1;
+					UserData.address.City = user.Address1.City;
+					UserData.address.Country = user.Address1.Country;
+					UserData.address.PostalCode = user.Address1.PostalCode;
+					UserData.address.State = user.Address1.State;
+				}
 
-					userAddress.Address1 = user.Address1.Address1;
-				userAddress.City = user.Address1.City;
-				userAddress.Country = user.Address1.Country;
-				userAddress.PostalCode = user.Address1.PostalCode;
-				userAddress.State = user.Address1.State;
-					//applicationDbContext.Address.Update(userAddress);
-
-			}
-			else
-			{
-					userAddress = user.Address1;
-			}
-
-			var result=	await userManager.UpdateAsync(UserData);
-				applicationDbContext.Address.Update(userAddress);
+				var result=	await userManager.UpdateAsync(UserData);
+				
 				if (result.Succeeded)
 				{
 					return UserData;
