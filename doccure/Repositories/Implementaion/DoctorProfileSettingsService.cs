@@ -4,6 +4,7 @@ using doccure.Data.RequestModels;
 using doccure.Repositories.Interfance;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging;
 using System.Security.Claims;
 using System.Transactions;
 using static System.Formats.Asn1.AsnWriter;
@@ -70,7 +71,8 @@ namespace doccure.Repositories.Implementaion
 		{
 			DoctorProfileRequest doctorUpdatess = (DoctorProfileRequest)doctorUpdates;
 			var Doctor = await userManager.Users.Include(a => a.address).Include(a => a.doctor).Include(a => a.doctor.educations).Include(a => a.doctor.experiences).Include(a => a.doctor.awards).Include(a => a.doctor.memberships).Include(a => a.doctor.clinics).FirstOrDefaultAsync(usr => usr.Id == userManager.GetUserId(user));
-				using(var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+			Clinic DoctorClinic = null;	
+			using(var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
 			{
 				try
 				{
@@ -248,6 +250,23 @@ namespace doccure.Repositories.Implementaion
 						{
 							Doctor.doctor.clinics.Add(doctorUpdatess.Clinic);
 						}
+						
+					}
+					else
+					{
+						throw new Exception("can not update doctor profile");
+					}
+					result = await userManager.UpdateAsync(Doctor);
+					if (result.Succeeded)
+					{
+						List<string> ClinicImages = doctorUpdatess.ClinicImages.Select(x => fileService.SaveFile(x)).ToList().FindAll(e=>e!="");
+
+						var ClinicDb = Doctor.doctor.clinics.FirstOrDefault(e => e.Id == doctorUpdatess.Clinic.Id);
+						ClinicDb.clinicImages.AddRange(ClinicImages.Select(e =>new ClinicImage(){
+							ClinicId=ClinicDb.Id,
+							image=e
+						} ));
+
 					}
 					else
 					{
