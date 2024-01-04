@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\" />
-    <Folder Include="Data\ResponseModels\" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
+@model doccure.Data.RequestModels.DoctorSearchBarRequest;
 <section class="section section-search">
 	<div class="container-fluid">
 		<div class="banner-wrapper">
@@ -12,13 +12,14 @@
 
 			<!-- Search -->
 			<div class="search-box">
-				<form action="templateshub.net">
+				<form asp-action="Index" asp-controller="DoctorSearch" method="get">
 					<div class="form-group search-location">
-						<input type="text" class="form-control" placeholder="Search Location">
+						<input asp-for="Location" type="text" class="form-control" placeholder="Search Location" required>
 						<span class="form-text">Based on your Location</span>
 					</div>
 					<div class="form-group search-info">
-						<input type="text" class="form-control" placeholder="Search Doctors, Clinics, Hospitals, Diseases Etc">
+						<input asp-for="SearchInput" type="text" class="form-control" placeholder="Search Doctors, Clinics, Hospitals, Diseases Etc" required>
+
 						<span class="form-text">Ex : Dental or Sugar Check up etc</span>
 					</div>
 					<button type="submit" class="btn btn-primary search-btn"><i class="fas fa-search"></i> <span>Search</span></button>
