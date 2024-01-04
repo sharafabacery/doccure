@@ -1,5 +1,8 @@
-﻿namespace doccure.Data.ResponseModels
-{
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace doccure.Data.ResponseModels
+{ 
 	public class DoctorSearchReturned
 	{
 		public string Id { get; set; }

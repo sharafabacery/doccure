@@ -1,4 +1,5 @@
 ﻿using doccure.Data.Models;
+using doccure.Data.ResponseModels;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,5 +22,6 @@ namespace doccure.Data
         public DbSet<Clinic> Clinics { set; get; }
         public DbSet<ClinicImage> ClinicImages { set; get; }
         public DbSet<ScheduleTiming> ScheduleTiming { set; get; }
-    }
+		public  DbSet<DoctorSearchReturned> DoctorSearchReturned { get; set; }
+	}
 }
