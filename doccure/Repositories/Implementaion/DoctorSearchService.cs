@@ -16,7 +16,7 @@ namespace doccure.Repositories.Implementaion
 		}
 		
 
-		public async Task<DoctorSearchReturned> SearchDoctors(DoctorSearchBarRequest doctorSearchBarRequest)
+		public async Task<List<DoctorSearchReturned>> SearchDoctors(DoctorSearchBarRequest doctorSearchBarRequest)
 		{
 			int NumberOfRowsReturned = 10;
 			int SkipRows = doctorSearchBarRequest.SkipRows == null ? 0 : (int)doctorSearchBarRequest.SkipRows;
