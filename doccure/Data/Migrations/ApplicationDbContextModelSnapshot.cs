@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using doccure.Data;
-using doccure.Data.ResponseModels;
 
 #nullable disable
 
@@ -22,14 +21,8 @@ namespace doccure.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-			modelBuilder
-		.Entity<DoctorSearchReturned>(
-			eb =>
-			{
-				eb.HasNoKey();
-				eb.ToView("DoctorSearchReturned");
-			});
-			modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -202,7 +195,7 @@ namespace doccure.Data.Migrations
                     b.HasIndex("applicationuserId")
                         .IsUnique();
 
-                    b.ToTable("Address");
+                    b.ToTable("Address", (string)null);
                 });
 
             modelBuilder.Entity("doccure.Data.Models.Applicationuser", b =>
@@ -311,7 +304,7 @@ namespace doccure.Data.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("Awards");
+                    b.ToTable("Awards", (string)null);
                 });
 
             modelBuilder.Entity("doccure.Data.Models.Clinic", b =>
@@ -351,7 +344,7 @@ namespace doccure.Data.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("Clinics");
+                    b.ToTable("Clinics", (string)null);
                 });
 
             modelBuilder.Entity("doccure.Data.Models.ClinicImage", b =>
@@ -373,7 +366,7 @@ namespace doccure.Data.Migrations
 
                     b.HasIndex("ClinicId");
 
-                    b.ToTable("ClinicImages");
+                    b.ToTable("ClinicImages", (string)null);
                 });
 
             modelBuilder.Entity("doccure.Data.Models.Doctor", b =>
@@ -413,7 +406,7 @@ namespace doccure.Data.Migrations
                     b.HasIndex("applicationuserId")
                         .IsUnique();
 
-                    b.ToTable("Doctor");
+                    b.ToTable("Doctor", (string)null);
                 });
 
             modelBuilder.Entity("doccure.Data.Models.Education", b =>
@@ -442,7 +435,7 @@ namespace doccure.Data.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("Education");
+                    b.ToTable("Education", (string)null);
                 });
 
             modelBuilder.Entity("doccure.Data.Models.Experience", b =>
@@ -474,7 +467,7 @@ namespace doccure.Data.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("Experience");
+                    b.ToTable("Experience", (string)null);
                 });
 
             modelBuilder.Entity("doccure.Data.Models.Membership", b =>
@@ -496,7 +489,7 @@ namespace doccure.Data.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("Memberships");
+                    b.ToTable("Memberships", (string)null);
                 });
 
             modelBuilder.Entity("doccure.Data.Models.ScheduleTiming", b =>
@@ -525,7 +518,7 @@ namespace doccure.Data.Migrations
 
                     b.HasIndex("ClinicId");
 
-                    b.ToTable("ScheduleTiming");
+                    b.ToTable("ScheduleTiming", (string)null);
                 });
 
             modelBuilder.Entity("doccure.Data.Models.Speciality", b =>
@@ -545,7 +538,7 @@ namespace doccure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Speciality");
+                    b.ToTable("Speciality", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -2,7 +2,8 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace doccure.Data.ResponseModels
-{ 
+{
+	[NotMapped]
 	public class DoctorSearchReturned
 	{
 		public string Id { get; set; }
