@@ -1,4 +1,4 @@
-﻿@model doccure.Data.ResponseModels.DoctorSearchReturned
+﻿@model doccure.Data.RequestModels.DoctorSearch
 @using doccure.Data.Models;
 @using doccure.Data.ResponseModels;
 @{
@@ -49,64 +49,45 @@
 						<h4 class="card-title mb-0">Search Filter</h4>
 					</div>
 					<div class="card-body">
-						
-						<div class="filter-widget">
+						<form asp-action="DoctorSearches" asp-controller="DoctorSearch" method="get">
+							<div class="filter-widget">
 							<h4>Gender</h4>
 							<div>
-								<label class="custom_check">
-									<input type="checkbox" name="gender_type" >
-									<span class="checkmark"></span> Male Doctor
-								</label>
+								<select class="form-control select" asp-for="Gender" multiple>
+								<option>Select</option>
+								
+								<option value="1">Male</option>
+								
+								
+								<option value="0">Female</option>
+								
+								
+								
+							</select>
 							</div>
-							<div>
-								<label class="custom_check">
-									<input type="checkbox" name="gender_type">
-									<span class="checkmark"></span> Female Doctor
-								</label>
-							</div>
+							
 						</div>
+						
+						
 						<div class="filter-widget">
 							<h4>Select Specialist</h4>
-							<div>
-								<label class="custom_check">
-									<input type="checkbox" name="select_specialist" >
-									<span class="checkmark"></span> Urology
-								</label>
-							</div>
-							<div>
-								<label class="custom_check">
-									<input type="checkbox" name="select_specialist" >
-									<span class="checkmark"></span> Neurology
-								</label>
-							</div>
-							<div>
-								<label class="custom_check">
-									<input type="checkbox" name="select_specialist">
-									<span class="checkmark"></span> Dentist
-								</label>
-							</div>
-							<div>
-								<label class="custom_check">
-									<input type="checkbox" name="select_specialist">
-									<span class="checkmark"></span> Orthopedic
-								</label>
-							</div>
-							<div>
-								<label class="custom_check">
-									<input type="checkbox" name="select_specialist">
-									<span class="checkmark"></span> Cardiologist
-								</label>
-							</div>
-							<div>
-								<label class="custom_check">
-									<input type="checkbox" name="select_specialist">
-									<span class="checkmark"></span> Cardiologist
-								</label>
-							</div>
+								<select class="form-control select" asp-for="Spcialites" multiple>
+									<option>Select</option>
+
+									<option value="Urology">Urology</option>
+									<option value="Neurology">Neurology</option>
+									<option value="Dentist">Dentist</option>
+									<option value="Orthopedic">Orthopedic</option>
+									<option value="Cardiologist">Cardiologist</option>
+									<option value="Urology">Urology</option>
+									<option value="Urology">Urology</option>
+
+								</select>
 						</div>
 						<div class="btn-search">
-							<button type="button" class="btn btn-block">Search</button>
+							<button type="submit" class="btn btn-block">Search</button>
 						</div>
+						</form>
 					</div>
 				</div>
 				<!-- /Search Filter -->
