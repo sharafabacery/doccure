@@ -16,8 +16,9 @@ namespace doccure.Controllers.patient
 		public async Task<IActionResult> IndexAsync(DoctorSearchBarRequest doctorSearchBar)
 		{
 			var result=await doctorSearch.SearchDoctors(doctorSearchBar);
-			ViewBag.Doctors = result;
-			ViewBag.NumberOfDoctors=result.Count();
+			ViewBag.Doctors = result.doctorSearchReturneds;
+			ViewBag.NumberOfDoctors=result.doctorSearchReturneds.Count;
+			ViewBag.ClinicImages = result.clinicImages;
 			return View("DoctorSearch");
 		}
 	}
