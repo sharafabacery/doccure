@@ -20,6 +20,7 @@ namespace doccure.Repositories.Implementaion
 				{
 					Directory.CreateDirectory(path);
 				}
+				if (formFile == null) return "";
 				var ext = Path.GetExtension(formFile.FileName);
 				var allowedExtension = new string[] { ".jpg", ".png", ".jpeg" };
 				if (!allowedExtension.Contains(ext))

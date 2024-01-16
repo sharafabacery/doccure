@@ -259,13 +259,16 @@ namespace doccure.Repositories.Implementaion
 					result = await userManager.UpdateAsync(Doctor);
 					if (result.Succeeded)
 					{
-						List<string> ClinicImages = doctorUpdatess.ClinicImages.Select(x => fileService.SaveFile(x)).ToList().FindAll(e=>e!="");
 
+						List<string>? ClinicImages = doctorUpdatess.ClinicImages?.Select(x => fileService.SaveFile(x))?.ToList().FindAll(e=>e!="");
+						if (ClinicImages != null) { 
 						var ClinicDb = Doctor.doctor.clinics.FirstOrDefault(e => e.Id == doctorUpdatess.Clinic.Id);
 						ClinicDb.clinicImages.AddRange(ClinicImages.Select(e =>new ClinicImage(){
 							ClinicId=ClinicDb.Id,
 							image=e
 						} ));
+						}
+						
 
 					}
 					else

@@ -13,7 +13,7 @@ namespace doccure.Data.RequestModels
 		public float videocall { get; set; }
 		public string? Specialization { get; set; }
 		public string? Services { get; set; }
-		public List<IFormFile> ClinicImages { set; get; }
+		public List<IFormFile>? ClinicImages { set; get; }
 		//public Education? education { get; set; }
 		public List<Education> Educations { get; set; }=new List<Education>();
 		public List<Experience> Experience { get; set; } = new List<Experience>();
