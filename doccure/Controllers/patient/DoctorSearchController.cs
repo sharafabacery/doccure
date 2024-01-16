@@ -30,5 +30,17 @@ namespace doccure.Controllers.patient
 			//ViewBag.ClinicImages = result.clinicImages;
 			return View("DoctorSearch");
 		}
+		public async Task<IActionResult> GetDoctor(string Id)
+		{
+			var Doctor=await doctorSearch.GetDoctorData(Id);
+			if (Doctor.applicationuser == null)
+			{
+				//Not Found Page
+				return View("DoctorSearch");
+			}
+			ViewBag.Doctor = Doctor; 
+			return View("DoctorProfile");
+
+		}
 	}
 }

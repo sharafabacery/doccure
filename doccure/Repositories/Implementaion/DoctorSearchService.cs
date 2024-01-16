@@ -3,20 +3,39 @@ using doccure.Data.Models;
 using doccure.Data.RequestModels;
 using doccure.Data.ResponseModels;
 using doccure.Repositories.Interfance;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace doccure.Repositories.Implementaion
 {
-	public class DoctorSearchService : IDoctorSearch
+    public class DoctorSearchService : IDoctorSearch
 	{
 		private readonly ApplicationDbContext applicationDbContext;
+		private readonly UserManager<Applicationuser> userManager;
 
-		public DoctorSearchService(ApplicationDbContext applicationDbContext)
+		public DoctorSearchService(ApplicationDbContext applicationDbContext, UserManager<Applicationuser> userManager)
 		{
 			this.applicationDbContext = applicationDbContext;
+			this.userManager = userManager;
 		}
-		
+
+		public async Task<DoctorData> GetDoctorData(string Id)
+		{
+			var Doctor = await userManager.Users.Include(a => a.address).Include(a => a.doctor).Include(a => a.doctor.educations).Include(a => a.doctor.experiences).Include(a => a.doctor.awards).Include(a => a.doctor.memberships).Include(a => a.doctor.clinics).FirstOrDefaultAsync(usr => usr.Id == Id);
+			List<ClinicImage>? ClinicImages = null;
+			if (Doctor != null)
+			{
+				var ClinicIds = Doctor.doctor.clinics?.Select(c => c.Id).ToList();
+				if (ClinicIds != null)
+				{
+					ClinicImages = await applicationDbContext.ClinicImages.Where(s => ClinicIds.Contains(s.ClinicId)).ToListAsync();
+				}
+				
+			}
+
+			return new DoctorData { applicationuser= Doctor , clinicImages= ClinicImages };
+		}
 
 		public async Task<DoctorsSearch> SearchDoctors(DoctorSearchBarRequest doctorSearchBarRequest)
 		{

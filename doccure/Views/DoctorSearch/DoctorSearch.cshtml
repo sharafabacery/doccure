@@ -103,9 +103,9 @@
 								<div class="doctor-widget">
 									<div class="doc-info-left">
 										<div class="doctor-img">
-											<a href="doctor-profile.html">
+											@Html.ActionLink("Doctor", "GetDoctor", "DoctorSearch", new { @id = doctor.Id }, null)
 												<img src="~/img/uploads/@doctor.PROFILEIMAGE" class="img-fluid" alt="User Image">
-											</a>
+											
 										</div>
 										<div class="doc-info-cont">
 											<h4 class="doc-name"><a href="doctor-profile.html">@doctor.FULLNAME</a></h4>
