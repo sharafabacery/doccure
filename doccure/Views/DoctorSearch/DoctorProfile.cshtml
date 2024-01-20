@@ -1,5 +1,9 @@
 ﻿@using doccure.Data.Models;
 @using doccure.Data.ResponseModels;
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims;
+@inject SignInManager<Applicationuser> SignInManager
+@inject UserManager<Applicationuser> UserManager
 
 @{
 	var Doctor = (DoctorData)ViewData["Doctor"];
@@ -95,9 +99,9 @@
 								<i class="fas fa-video"></i>
 							</a>
 						</div>
-						<div class="clinic-booking">
+						@*<div class="clinic-booking">
 							<a class="apt-btn" href="booking.html">Book Appointment</a>
-						</div>
+						</div>*@
 					</div>
 				</div>
 			</div>
@@ -317,7 +321,22 @@
 											<div class="consult-price">
 												@Doctor.applicationuser.doctor?.Price
 											</div>
+											@if (SignInManager.IsSignedIn(User))
+											{
+											<div class="clinic-booking">
+                                                <a class="apt-btn" href="booking.html">Book Appointment</a>
+                                            </div>
+											}
+											else
+											{
+												<div>
+												<h5>Please sign-in to compelte</h5>
+													<a class="nav-link header-login" asp-controller="UserAuthuntication" asp-action="login">login / Signup </a>
+												</div>
+											}
+											
 										</div>
+										
 									</div>
 								</div>
 							}
