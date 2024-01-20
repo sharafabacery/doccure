@@ -24,10 +24,10 @@ namespace doccure.Controllers.patient
 		[ActionName("DoctorSearches")]
 		public async Task<IActionResult> IndexAsync(DoctorSearch doctorsSearch)
 		{
-			//var result = await doctorSearch.SearchDoctors(doctorSearchBar);
-			//ViewBag.Doctors = result.doctorSearchReturneds;
-			//ViewBag.NumberOfDoctors = result.doctorSearchReturneds.Count;
-			//ViewBag.ClinicImages = result.clinicImages;
+			var result = await doctorSearch.SearchDoctors(doctorsSearch);
+			ViewBag.Doctors = result.doctorSearchReturneds;
+			ViewBag.NumberOfDoctors = result.doctorSearchReturneds.Count;
+			ViewBag.ClinicImages = result.clinicImages;
 			return View("DoctorSearch");
 		}
 		public async Task<IActionResult> GetDoctor(string Id)

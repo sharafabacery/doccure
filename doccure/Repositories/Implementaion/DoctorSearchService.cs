@@ -57,5 +57,75 @@ namespace doccure.Repositories.Implementaion
 				clinicImages= ClinicImages
 			};
 		}
+
+		public async Task<DoctorsSearch> SearchDoctors(DoctorSearch DoctorSearchRequest)
+		{
+			string Where = "";
+			string WhereGender = "";
+			string WhereSpcialities = "";
+			if (DoctorSearchRequest.Gender!=null&&DoctorSearchRequest.Gender.Any())
+			{
+				Where = " WHERE ";
+				WhereGender = " U.Gender IN(";
+				for (int i = 0; i < DoctorSearchRequest.Gender.Count; i++)
+				{
+					WhereGender += DoctorSearchRequest.Gender[i];
+					if (DoctorSearchRequest.Gender.Count > 1 && i != DoctorSearchRequest.Gender.Count - 1)
+					{
+						WhereGender += ",";
+					}
+				}
+				WhereGender += ") ";
+			}
+			if (DoctorSearchRequest.Spcialites!=null&&DoctorSearchRequest.Spcialites.Any())
+			{
+				if (Where.Length == 0)
+				{
+					Where = " WHERE ";
+				}
+				WhereSpcialities = " S.Id IN(";
+				for (int i = 0; i < DoctorSearchRequest.Spcialites.Count; i++)
+				{
+					WhereSpcialities += DoctorSearchRequest.Spcialites[i];
+					if (DoctorSearchRequest.Spcialites.Count > 1 && i != DoctorSearchRequest.Spcialites.Count - 1)
+					{
+						WhereSpcialities += ",";
+					}
+				}
+				WhereSpcialities += ") ";
+			}
+			if (WhereGender != "")
+			{
+				Where = Where + WhereGender;
+				if (WhereSpcialities != "")
+				{
+					Where = Where + " AND " + WhereSpcialities+" ";
+				}
+			}
+			else if (WhereSpcialities != "")
+			{
+				Where = Where + WhereSpcialities+" ";
+			}
+
+			int NumberOfRowsReturned = 10;
+			int SkipRows = DoctorSearchRequest.SkipRows == null ? 0 : (int)DoctorSearchRequest.SkipRows;
+			int LowerLimit = NumberOfRowsReturned * SkipRows;
+			int UpperLimit = LowerLimit + NumberOfRowsReturned;
+			var DoctorSearchReturneds = await applicationDbContext
+				.DoctorSearchReturned
+				.FromSqlRaw($"SELECT * \r\nFROM(\r\nSELECT ROW_NUMBER() OVER ( ORDER BY U.Id ) AS RowNum,  U.Id, U.FirstName+' '+U.LastName AS FULLNAME,S.Name,S.Name AS SPECALITYNAME,U.image AS PROFILEIMAGE,S.image,D.Price,C.Address,C.Id AS ClinicID,D.Specialization,D.Services\r\nFROM [dbo].[AspNetUsers] U\r\nJOIN [dbo].[AspNetUserRoles] UR\r\nON U.Id=UR.UserId\r\nJOIN [dbo].[AspNetRoles] R\r\nON UR.RoleId=R.Id AND R.Name='doctor'\r\nLEFT JOIN [dbo].[Doctor] D\r\nON U.Id=D.applicationuserId\r\nLEFT JOIN [dbo].[Clinics] C\r\nON C.DoctorId=D.Id\r\nJOIN [dbo].[Speciality] S\r\nON S.Id=D.SpecialityId {Where} \r\n\r\n)AS Result\r\nWHERE RowNum>=${LowerLimit} AND RowNum<=${UpperLimit}")
+				.ToListAsync();
+
+			var ClinicIds = DoctorSearchReturneds.Select(c => c.ClinicID).ToList();
+			var ClinicImages = await applicationDbContext.ClinicImages.Where(s => ClinicIds.Contains(s.ClinicId)).ToListAsync();
+
+			return new DoctorsSearch()
+			{
+				doctorSearchReturneds = DoctorSearchReturneds,
+				clinicImages = ClinicImages
+			};
+
+			//throw new NotImplementedException();
+		}
 	}
 }

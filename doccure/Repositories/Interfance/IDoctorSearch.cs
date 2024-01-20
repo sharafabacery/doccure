@@ -6,6 +6,7 @@ namespace doccure.Repositories.Interfance
     public interface IDoctorSearch
 	{
 		 Task<DoctorsSearch> SearchDoctors(DoctorSearchBarRequest doctorSearchBarRequest);
-		 Task<DoctorData> GetDoctorData(string Id);
+		Task<DoctorsSearch> SearchDoctors(DoctorSearch doctorSearchBarRequest);
+		Task<DoctorData> GetDoctorData(string Id);
 	}
 }
