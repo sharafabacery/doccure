@@ -103,8 +103,10 @@
 								<div class="doctor-widget">
 									<div class="doc-info-left">
 										<div class="doctor-img">
-											@Html.ActionLink("Doctor", "GetDoctor", "DoctorSearch", new { @id = doctor.Id }, null)
+											<a href="@Url.Action("GetDoctor", "DoctorSearch",new { @id = doctor.Id })">
 												<img src="~/img/uploads/@doctor.PROFILEIMAGE" class="img-fluid" alt="User Image">
+											</a>
+												
 											
 										</div>
 										<div class="doc-info-cont">
