@@ -10,8 +10,8 @@
 		
 		public int ClinicId { get; set; }
 		public Clinic Clinic { get; set; } = null!;
+		public Booking Booking { get; set; } = null!;
 
-		
 
 	}
 }
