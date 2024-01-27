@@ -16,7 +16,8 @@
 		public PaymentMethod payment { get; set; }
 		public int scheduletimingId { get; set; }
 		public string? patientId { get; set; }
-		public Applicationuser? patient { get; set; } 
+		public Applicationuser?
+			patient { get; set; } 
 		public string? doctorId { get; set; }
 		public Applicationuser? doctor { get; set; }
 
