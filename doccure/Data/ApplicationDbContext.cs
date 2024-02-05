@@ -26,6 +26,7 @@ namespace doccure.Data
         public DbSet<Booking> Bookings { set; get; }
 
 		public virtual DbSet<DoctorSearchReturned> DoctorSearchReturned { get; set; }
+		public virtual DbSet<ScheduleTimingBooking> ScheduleTimingBooking { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -34,7 +35,11 @@ namespace doccure.Data
 			{
 				e.HasNoKey().ToView("DoctorSearchReturned");
 			});
-            builder.Entity<Booking>()
+			builder.Entity<ScheduleTimingBooking>(e =>
+			{
+				e.HasNoKey().ToView("ScheduleTimingBooking");
+			});
+			builder.Entity<Booking>()
             .HasOne(b => b.patient)
             .WithMany(a => a.PatientBooking)
             .HasForeignKey(b => b.patientId).OnDelete(DeleteBehavior.NoAction);
