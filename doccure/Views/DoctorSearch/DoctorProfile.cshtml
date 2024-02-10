@@ -324,7 +324,7 @@
 											@if (SignInManager.IsSignedIn(User))
 											{
 											<div class="clinic-booking">
-                                                <a class="apt-btn" href="booking.html">Book Appointment</a>
+													<a class="apt-btn" href="@Url.Action("Index", "Booking",new { @DoctorId = @Doctor.applicationuser.doctor?.Id,@ClinicId = Clinic.Id })">Book Appointment</a>
                                             </div>
 											}
 											else

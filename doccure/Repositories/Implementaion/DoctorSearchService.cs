@@ -37,6 +37,14 @@ namespace doccure.Repositories.Implementaion
 			return new DoctorData { applicationuser= Doctor , clinicImages= ClinicImages };
 		}
 
+		public async Task<Doctor> GetDoctorDataByDoctorId(int Id)
+		{
+			var Doctor = await applicationDbContext.Doctor.Include(d => d.applicationuser).FirstOrDefaultAsync(v => v.Id == Id);
+			if (Doctor == null) return null;
+			return Doctor;
+
+		}
+
 		public async Task<DoctorsSearch> SearchDoctors(DoctorSearchBarRequest doctorSearchBarRequest)
 		{
 			int NumberOfRowsReturned = 10;

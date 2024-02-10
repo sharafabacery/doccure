@@ -8,5 +8,6 @@ namespace doccure.Repositories.Interfance
 		 Task<DoctorsSearch> SearchDoctors(DoctorSearchBarRequest doctorSearchBarRequest);
 		Task<DoctorsSearch> SearchDoctors(DoctorSearch doctorSearchBarRequest);
 		Task<DoctorData> GetDoctorData(string Id);
+		Task<Doctor> GetDoctorDataByDoctorId(int Id);
 	}
 }

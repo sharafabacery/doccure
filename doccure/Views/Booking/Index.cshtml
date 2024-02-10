@@ -1,0 +1,153 @@
+﻿@using doccure.Data.Models;
+@using doccure.Data.ResponseModels;
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims;
+@inject SignInManager<Applicationuser> SignInManager
+@inject UserManager<Applicationuser> UserManager
+
+@{
+	var Doctor = (Doctor)ViewBag.Doctor;
+	var AvaiableBooking = (List<ScheduleTimingBooking>)ViewBag.AvaiableBooking;
+	var weekDay = AvaiableBooking.Select(e => new { e.BookingDateDay,e.BookingDate}).ToList().Distinct().ToList();
+}
+<!-- Breadcrumb -->
+<div class="breadcrumb-bar">
+	<div class="container-fluid">
+		<div class="row align-items-center">
+			<div class="col-md-12 col-12">
+				<nav aria-label="breadcrumb" class="page-breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="index-2.html">Home</a></li>
+						<li class="breadcrumb-item active" aria-current="page">Booking</li>
+					</ol>
+				</nav>
+				<h2 class="breadcrumb-title">Booking</h2>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Page Content -->
+<div class="content">
+	<div class="container">
+
+		<div class="row">
+			<div class="col-12">
+
+				<div class="card">
+					<div class="card-body">
+						<div class="booking-doc-info">
+							<a href="doctor-profile.html" class="booking-doc-img">
+								<img src="~/img/uploads/@Doctor.applicationuser.Image" alt="User Image">
+							</a>
+							<div class="booking-info">
+								<h4><a>Dr. @Doctor.applicationuser.FirstName @Doctor.applicationuser.LastName</a></h4>
+								<div class="rating">
+									<i class="fas fa-star filled"></i>
+									<i class="fas fa-star filled"></i>
+									<i class="fas fa-star filled"></i>
+									<i class="fas fa-star filled"></i>
+									<i class="fas fa-star"></i>
+									<span class="d-inline-block average-rating">35</span>
+								</div>
+								<p class="text-muted mb-0"><i class="fas fa-map-marker-alt"></i> Newyork, USA</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Schedule Widget -->
+				<div class="card booking-schedule schedule-widget">
+
+					<!-- Schedule Header -->
+					<div class="schedule-header">
+						<div class="row">
+							<div class="col-md-12">
+
+								<!-- Day Slot -->
+								<div class="day-slot">
+									<ul>
+										@*<li class="left-arrow">
+											<a href="#">
+												<i class="fa fa-chevron-left"></i>
+											</a>
+										</li>*@
+										@{
+											for(int i = 0; i < weekDay.Count; i++)
+											{
+												<li>
+													<span>@weekDay[i].BookingDateDay</span>
+													<span class="slot-date">@weekDay[i].BookingDate</span>
+												</li>
+											}
+										}
+										@*<li class="right-arrow">
+											<a href="#">
+												<i class="fa fa-chevron-right"></i>
+											</a>
+										</li>*@
+									</ul>
+								</div>
+								<!-- /Day Slot -->
+
+							</div>
+						</div>
+					</div>
+					<!-- /Schedule Header -->
+					<!-- Schedule Content -->
+					<div class="schedule-cont">
+						<div class="row">
+							<div class="col-md-12">
+
+								<!-- Time Slot -->
+								<div class="time-slot">
+									<ul class="clearfix">
+										@{
+											for (int i = 0; i < weekDay.Count; i++)
+											{
+												var slots = AvaiableBooking.FindAll(a => a.BookingDate == weekDay[i].BookingDate);
+												<li>
+												@for(int j=0; j < slots.Count; j++)
+												{
+														<a class="timing" href="#">
+															@slots[j].StartTime
+														</a>
+												}
+												</li>
+											}
+										}
+
+									@*	
+										<li>
+											<a class="timing" href="#">
+												<span>9:00</span> <span>AM</span>
+											</a>
+											<a class="timing selected" href="#">
+												<span>10:00</span> <span>AM</span>
+											</a>
+											<a class="timing" href="#">
+												<span>11:00</span> <span>AM</span>
+											</a>
+										</li>*@
+									
+									</ul>
+								</div>
+								<!-- /Time Slot -->
+
+							</div>
+						</div>
+					</div>
+					<!-- /Schedule Content -->
+
+				</div>
+				<!-- /Schedule Widget -->
+				<!-- Submit Section -->
+				<div class="submit-section proceed-btn text-right">
+					<a href="checkout.html" class="btn btn-primary submit-btn">Proceed to Pay</a>
+				</div>
+				<!-- /Submit Section -->
+
+			</div>
+		</div>
+	</div>
+
+</div>		
