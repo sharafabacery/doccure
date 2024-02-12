@@ -36,5 +36,10 @@ namespace doccure.Controllers.patient
 				ViewBag.AvaiableBooking = AvaiableBooking;
 				return View();
 		}
+		public IActionResult RegisterBooking(RegisterBookingRequest registerBooking)
+		{
+
+			return View();
+		}
 	}
 }

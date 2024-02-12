@@ -653,7 +653,15 @@ Version      : 1.0
             }
         });
     }
-
+    //choose booking time
+    $('.timing').on("click", function () {
+        $('.timing').removeClass('selected')
+        $(this).addClass('selected')
+        var tempp = $(this).find(`input[name="Idtemp"]`).val()
+        console.log(tempp)
+        $('input[name=Id]').val(tempp)
+        console.log("timing selected")
+    })
     // Chat
 
     var chatAppTarget = $('.chat-window');
