@@ -85,5 +85,45 @@ namespace doccure.Repositories.Implementaion
 
 			return booking;
 		}
+
+		public async Task<Booking> GetBookingById(int BookingId, ClaimsPrincipal claims)
+		{
+			var Booking = await applicationDbContext.Bookings.Include(p=>p.patient).Include(d=>d.doctor).Include(s=>s.scheduleTiming).Where(b => b.Id == BookingId && b.patientId == userManager.GetUserId(claims)).FirstOrDefaultAsync();
+			if(Booking == null)
+			{
+				return null;
+			}
+			else
+			{
+				return Booking;
+			}
+		}
+
+		public async Task<Booking> Checkout(CheckoutRequest checkoutRequest, ClaimsPrincipal claims)
+		{
+			var Booking = await applicationDbContext.Bookings.Include(p => p.patient).Include(d => d.doctor).Include(s => s.scheduleTiming).Where(b => b.Id == checkoutRequest.BookingId && b.patientId == userManager.GetUserId(claims)).FirstOrDefaultAsync();
+			if(Booking == null)
+			{
+				return null;
+			}
+			else
+			{
+				if (checkoutRequest.CreditCard == true) { 
+					Booking.payment=PaymentMethod.CreditCard;
+				}else if (checkoutRequest.Paypal == true)
+				{
+					Booking.payment = PaymentMethod.Paypal;
+				}
+
+				var result=await applicationDbContext.SaveChangesAsync();
+				if (result == 0)
+				{
+					return null;
+				}
+
+			}
+			return Booking;
+			
+		}
 	}
 }

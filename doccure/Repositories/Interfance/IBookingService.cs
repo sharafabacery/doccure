@@ -19,5 +19,7 @@ namespace doccure.Repositories.Interfance
 		 */
 		public Task<List<ScheduleTimingBooking>> GetScheduleTimingAvaiable(BookingScheduleTimingRequest booking);
 		public Task<Booking> RegisterBooking(RegisterBookingRequest registerBookingRequest, ClaimsPrincipal claims);
+		public Task<Booking> GetBookingById(int BookingId, ClaimsPrincipal claims);
+		public Task<Booking> Checkout(CheckoutRequest checkoutRequest, ClaimsPrincipal claims);
 	}
 }

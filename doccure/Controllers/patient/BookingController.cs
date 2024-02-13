@@ -1,4 +1,5 @@
-﻿using doccure.Data.RequestModels;
+﻿using doccure.Data.Models;
+using doccure.Data.RequestModels;
 using doccure.Data.ResponseModels;
 using doccure.Repositories.Implementaion;
 using doccure.Repositories.Interfance;
@@ -36,13 +37,39 @@ namespace doccure.Controllers.patient
 				ViewBag.AvaiableBooking = AvaiableBooking;
 				return View();
 		}
+		public async Task<IActionResult> Checkout(int BookingId)
+		{
+			var Booking = await BookingService.GetBookingById(BookingId, User);
+			if (Booking == null)
+			{
+				return RedirectToAction("Index", "Home");
+			}
+			else
+			{
+				ViewBag.Booking = Booking;
+			}
+			return View();
+		}
+		[HttpPost]
+		public async Task<IActionResult>Checkout(CheckoutRequest checkoutRequest)
+		{
+			var Booking = await BookingService.Checkout(checkoutRequest, User);
+			if (Booking == null)
+			{
+				return RedirectToAction("Index", "Home");
+			}
+			else
+			{
+				ViewBag.Booking = Booking;
+			}
+			return View("BookingSuccess");
+		}
 		public async Task<IActionResult> RegisterBooking(RegisterBookingRequest registerBooking)
 		{
 			var Booking = await BookingService.RegisterBooking(registerBooking, User);
 			if (Booking != null)
 			{
-				TempData["message"] = "Booking Added scuessfully";
-				return RedirectToAction("Index", "Booking");
+				return RedirectToAction("Checkout", "Booking", new {BookingId=Booking.Id});
 			}
 			else
 			{
