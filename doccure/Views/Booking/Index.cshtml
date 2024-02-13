@@ -10,6 +10,7 @@
 	var Doctor = (Doctor)ViewBag.Doctor;
 	var AvaiableBooking = (List<ScheduleTimingBooking>)ViewBag.AvaiableBooking;
 	var weekDay = AvaiableBooking.Select(e => new { e.BookingDateDay,e.BookingDate}).ToList().Distinct().ToList();
+	var Message = TempData["message"];
 }
 <!-- Breadcrumb -->
 <div class="breadcrumb-bar">
@@ -33,9 +34,11 @@
 
 		<div class="row">
 			<div class="col-12">
+				<h4>@Message?</h4>
 				<form asp-action="RegisterBooking" asp-controller="Booking">
 					<input asp-for="Id" type="hidden" />
 					<input asp-for="DoctorId" value="@Doctor.Id" type="hidden" />
+					<input asp-for="BookingDate"  type="hidden" />
 					<div class="card">
 						<div class="card-body">
 							<div class="booking-doc-info">
@@ -113,6 +116,7 @@
 
 															<a class="timing">
 																<input name="Idtemp" value="@slots[j].Id" hidden="hidden" readonly="readonly"/>
+																<input name="BookingDateTemp" value="@slots[j].BookingDate" hidden="hidden" readonly="readonly" />
 																@slots[j].StartTime
 															</a>
 														}

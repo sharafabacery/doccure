@@ -36,10 +36,19 @@ namespace doccure.Controllers.patient
 				ViewBag.AvaiableBooking = AvaiableBooking;
 				return View();
 		}
-		public IActionResult RegisterBooking(RegisterBookingRequest registerBooking)
+		public async Task<IActionResult> RegisterBooking(RegisterBookingRequest registerBooking)
 		{
-
-			return View();
+			var Booking = await BookingService.RegisterBooking(registerBooking, User);
+			if (Booking != null)
+			{
+				TempData["message"] = "Booking Added scuessfully";
+				return RedirectToAction("Index", "Booking");
+			}
+			else
+			{
+				TempData["message"] = "Booking failed to Add scuessfully";
+				return RedirectToAction("Index", "Booking");
+			}
 		}
 	}
 }

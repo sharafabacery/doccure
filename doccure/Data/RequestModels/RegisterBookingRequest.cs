@@ -4,5 +4,6 @@
 	{
 		public int Id { get; set; }
 		public int DoctorId { get; set; }
+		public DateTime BookingDate { get; set; }
 	}
 }

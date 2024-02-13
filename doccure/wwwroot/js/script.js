@@ -658,8 +658,10 @@ Version      : 1.0
         $('.timing').removeClass('selected')
         $(this).addClass('selected')
         var tempp = $(this).find(`input[name="Idtemp"]`).val()
+        var tempp2 = $(this).find(`input[name="BookingDateTemp"]`).val()
         console.log(tempp)
         $('input[name=Id]').val(tempp)
+        $('input[name=BookingDate]').val(tempp2)
         console.log("timing selected")
     })
     // Chat

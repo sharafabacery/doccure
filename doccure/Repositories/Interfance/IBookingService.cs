@@ -1,6 +1,7 @@
 ﻿using doccure.Data.Models;
 using doccure.Data.RequestModels;
 using doccure.Data.ResponseModels;
+using System.Security.Claims;
 
 namespace doccure.Repositories.Interfance
 {
@@ -17,5 +18,6 @@ namespace doccure.Repositories.Interfance
 		 ORDER BY S.Day,S.StartTime
 		 */
 		public Task<List<ScheduleTimingBooking>> GetScheduleTimingAvaiable(BookingScheduleTimingRequest booking);
+		public Task<Booking> RegisterBooking(RegisterBookingRequest registerBookingRequest, ClaimsPrincipal claims);
 	}
 }
