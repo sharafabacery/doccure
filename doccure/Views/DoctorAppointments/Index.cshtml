@@ -1,0 +1,71 @@
+﻿@using doccure.Data.Models;
+@{
+	var books = (List<Booking>)ViewBag.Appointments;
+}
+<div class="breadcrumb-bar">
+	<div class="container-fluid">
+		<div class="row align-items-center">
+			<div class="col-md-12 col-12">
+				<nav aria-label="breadcrumb" class="page-breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a >Home</a></li>
+						<li class="breadcrumb-item active" aria-current="page">Appointments</li>
+					</ol>
+				</nav>
+				<h2 class="breadcrumb-title">Appointments</h2>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Page Content -->
+			<div class="content">
+				<div class="container-fluid">
+
+					<div class="row">
+						<partial name="_DoctorSidebar" />
+
+						<div class="col-md-7 col-lg-8 col-xl-9">
+							<div class="appointments">
+					@{
+						for(int i = 0; i < books.Count; i++)
+						{
+							<div class="appointment-list">
+								<div class="profile-info-widget">
+									<a href="patient-profile.html" class="booking-doc-img">
+										<img src="~/img/uploads/@books[i].patient.Image" alt="User Image">
+									</a>
+									<div class="profile-det-info">
+										<h3><a href=""></a>@books[i].patient.FirstName @books[i].patient.LastName</h3>
+										<div class="patient-details">
+											<h5><i class="far fa-clock"></i> @books[i].bookingDate, @books[i].scheduleTiming.StartTime</h5>
+											<h5><i class="fas fa-map-marker-alt"></i> @books[i].patient.address?.Address1</h5>
+											<h5><i class="fas fa-envelope"></i> @books[i].patient.Email</h5>
+											<h5 class="mb-0"><i class="fas fa-phone"></i> @books[i].patient.PhoneNumber</h5>
+										</div>
+									</div>
+								</div>
+								<div class="appointment-action">
+									<a href="#" class="btn btn-sm bg-info-light" data-toggle="modal" data-target="#appt_details">
+										<i class="far fa-eye"></i> View
+									</a>
+									@if (books[i].BookingStatus == BookingStatus.Pending)
+									{
+										<a href="javascript:void(0);" class="btn btn-sm bg-success-light">
+										<i class="fas fa-check"></i> Accept
+									</a>
+									<a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
+										<i class="fas fa-times"></i> Cancel
+									</a>
+									}
+									
+								</div>
+							</div>
+						}
+					}
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+			</div>		
