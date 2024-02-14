@@ -13,7 +13,11 @@
 		Accepted=3,
 		Complete=4
 	}
-	
+	public enum PatientType
+	{
+		NewPatient=1,
+		OldPatient=2
+	}
 	public class Booking
 	{
 		public int Id { get; set; }
@@ -24,11 +28,11 @@
 		public PaymentMethod payment { get; set; }
 		public int scheduletimingId { get; set; }
 		public string? patientId { get; set; }
-		public Applicationuser?
-			patient { get; set; } 
+		public Applicationuser?patient { get; set; } 
 		public string? doctorId { get; set; }
 		public DateTime? FollowUp { get; set; }
 		public BookingStatus BookingStatus { get; set; }
+		public PatientType PatientType { get; set; }
 		public DateTime createdDate { get; set; }
 		public Applicationuser? doctor { get; set; }
 

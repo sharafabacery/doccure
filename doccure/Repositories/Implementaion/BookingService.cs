@@ -49,6 +49,7 @@ namespace doccure.Repositories.Implementaion
 					var Slot=await applicationDbContext.ScheduleTiming.FromSql($"SELECT * FROM ScheduleTiming WITH (UPDLOCK) WHERE Id={registerBookingRequest.Id}").FirstOrDefaultAsync();
 					var Booked=await applicationDbContext.Bookings.Where(b=>b.scheduletimingId==Slot.Id && b.bookingDate.Date ==registerBookingRequest.BookingDate.Date).FirstOrDefaultAsync();
 					var Doctor = await applicationDbContext.Doctor.FirstOrDefaultAsync(d => d.Id == registerBookingRequest.DoctorId);
+					var PatientTypee = await applicationDbContext.Bookings.Where(b => b.doctorId == Doctor.applicationuserId && b.patientId == userManager.GetUserId(claims) && (b.BookingStatus != BookingStatus.Cancel || b.BookingStatus != BookingStatus.Pending)).FirstOrDefaultAsync();
 					if (Booked != null)
 					{
 						throw new Exception("schedule timing in that time was booked");
@@ -64,6 +65,7 @@ namespace doccure.Repositories.Implementaion
 						booking.bookingDate =registerBookingRequest.BookingDate;
 						booking.payment = PaymentMethod.NotPayed;
 						booking.createdDate =  DateTime.Now;
+						booking.PatientType = PatientTypee!=null ? PatientType.OldPatient : PatientType.NewPatient;
 						booking.BookingStatus=BookingStatus.Pending;
 						booking.scheduletimingId = Slot.Id;
 						 applicationDbContext.Bookings.Add(booking);
