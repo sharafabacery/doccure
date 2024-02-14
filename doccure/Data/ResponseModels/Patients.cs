@@ -1,5 +1,8 @@
-﻿namespace doccure.Data.ResponseModels
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace doccure.Data.ResponseModels
 {
+	[NotMapped]
 	public class Patients
 	{
 		public string Id { get; set; }
