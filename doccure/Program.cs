@@ -53,6 +53,7 @@ namespace doccure
 			builder.Services.AddScoped<IFileService, ImageService>();
 			builder.Services.AddScoped<IDoctorSearch, DoctorSearchService>();
 			builder.Services.AddScoped<IBookingService, BookingService>();
+			builder.Services.AddScoped<IPatientsService, PatientsService>();
 			// builder.Services.AddScoped<IUserAuthticationService, UserAuthticationService>();
 
 			//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)

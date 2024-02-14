@@ -29,7 +29,6 @@ namespace doccure.Repositories.Implementaion
 			List<ScheduleTimingBooking> AvaiableBooking = new List<ScheduleTimingBooking>();
 			if (doctor != null)
 			{
-				string S = $"SELECT S.Id,S.Day,CONVERT(varchar,S.StartTime) StartTime,CONVERT(varchar,S.EndTime) EndTime,CONVERT(varchar,DATEADD(DAY,S.Day,{DateOfToday}),1) BookingDate,DATENAME(dw,DATEADD(DAY,S.Day,{DateOfToday})) BookingDateDay \r\nFROM [dbo].[ScheduleTiming] S\r\nWHERE S.Id NOT IN(\r\nSELECT B.scheduletimingId\r\nFROM [dbo].[Bookings] B\r\nWHERE B.doctorId='{doctor.applicationuserId}'  AND B.bookingDate >= '{DateOfToday}' AND B.bookingDate <= '{DateOfTheNextWeekOfDay}' \r\n) AND S.ClinicId={booking.ClinicID} \r\nORDER BY BookingDate, S.Day,S.StartTime";
 				AvaiableBooking = await applicationDbContext.ScheduleTimingBooking.FromSqlRaw($"SELECT S.Id,S.Day,CONVERT(varchar,S.StartTime) StartTime,CONVERT(varchar,S.EndTime) EndTime,CONVERT(varchar,DATEADD(DAY,S.Day,'{DateOfToday}'),1) BookingDate,DATENAME(dw,DATEADD(DAY,S.Day,'{DateOfToday}')) BookingDateDay \r\nFROM [dbo].[ScheduleTiming] S\r\nWHERE S.Id NOT IN(\r\nSELECT B.scheduletimingId\r\nFROM [dbo].[Bookings] B\r\nWHERE B.doctorId='{doctor.applicationuserId}'  AND B.bookingDate >= '{DateOfToday}' AND B.bookingDate <= '{DateOfTheNextWeekOfDay}' \r\n) AND S.ClinicId={booking.ClinicID} \r\nORDER BY BookingDate, S.Day,S.StartTime").ToListAsync();
 			}
 
@@ -64,6 +63,8 @@ namespace doccure.Repositories.Implementaion
 						booking.total = (double)Doctor.Price + (double)Doctor.VideoCall;
 						booking.bookingDate =registerBookingRequest.BookingDate;
 						booking.payment = PaymentMethod.NotPayed;
+						booking.createdDate =  DateTime.Now;
+						booking.BookingStatus=BookingStatus.Pending;
 						booking.scheduletimingId = Slot.Id;
 						 applicationDbContext.Bookings.Add(booking);
 						var Inserted = await applicationDbContext.SaveChangesAsync();

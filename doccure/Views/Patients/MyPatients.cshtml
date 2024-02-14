@@ -1,0 +1,71 @@
+﻿@using doccure.Data.Models;
+@using doccure.Data.ResponseModels;
+@{
+	var Patients = (List<Patients>)ViewBag.Patients;
+}
+<div class="breadcrumb-bar">
+	<div class="container-fluid">
+		<div class="row align-items-center">
+			<div class="col-md-12 col-12">
+				<nav aria-label="breadcrumb" class="page-breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="index-2.html">Home</a></li>
+						<li class="breadcrumb-item active" aria-current="page">My Patients</li>
+					</ol>
+				</nav>
+				<h2 class="breadcrumb-title">My Patients</h2>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="content">
+	<div class="container-fluid">
+
+        <div class="row">
+            
+			<partial name="_DoctorSidebar" />
+			<div class="col-md-7 col-lg-8 col-xl-9">
+				@{
+					for(int i = 0; i < Patients.Count; i++)
+					{
+						<div class="row row-grid">
+							<div class="col-md-6 col-lg-4 col-xl-3">
+								<div class="card widget-profile pat-widget-profile">
+									<div class="card-body">
+										<div class="pro-widget-content">
+											<div class="profile-info-widget">
+												<a href="" class="booking-doc-img">
+													<img src="~/img/uploads/@Patients[i].ProfilePicture" alt="User Image">
+												</a>
+												<div class="profile-det-info">
+													<h3><a href="">Richard Wilson</a></h3>
+
+													<div class="patient-details">
+														<h5><b>Patient ID :</b>@Patients[i].Id.Substring(0,5) </h5>
+														<h5 class="mb-0"><i class="fas fa-map-marker-alt"></i> @Patients[i].Address</h5>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="patient-info">
+											<ul>
+												<li>Phone <span>@Patients[i].PhoneNumber</span></li>
+												<li>Age <span>@Patients[i].Age Years, @Patients[i].Gender</span></li>
+												<li>Blood Group <span>@Patients[i].BloodGroup</span></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					}
+				}
+
+
+			</div>
+		</div>
+
+	</div>
+
+</div>

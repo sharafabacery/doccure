@@ -27,6 +27,7 @@ namespace doccure.Data
 
 		public virtual DbSet<DoctorSearchReturned> DoctorSearchReturned { get; set; }
 		public virtual DbSet<ScheduleTimingBooking> ScheduleTimingBooking { get; set; }
+		public virtual DbSet<Patients> Patients { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -38,6 +39,10 @@ namespace doccure.Data
 			builder.Entity<ScheduleTimingBooking>(e =>
 			{
 				e.HasNoKey().ToView("ScheduleTimingBooking");
+			});
+			builder.Entity<Patients>(e =>
+			{
+				e.HasNoKey().ToView("Patients");
 			});
 			builder.Entity<Booking>()
             .HasOne(b => b.patient)
