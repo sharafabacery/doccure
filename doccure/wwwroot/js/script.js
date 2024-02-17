@@ -571,7 +571,69 @@ Version      : 1.0
         $(".hours-info-v3").append(hourscontent);
         return false;
     });
+    $('.appointment-list').on('click', '.status', function (e) {
+        //var bookingIdInput = $(e.target).closest('input');
+        var bookingId = Number ($(e.target).find('input[name="BookingId"]').val());
+        var bookingStatusInput = $(e.target).closest('a');
+        var bookingStatus = bookingStatusInput.data('value');
+        fetch(`/DoctorAppointments/UpdateAppointmentStatus?BookingId=${bookingId}`, {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                BookingId: bookingId,
+                Status: bookingStatus
+                })
 
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Error: ' + response.status);
+                }
+            })
+            .then(data => {
+                location.reload();
+               
+            })
+            .catch(error => {
+                location.reload();
+            });
+
+    })
+    $('.app_details').on('click', function (e) {
+        var bookingId = Number($(e.target).find('input[name="BookingId"]').val());
+        fetch(`/DoctorAppointments/GetAppiontmentById?BookingId=${bookingId}`, {
+            method: 'get',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Error: ' + response.status);
+                }
+            })
+            .then(data => {
+                //location.reload();
+                $('.app_Id').html(data.id);
+                $('.app_Date').html(data.bookingDate);
+                $('.app_Status').html(data.bookingStatus == 3 ? 'Accepted' : data.bookingStatus == 2 ? 'Cancel' : data.bookingStatus == 1 ? 'Pending' :'Complete');
+                $('.app_Total').html(data.total);
+            })
+            .catch(error => {
+                //location.reload();
+            });
+
+    })
     // Content div min height set
 
     function resizeInnerDiv() {

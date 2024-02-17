@@ -1,4 +1,5 @@
-﻿using doccure.Data.ResponseModels;
+﻿using doccure.Data.RequestModels;
+using doccure.Data.ResponseModels;
 using doccure.Repositories.Interfance;
 using Microsoft.AspNetCore.Mvc;
 using static doccure.Program;
@@ -22,6 +23,34 @@ namespace doccure.Controllers.Doctors
 			ViewBag.Appointments = Appointments;
 			ViewBag.User = Doctor;
 			return View();
+		}
+		//BookingId
+		[HttpPut]
+		public async Task<IActionResult> UpdateAppointmentStatus(int BookingId, [FromBody] UpdateBookingStatusRequest updateBookingStatusRequest)
+		{
+			var Booking = await doctorAppointmentService.UpdateAppiontmentStatus(User,updateBookingStatusRequest);
+			if (Booking != null)
+			{
+				return Ok();
+			}
+			else
+			{
+				return NotFound();
+			}
+		}
+		[HttpGet]
+		public async Task<IActionResult>GetAppiontmentById(int BookingId)
+		{
+
+			var Booking = await doctorAppointmentService.GetAppiontmentById(User, BookingId);
+			if (Booking != null)
+			{
+				return Ok(Booking);
+			}
+			else
+			{
+				return NotFound();
+			}
 		}
 	}
 }

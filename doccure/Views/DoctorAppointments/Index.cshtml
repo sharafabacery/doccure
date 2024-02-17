@@ -45,16 +45,23 @@
 									</div>
 								</div>
 								<div class="appointment-action">
-									<a href="#" class="btn btn-sm bg-info-light" data-toggle="modal" data-target="#appt_details">
+									<a href="#" class="btn btn-sm bg-info-light app_details" data-toggle="modal" data-target="#appt_details">
 										<i class="far fa-eye"></i> View
+										<input name="BookingId" type="number" value="@books[i].Id" hidden="hidden" readonly="readonly"></input>
+
 									</a>
+									
 									@if (books[i].BookingStatus == BookingStatus.Pending)
 									{
-										<a href="javascript:void(0);" class="btn btn-sm bg-success-light">
-										<i class="fas fa-check"></i> Accept
+										<a class="btn btn-sm bg-success-light status" data-value="3">
+											<input name="BookingId" type="number" value="@books[i].Id" hidden="hidden" readonly="readonly"></input>
+
+											<i class="fas fa-check"></i> Accept
 									</a>
-									<a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
-										<i class="fas fa-times"></i> Cancel
+										<a class="btn btn-sm bg-danger-light status" data-value="2">
+											<input name="BookingId" type="number" value="@books[i].Id" hidden="hidden" readonly="readonly"></input>
+
+											<i class="fas fa-times"></i> Cancel
 									</a>
 									}
 									
@@ -69,3 +76,6 @@
 				</div>
 
 			</div>		
+@section PatientAppointment {
+	<partial name="_PatientAppointment" />
+}
