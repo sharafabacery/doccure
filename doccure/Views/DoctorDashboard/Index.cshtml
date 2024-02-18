@@ -1,0 +1,243 @@
+﻿@using doccure.Data.Models;
+@using doccure.Data.ResponseModels;
+@{
+	var result = (DoctorDashboardReturned)ViewBag.result;
+	var user = (Applicationuser)ViewData["User"];
+}
+<div class="breadcrumb-bar">
+	<div class="container-fluid">
+		<div class="row align-items-center">
+			<div class="col-md-12 col-12">
+				<nav aria-label="breadcrumb" class="page-breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a >Home</a></li>
+						<li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+					</ol>
+				</nav>
+				<h2 class="breadcrumb-title">Dashboard</h2>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Page Content -->
+<div class="content">
+	<div class="container-fluid">
+
+		<div class="row">
+			<partial name="_DoctorSidebar" />
+
+
+			<div class="col-md-7 col-lg-8 col-xl-9">
+
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card dash-card">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-12 col-lg-4">
+										<div class="dash-widget dct-border-rht">
+											<div class="circle-bar circle-bar1">
+												<div class="circle-graph1" data-percent="75">
+													<img src="~/img/icon-01.png" class="img-fluid" alt="patient">
+												</div>
+											</div>
+											<div class="dash-widget-info">
+												<h6>Total Patient</h6>
+												<h3>@result.TotalPatients</h3>
+												<p class="text-muted">Till Today</p>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-12 col-lg-4">
+										<div class="dash-widget dct-border-rht">
+											<div class="circle-bar circle-bar2">
+												<div class="circle-graph2" data-percent="65">
+													<img src="~/img/icon-02.png" class="img-fluid" alt="Patient">
+												</div>
+											</div>
+											<div class="dash-widget-info">
+												<h6>Today Patient</h6>
+												<h3>@result.TotalTodayPatients</h3>
+												<p class="text-muted"> @DateTime.Now.Date</p>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-12 col-lg-4">
+										<div class="dash-widget">
+											<div class="circle-bar circle-bar3">
+												<div class="circle-graph3" data-percent="50">
+													<img src="~/img/icon-03.png" class="img-fluid" alt="Patient">
+												</div>
+											</div>
+											<div class="dash-widget-info">
+												<h6>Appoinments</h6>
+												<h3>@result.TotalAppiontment</h3>
+												<p class="text-muted"> @DateTime.Now.Date</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-12">
+						<h4 class="mb-4">Patient Appoinment</h4>
+						<div class="appointment-tab">
+
+							<!-- Appointment Tab -->
+							<ul class="nav nav-tabs nav-tabs-solid nav-tabs-rounded">
+								<li class="nav-item">
+									<a class="nav-link active" href="#upcoming-appointments" data-toggle="tab">Upcoming</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="#today-appointments" data-toggle="tab">Today</a>
+								</li>
+							</ul>
+							<!-- /Appointment Tab -->
+
+							<div class="tab-content">
+
+								<!-- Upcoming Appointment Tab -->
+								<div class="tab-pane show active" id="upcoming-appointments">
+									<div class="card card-table mb-0">
+										<div class="card-body">
+											<div class="table-responsive">
+												<table class="table table-hover table-center mb-0">
+													<thead>
+														<tr>
+															<th>Patient Name</th>
+															<th>Appt Date</th>
+															<th>Type</th>
+															<th class="text-center">Paid Amount</th>
+															<th></th>
+														</tr>
+													</thead>
+													<tbody>
+														
+														@{
+															for(int i = 0; i < result.Upcoming.Count; i++)
+															{
+																<tr>
+																	<td>
+																		<h2 class="table-avatar">
+																			<a href="" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="~/img/uploads/@result.Upcoming[i].patient?.Image" alt="User Image"></a>
+																			<a href="">@result.Upcoming[i].patient?.FirstName @result.Upcoming[i].patient?.LastName<span>@result.Upcoming[i].patientId.Substring(0,6)</span></a>
+																		</h2>
+																	</td>
+																	<td>@result.Upcoming[i].bookingDate <span class="d-block text-info">@result.Upcoming[i].scheduleTiming.StartTime</span></td>
+																	<td>@result.Upcoming[i].PatientType</td>
+																	<td class="text-center">@result.Upcoming[i].total</td>
+																	<td class="text-right">
+																		<div class="table-action">
+																			<a href="#" class="btn btn-sm bg-info-light app_details" data-toggle="modal" data-target="#appt_details">
+																				<i class="far fa-eye"></i> View
+																				<input name="BookingId" type="number" value="@result.Upcoming[i]..Id" hidden="hidden" readonly="readonly"></input>
+
+																			</a>
+
+																			@if (@result.Upcoming[i].BookingStatus == BookingStatus.Pending)
+																			{
+																				<a class="btn btn-sm bg-success-light status" data-value="3">
+																					<input name="BookingId" type="number" value="@result.Upcoming[i].Id" hidden="hidden" readonly="readonly"></input>
+
+																					<i class="fas fa-check"></i> Accept
+																				</a>
+																				<a class="btn btn-sm bg-danger-light status" data-value="2">
+																					<input name="BookingId" type="number" value="@result.Upcoming[i].Id" hidden="hidden" readonly="readonly"></input>
+
+																					<i class="fas fa-times"></i> Cancel
+																				</a>
+																			}
+																		</div>
+																	</td>
+																</tr>
+															}
+														}
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- /Upcoming Appointment Tab -->
+								<!-- Today Appointment Tab -->
+								<div class="tab-pane" id="today-appointments">
+									<div class="card card-table mb-0">
+										<div class="card-body">
+											<div class="table-responsive">
+												<table class="table table-hover table-center mb-0">
+													<thead>
+														<tr>
+															<th>Patient Name</th>
+															<th>Appt Date</th>
+															<th>Type</th>
+															<th class="text-center">Paid Amount</th>
+															<th></th>
+														</tr>
+													</thead>
+													<tbody>
+														@{
+															for (int i = 0; i < result.Today.Count; i++)
+															{
+																<tr>
+																	<td>
+																		<h2 class="table-avatar">
+																			<a href="" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="~/img/uploads/@result.Today[i].patient?.Image" alt="User Image"></a>
+																			<a href="">@result.Today[i].patient?.FirstName @result.Today[i].patient?.LastName<span>@result.Today[i].patientId.Substring(0,6)</span></a>
+																		</h2>
+																	</td>
+																	<td>@result.Today[i].bookingDate <span class="d-block text-info">@result.Today[i].scheduleTiming.StartTime</span></td>
+																	<td>@result.Today[i].PatientType</td>
+																	<td class="text-center">@result.Today[i].total</td>
+																	<td class="text-right">
+																		<div class="table-action">
+																			<a href="#" class="btn btn-sm bg-info-light app_details" data-toggle="modal" data-target="#appt_details">
+																				<i class="far fa-eye"></i> View
+																				<input name="BookingId" type="number" value="@result.Today[i].Id" hidden="hidden" readonly="readonly"></input>
+
+																			</a>
+
+																			@if (@result.Today[i].BookingStatus == BookingStatus.Pending)
+																			{
+																				<a class="btn btn-sm bg-success-light status" data-value="3">
+																					<input name="BookingId" type="number" value="@result.Today[i].Id" hidden="hidden" readonly="readonly"></input>
+
+																					<i class="fas fa-check"></i> Accept
+																				</a>
+																				<a class="btn btn-sm bg-danger-light status" data-value="2">
+																					<input name="BookingId" type="number" value="@result.Today[i].Id" hidden="hidden" readonly="readonly"></input>
+
+																					<i class="fas fa-times"></i> Cancel
+																				</a>
+																			}
+																		</div>
+																	</td>
+																</tr>
+															}
+														}
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- /Today Appointment Tab -->
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+</div>		
+@section PatientAppointment {
+	<partial name="_PatientAppointment" />
+}
