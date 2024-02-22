@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using doccure.Data;
 
@@ -11,9 +12,11 @@ using doccure.Data;
 namespace doccure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240222203221_MedicalRecord")]
+    partial class MedicalRecord
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -305,31 +308,6 @@ namespace doccure.Data.Migrations
                     b.HasIndex("DoctorId");
 
                     b.ToTable("Awards");
-                });
-
-            modelBuilder.Entity("doccure.Data.Models.Billing", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<float>("Amount")
-                        .HasColumnType("real");
-
-                    b.Property<int>("BookingId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookingId");
-
-                    b.ToTable("Billing");
                 });
 
             modelBuilder.Entity("doccure.Data.Models.Booking", b =>
@@ -864,17 +842,6 @@ namespace doccure.Data.Migrations
                     b.Navigation("doctor");
                 });
 
-            modelBuilder.Entity("doccure.Data.Models.Billing", b =>
-                {
-                    b.HasOne("doccure.Data.Models.Booking", "booking")
-                        .WithMany("Billing")
-                        .HasForeignKey("BookingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("booking");
-                });
-
             modelBuilder.Entity("doccure.Data.Models.Booking", b =>
                 {
                     b.HasOne("doccure.Data.Models.Applicationuser", "doctor")
@@ -1020,8 +987,6 @@ namespace doccure.Data.Migrations
 
             modelBuilder.Entity("doccure.Data.Models.Booking", b =>
                 {
-                    b.Navigation("Billing");
-
                     b.Navigation("MedicalRecord")
                         .IsRequired();
 
