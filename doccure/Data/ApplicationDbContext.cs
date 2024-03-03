@@ -24,6 +24,7 @@ namespace doccure.Data
         public DbSet<ClinicImage> ClinicImages { set; get; }
         public DbSet<ScheduleTiming> ScheduleTiming { set; get; }
         public DbSet<Booking> Bookings { set; get; }
+        public DbSet<Prescription> Prescriptions { set; get; }
 
 		public virtual DbSet<DoctorSearchReturned> DoctorSearchReturned { get; set; }
 		public virtual DbSet<ScheduleTimingBooking> ScheduleTimingBooking { get; set; }
