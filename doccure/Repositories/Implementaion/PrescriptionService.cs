@@ -53,6 +53,13 @@ namespace doccure.Repositories.Implementaion
 			
 		}
 
+		public async Task<bool> DeleteAllPrescriptionByBookingId(int BookingId)
+		{
+			var Prescriptiondb = await applicationDbContext.Prescriptions.Where(p => p.BookingId == BookingId).ExecuteDeleteAsync();
+			if (Prescriptiondb > 0) return true;
+			else return false;
+		}
+
 		public async Task<bool> DeletePrescription(int PrescriptionId, ClaimsPrincipal claims)
 		{
 			var Prescriptiondb= await applicationDbContext.Prescriptions.Include(b=>b.booking).FirstOrDefaultAsync(p=>p.Id==PrescriptionId);
@@ -72,6 +79,19 @@ namespace doccure.Repositories.Implementaion
 				{
 					return false;
 				}
+			}
+		}
+
+		public async Task<List<Prescription>> GetPrescriptionsByBookingId(int BookingId)
+		{
+			var Prescriptiondb = await applicationDbContext.Prescriptions.Where(b => b.BookingId == BookingId).ToListAsync();
+			if(Prescriptiondb == null)
+			{
+				return new List<Prescription>();
+			}
+			else
+			{
+				return Prescriptiondb;
 			}
 		}
 	}
