@@ -36,8 +36,11 @@ namespace doccure.Repositories.Implementaion
 					{
 						Prescriptiondb.Days=pp.Days;
 						Prescriptiondb.Quantity=pp.Quantity;
-						Prescriptiondb.Time=pp.Time;
-						
+						Prescriptiondb.Afternoon=pp.Afternoon;
+						Prescriptiondb.Morning=pp.Morning;
+						Prescriptiondb.Evening=pp.Evening;
+						Prescriptiondb.Night=pp.Night;
+
 					}
 				}
 				var res=await applicationDbContext.SaveChangesAsync();

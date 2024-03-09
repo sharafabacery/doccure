@@ -605,6 +605,53 @@ Version      : 1.0
             });
 
     })
+    $(".prescription-info").on('click', '.trash', function (e) {
+        $(this).closest('.prescription-count').remove();
+        return false;
+    })
+    $(".add-more-item").on('click', function () {
+        var indexPrescription = $(".prescription-count").length;
+
+        var prescriptioncontent = `<tr class="prescription-count">
+												<td>
+													<input class="form-control" type="text" name=prescriptions[${indexPrescription}].Name>
+												</td>
+												<td>
+													<input class="form-control" type="number" name=prescriptions[${indexPrescription}].Quantity>
+												</td>
+												<td>
+													<input class="form-control" type="number" name=prescriptions[${indexPrescription}].Days>
+												</td>
+												<td>
+													<div class="form-check form-check-inline">
+														<label class="form-check-label">
+															<input class="form-check-input" type="checkbox" name=prescriptions[${indexPrescription}].Morning> Morning
+														</label>
+													</div>
+													<div class="form-check form-check-inline">
+														<label class="form-check-label">
+															<input class="form-check-input" type="checkbox" name=prescriptions[${indexPrescription}].AfterNoon> Afternoon
+														</label>
+													</div>
+													<div class="form-check form-check-inline">
+														<label class="form-check-label">
+															<input class="form-check-input" type="checkbox" name=prescriptions[${indexPrescription}].Evening> Evening
+														</label>
+													</div>
+													<div class="form-check form-check-inline">
+														<label class="form-check-label">
+															<input class="form-check-input" type="checkbox" name=prescriptions[${indexPrescription}].Night> Night
+														</label>
+													</div>
+												</td>
+												<td class='delete'>
+													<a  class="btn bg-danger-light trash"><i class="far fa-trash-alt"></i></a>
+												</td>
+											</tr>`;
+
+        $(".prescription-info").append(prescriptioncontent);
+        return false;
+    });
     $('.app_details').on('click', function (e) {
         var bookingId = Number($(e.target).find('input[name="BookingId"]').val());
         fetch(`/DoctorAppointments/GetAppiontmentById?BookingId=${bookingId}`, {

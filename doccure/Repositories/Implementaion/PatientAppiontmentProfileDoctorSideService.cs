@@ -20,6 +20,8 @@ namespace doccure.Repositories.Implementaion
 		public async Task<List<Booking>> GetAllAppoitementPatientByDoctorId(ClaimsPrincipal claims, string patientId)
 		{
 			var Books = await applicationDbContext.Bookings.Include(a => a.doctor)
+														   .Include(a => a.doctor.doctor)
+															.Include(a=>a.doctor.doctor.Speciality)
 														  .Include(p => p.Prescription)
 														  .Include(m => m.MedicalRecord)
 														  .Include(p => p.Billing)
@@ -28,6 +30,13 @@ namespace doccure.Repositories.Implementaion
 														  .OrderByDescending(c => c.bookingDate)
 														  .ToListAsync();
 			return Books;
+		}
+
+		public async Task<Applicationuser> GetPatientProfileData(string Id)
+		{
+			var user=await applicationDbContext.Users.Include(a=>a.address).FirstOrDefaultAsync(u => u.Id == Id);
+
+			return user;
 		}
 	}
 }

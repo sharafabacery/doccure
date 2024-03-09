@@ -38,7 +38,7 @@
 													<img src="~/img/uploads/@Patients[i].ProfilePicture" alt="User Image">
 												</a>
 												<div class="profile-det-info">
-													<h3><a href="">Richard Wilson</a></h3>
+													<h3><a href="@Url.Action("Index", "PatientAppiontmentProfileDoctorView",new { @id = Patients[i].Id })">@Patients[i].FirstName @Patients[i].LastName</a></h3>
 
 													<div class="patient-details">
 														<h5><b>Patient ID :</b>@Patients[i].Id.Substring(0,5) </h5>
