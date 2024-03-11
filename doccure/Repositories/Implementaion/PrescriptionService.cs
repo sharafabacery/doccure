@@ -34,7 +34,9 @@ namespace doccure.Repositories.Implementaion
 					}
 					else
 					{
-						Prescriptiondb.Days=pp.Days;
+						Prescriptiondb.Name = pp.Name;
+
+                        Prescriptiondb.Days=pp.Days;
 						Prescriptiondb.Quantity=pp.Quantity;
 						Prescriptiondb.Afternoon=pp.Afternoon;
 						Prescriptiondb.Morning=pp.Morning;
@@ -85,16 +87,24 @@ namespace doccure.Repositories.Implementaion
 			}
 		}
 
-		public async Task<List<Prescription>> GetPrescriptionsByBookingId(int BookingId)
+		public async Task<Booking> GetPrescriptionsByBookingId(int BookingId)
 		{
-			var Prescriptiondb = await applicationDbContext.Prescriptions.Where(b => b.BookingId == BookingId).ToListAsync();
-			if(Prescriptiondb == null)
+			var BookPrescriptiondb = await applicationDbContext.Bookings
+																.Include(p=>p.patient)
+																.Include(p => p.patient.address)
+																.Include(d=>d.doctor)
+																.Include(d=>d.doctor.doctor.Speciality)
+																.Include(d => d.doctor.address)
+																.Include(p=>p.Prescription)
+																.Where(b => b.Id == BookingId)
+																.FirstOrDefaultAsync();
+			if(BookPrescriptiondb == null)
 			{
-				return new List<Prescription>();
+				return null;
 			}
 			else
 			{
-				return Prescriptiondb;
+				return BookPrescriptiondb;
 			}
 		}
 	}

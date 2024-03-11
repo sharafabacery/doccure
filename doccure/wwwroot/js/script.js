@@ -606,7 +606,34 @@ Version      : 1.0
 
     })
     $(".prescription-info").on('click', '.trash', function (e) {
-        $(this).closest('.prescription-count').remove();
+        var prescription=$(this).closest('.prescription-count');
+        var PrescriptionID = prescription.find(`input[name="PrescriptionID"]`).val()
+        if (PrescriptionID !== undefined) {
+            PrescriptionID = Number(PrescriptionID)
+            $.ajax({
+                url: `/Prescription/DeletePrescription/${PrescriptionID}`,
+                type: 'DELETE',
+                contentType: false,
+                processData: false,
+                cache: false,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (response) {
+                    // Handle the success response
+                    prescription.remove();
+                    console.log('prescription data sent successfully.');
+                    // Perform any additional actions on success, such as showing a success message or redirecting to another page
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    // Handle the error response
+                    console.error('Failed to send prescription data.');
+                    // Handle the error case, such as showing an error message to the user
+                }
+            });
+        } else {
+            prescription.remove();
+        }
         return false;
     })
     $(".add-more-item").on('click', function () {
@@ -625,22 +652,22 @@ Version      : 1.0
 												<td>
 													<div class="form-check form-check-inline">
 														<label class="form-check-label">
-															<input class="form-check-input" type="checkbox" name=prescriptions[${indexPrescription}].Morning> Morning
+															<input class="form-check-input" type="checkbox" name=prescriptions[${indexPrescription}].Morning value="true"> Morning
 														</label>
 													</div>
 													<div class="form-check form-check-inline">
 														<label class="form-check-label">
-															<input class="form-check-input" type="checkbox" name=prescriptions[${indexPrescription}].AfterNoon> Afternoon
+															<input class="form-check-input" type="checkbox" name=prescriptions[${indexPrescription}].AfterNoon value="true"> Afternoon
 														</label>
 													</div>
 													<div class="form-check form-check-inline">
 														<label class="form-check-label">
-															<input class="form-check-input" type="checkbox" name=prescriptions[${indexPrescription}].Evening> Evening
+															<input class="form-check-input" type="checkbox" name=prescriptions[${indexPrescription}].Evening value="true"> Evening
 														</label>
 													</div>
 													<div class="form-check form-check-inline">
 														<label class="form-check-label">
-															<input class="form-check-input" type="checkbox" name=prescriptions[${indexPrescription}].Night> Night
+															<input class="form-check-input" type="checkbox" name=prescriptions[${indexPrescription}].Night value="true"> Night
 														</label>
 													</div>
 												</td>

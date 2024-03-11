@@ -68,7 +68,7 @@
 									<li class="list-group-item">
 										<div class="media align-items-center">
 											<div class="mr-3">
-												<img alt="Image placeholder" src="assets/img/doctors/doctor-thumb-02.jpg" class="avatar  rounded-circle">
+												<img alt="Image placeholder" src="~/img/doctors/doctor-thumb-02.jpg" class="avatar  rounded-circle">
 											</div>
 											<div class="media-body">
 												<h5 class="d-block mb-0">Dr. Darren Elder </h5>
@@ -80,7 +80,7 @@
 									<li class="list-group-item">
 										<div class="media align-items-center">
 											<div class="mr-3">
-												<img alt="Image placeholder" src="assets/img/doctors/doctor-thumb-02.jpg" class="avatar  rounded-circle">
+												<img alt="Image placeholder" src="~/img/doctors/doctor-thumb-02.jpg" class="avatar  rounded-circle">
 											</div>
 											<div class="media-body">
 												<h5 class="d-block mb-0">Dr. Darren Elder </h5>
@@ -156,7 +156,7 @@
 <td><span class="badge badge-pill bg-success-light">Confirm</span></td>
 																<td class="text-right">
 																	<div class="table-action">
-																		<a href="javascript:void(0);" class="btn btn-sm bg-success-light">
+																			<a class="btn btn-sm bg-success-light">
 																			<i class="far fa-edit"></i> Edit
 																		</a>
 																	</div>
@@ -167,7 +167,7 @@
 																	<td><span class="badge badge-pill bg-warning-light">Pending</span></td>
 																	<td class="text-right">
 																		<div class="table-action">
-																			<a href="edit-prescription.html" class="btn btn-sm bg-success-light">
+																			<a  class="btn btn-sm bg-success-light">
 																				<i class="far fa-edit"></i> Edit
 																			</a>
 																			<a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
@@ -394,7 +394,7 @@
 										<!-- Prescription Tab -->
 										<div class="tab-pane fade" id="pres">
 											<div class="text-right">
-									<a href="@Url.Action("GetLastAppoitment", "Prescription",new { @id = @Patient.Id })" class="add-new-btn">Add Prescription</a>
+									<a href="@Url.Action("GetLastAppoitment", "Prescription",new { @id = @Patient.Id,@state="Add" })" class="add-new-btn">Add Prescription</a>
 											</div>
 											<div class="card card-table mb-0">
 												<div class="card-body">
@@ -430,10 +430,10 @@
 																			<a href="javascript:void(0);" class="btn btn-sm bg-primary-light">
 																				<i class="fas fa-print"></i> Print
 																			</a>
-																			<a href="javascript:void(0);" class="btn btn-sm bg-info-light">
+																			<a href="@Url.Action("ViewPrescription", "Prescription",new { @BookingId=Books[i].Id,@PatientId = @Patient.Id,@state="View" })" class="btn btn-sm bg-info-light">
 																				<i class="far fa-eye"></i> View
 																			</a>
-																			<a href="edit-prescription.html" class="btn btn-sm bg-success-light">
+																			<a href="@Url.Action("ViewPrescription", "Prescription",new { @BookingId=Books[i].Id,@PatientId = @Patient.Id,@state="Edit" })" class="btn btn-sm bg-success-light">
 																				<i class="fas fa-edit"></i> Edit
 																			</a>
 																			<a href="javascript:void(0);" class="btn btn-sm bg-danger-light">

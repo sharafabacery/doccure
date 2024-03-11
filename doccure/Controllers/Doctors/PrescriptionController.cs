@@ -50,9 +50,37 @@ namespace doccure.Controllers.Doctors
 			}
 			
 		}
-		public IActionResult Index()
+		public async Task<IActionResult> ViewPrescription(int BookingId,string PatientId,string state)
 		{
-			return View();
+			var Prescrptions = await prescriptionService.GetPrescriptionsByBookingId(BookingId);
+			if (Prescrptions == null)
+			{
+				return RedirectToAction("Index", "PatientAppiontmentProfileDoctorView", new { id = PatientId });
+			}
+			else
+			{
+				ViewBag.State = state;
+				ViewBag.lastAppiontment = Prescrptions;
+				return View("Index");
+			}
+			
 		}
-	}
+        [Authorize(Roles = "doctor")]
+        [Route("/Prescription/DeletePrescription/{PrescriptionID}")]
+
+        [HttpDelete]
+        public async Task<IActionResult> DeletePrescription(int PrescriptionID)
+        {
+            var Prescrptions = await prescriptionService.DeletePrescription(PrescriptionID, User);
+            if (Prescrptions == true)
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+
+        }
+    }
 }
