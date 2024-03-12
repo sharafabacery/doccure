@@ -636,6 +636,34 @@ Version      : 1.0
         }
         return false;
     })
+    $(".prescription-delete-all").on('click', '.trash', function (e) {
+        var prescriptionDelete = $(this).closest('.prescription-delete-table');
+        var BookingID = prescriptionDelete.find(`input[name="BookingId"]`).val()
+        if (BookingID !== undefined) {
+            $.ajax({
+                url: `/Prescription/DeleteBookingPrescription/${BookingID}`,
+                type: 'DELETE',
+                contentType: false,
+                processData: false,
+                cache: false,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (response) {
+                    // Handle the success response
+                    prescriptionDelete.remove();
+                    console.log('prescription data sent successfully.');
+                    // Perform any additional actions on success, such as showing a success message or redirecting to another page
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    // Handle the error response
+                    console.error('Failed to send prescription data.');
+                    // Handle the error case, such as showing an error message to the user
+                }
+            });
+        } 
+        return false;
+    })
     $(".add-more-item").on('click', function () {
         var indexPrescription = $(".prescription-count").length;
 

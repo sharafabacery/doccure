@@ -1,0 +1,284 @@
+﻿@using doccure.Data.Models;
+@using doccure.Data.ResponseModels;
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims;
+@inject SignInManager<Applicationuser> SignInManager
+@inject UserManager<Applicationuser> UserManager
+@{
+	var Patient = (Applicationuser)ViewBag.Patient;
+	var Books = (List<Booking>)ViewBag.Books;
+}
+<!-- Appointment Tab -->
+<div id="pat_appointments" class="tab-pane fade show active">
+	<div class="card card-table mb-0">
+		<div class="card-body">
+			<div class="table-responsive">
+				<table class="table table-hover table-center mb-0">
+					<thead>
+						<tr>
+							<th>Doctor</th>
+							<th>Appt Date</th>
+
+							<th>Booking Date</th>
+							<th>Amount</th>
+							<th>Follow Up</th>
+							<th>Status</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						@{
+							for (int i = 0; i < Books.Count; i++)
+							{
+								<tr>
+									<td>
+										<h2 class="table-avatar">
+											<a href="" class="avatar avatar-sm mr-2">
+												<img class="avatar-img rounded-circle" src="~/img/uploads/@Books[i].doctor.Image" alt="User Image">
+											</a>
+											<a href="doctor-profile.html">Dr. @Books[i].doctor.FirstName @Books[i].doctor.LastName  <span>@Books[i].doctor.doctor.Speciality.Name</span></a>
+										</h2>
+									</td>
+									<td>@Books[i].createdDate</td>
+									<td>@Books[i].bookingDate</td>
+									<td>@Books[i].total</td>
+									<td>16 Nov 2019</td>
+									@if (Books[i].BookingStatus == BookingStatus.Accepted)
+									{
+										<td><span class="badge badge-pill bg-success-light">Confirm</span></td>
+										<td class="text-right">
+											<div class="table-action">
+												<a class="btn btn-sm bg-success-light">
+													<i class="far fa-edit"></i> Edit
+												</a>
+											</div>
+										</td>
+									}
+									else
+									{
+										<td><span class="badge badge-pill bg-warning-light">Pending</span></td>
+										<td class="text-right">
+											<div class="table-action">
+												<a class="btn btn-sm bg-success-light">
+													<i class="far fa-edit"></i> Edit
+												</a>
+												<a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
+													<i class="far fa-trash-alt"></i> Cancel
+												</a>
+											</div>
+										</td>
+									}
+
+								</tr>
+							}
+
+						}
+
+						@*																<tr>
+						<td>
+						<h2 class="table-avatar">
+						<a href="doctor-profile.html" class="avatar avatar-sm mr-2">
+						<img class="avatar-img rounded-circle" src="assets/img/doctors/doctor-thumb-02.jpg" alt="User Image">
+						</a>
+						<a href="doctor-profile.html">Dr. Darren Elder <span>Dental</span></a>
+						</h2>
+						</td>
+						<td>12 Nov 2019 <span class="d-block text-info">8.00 PM</span></td>
+						<td>12 Nov 2019</td>
+						<td>$250</td>
+						<td>14 Nov 2019</td>
+						<td><span class="badge badge-pill bg-success-light">Confirm</span></td>
+						<td class="text-right">
+						<div class="table-action">
+						<a href="javascript:void(0);" class="btn btn-sm bg-success-light">
+						<i class="far fa-edit"></i> Edit
+						</a>
+						</div>
+						</td>
+						</tr>
+						<tr>
+						<td>
+						<h2 class="table-avatar">
+						<a href="doctor-profile.html" class="avatar avatar-sm mr-2">
+						<img class="avatar-img rounded-circle" src="assets/img/doctors/doctor-thumb-02.jpg" alt="User Image">
+						</a>
+						<a href="doctor-profile.html">Dr. Darren Elder <span>Dental</span></a>
+						</h2>
+						</td>
+						<td>11 Nov 2019 <span class="d-block text-info">11.00 AM</span></td>
+						<td>10 Nov 2019</td>
+						<td>$400</td>
+						<td>13 Nov 2019</td>
+						<td><span class="badge badge-pill bg-danger-light">Cancelled</span></td>
+						<td class="text-right">
+						<div class="table-action">
+						<a href="javascript:void(0);" class="btn btn-sm bg-success-light">
+						<i class="far fa-edit"></i> Edit
+						</a>
+						</div>
+						</td>
+						</tr>
+						<tr>
+						<td>
+						<h2 class="table-avatar">
+						<a href="doctor-profile.html" class="avatar avatar-sm mr-2">
+						<img class="avatar-img rounded-circle" src="assets/img/doctors/doctor-thumb-02.jpg" alt="User Image">
+						</a>
+						<a href="doctor-profile.html">Dr. Darren Elder <span>Dental</span></a>
+						</h2>
+						</td>
+						<td>10 Nov 2019 <span class="d-block text-info">3.00 PM</span></td>
+						<td>10 Nov 2019</td>
+						<td>$350</td>
+						<td>12 Nov 2019</td>
+						<td><span class="badge badge-pill bg-warning-light">Pending</span></td>
+						<td class="text-right">
+						<div class="table-action">
+						<a href="edit-prescription.html" class="btn btn-sm bg-success-light">
+						<i class="far fa-edit"></i> Edit
+						</a>
+						<a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
+						<i class="far fa-trash-alt"></i> Cancel
+						</a>
+						</div>
+						</td>
+						</tr>
+						<tr>
+						<td>
+						<h2 class="table-avatar">
+						<a href="doctor-profile.html" class="avatar avatar-sm mr-2">
+						<img class="avatar-img rounded-circle" src="assets/img/doctors/doctor-thumb-02.jpg" alt="User Image">
+						</a>
+						<a href="doctor-profile.html">Dr. Darren Elder <span>Dental</span></a>
+						</h2>
+						</td>
+						<td>9 Nov 2019 <span class="d-block text-info">7.00 PM</span></td>
+						<td>8 Nov 2019</td>
+						<td>$75</td>
+						<td>11 Nov 2019</td>
+						<td><span class="badge badge-pill bg-success-light">Confirm</span></td>
+						<td class="text-right">
+						<div class="table-action">
+						<a href="javascript:void(0);" class="btn btn-sm bg-success-light">
+						<i class="far fa-edit"></i> Edit
+						</a>
+						</div>
+						</td>
+						</tr>
+						<tr>
+						<td>
+						<h2 class="table-avatar">
+						<a href="doctor-profile.html" class="avatar avatar-sm mr-2">
+						<img class="avatar-img rounded-circle" src="assets/img/doctors/doctor-thumb-02.jpg" alt="User Image">
+						</a>
+						<a href="doctor-profile.html">Dr. Darren Elder <span>Dental</span></a>
+						</h2>
+						</td>
+						<td>8 Nov 2019 <span class="d-block text-info">9.00 AM</span></td>
+						<td>6 Nov 2019</td>
+						<td>$175</td>
+						<td>10 Nov 2019</td>
+						<td><span class="badge badge-pill bg-danger-light">Cancelled</span></td>
+						<td class="text-right">
+						<div class="table-action">
+						<a href="javascript:void(0);" class="btn btn-sm bg-success-light">
+						<i class="far fa-edit"></i> Edit
+						</a>
+						</div>
+						</td>
+						</tr>
+						<tr>
+						<td>
+						<h2 class="table-avatar">
+						<a href="doctor-profile.html" class="avatar avatar-sm mr-2">
+						<img class="avatar-img rounded-circle" src="assets/img/doctors/doctor-thumb-02.jpg" alt="User Image">
+						</a>
+						<a href="doctor-profile.html">Dr. Darren Elder <span>Dental</span></a>
+						</h2>
+						</td>
+						<td>8 Nov 2019 <span class="d-block text-info">6.00 PM</span></td>
+						<td>6 Nov 2019</td>
+						<td>$450</td>
+						<td>10 Nov 2019</td>
+						<td><span class="badge badge-pill bg-success-light">Confirm</span></td>
+						<td class="text-right">
+						<div class="table-action">
+						<a href="javascript:void(0);" class="btn btn-sm bg-success-light">
+						<i class="far fa-edit"></i> Edit
+						</a>
+						</div>
+						</td>
+						</tr>
+						<tr>
+						<td>
+						<h2 class="table-avatar">
+						<a href="doctor-profile.html" class="avatar avatar-sm mr-2">
+						<img class="avatar-img rounded-circle" src="assets/img/doctors/doctor-thumb-02.jpg" alt="User Image">
+						</a>
+						<a href="doctor-profile.html">Dr. Darren Elder <span>Dental</span></a>
+						</h2>
+						</td>
+						<td>7 Nov 2019 <span class="d-block text-info">9.00 PM</span></td>
+						<td>7 Nov 2019</td>
+						<td>$275</td>
+						<td>9 Nov 2019</td>
+						<td><span class="badge badge-pill bg-info-light">Completed</span></td>
+						<td class="text-right">
+						<div class="table-action">
+						<a href="javascript:void(0);" class="btn btn-sm bg-primary-light">
+						<i class="far fa-clock"></i> Reschedule
+						</a>
+						</div>
+						</td>
+						</tr>
+						<tr>
+						<td>
+						<h2 class="table-avatar">
+						<a href="doctor-profile.html" class="avatar avatar-sm mr-2">
+						<img class="avatar-img rounded-circle" src="assets/img/doctors/doctor-thumb-02.jpg" alt="User Image">
+						</a>
+						<a href="doctor-profile.html">Dr. Darren Elder <span>Dental</span></a>
+						</h2>
+						</td>
+						<td>6 Nov 2019 <span class="d-block text-info">8.00 PM</span></td>
+						<td>4 Nov 2019</td>
+						<td>$600</td>
+						<td>8 Nov 2019</td>
+						<td><span class="badge badge-pill bg-info-light">Completed</span></td>
+						<td class="text-right">
+						<div class="table-action">
+						<a href="javascript:void(0);" class="btn btn-sm bg-primary-light">
+						<i class="far fa-clock"></i> Reschedule
+						</a>
+						</div>
+						</td>
+						</tr>
+						<tr>
+						<td>
+						<h2 class="table-avatar">
+						<a href="doctor-profile.html" class="avatar avatar-sm mr-2">
+						<img class="avatar-img rounded-circle" src="assets/img/doctors/doctor-thumb-02.jpg" alt="User Image">
+						</a>
+						<a href="doctor-profile.html">Dr. Darren Elder <span>Dental</span></a>
+						</h2>
+						</td>
+						<td>5 Nov 2019 <span class="d-block text-info">5.00 PM</span></td>
+						<td>1 Nov 2019</td>
+						<td>$100</td>
+						<td>7 Nov 2019</td>
+						<td><span class="badge badge-pill bg-info-light">Completed</span></td>
+						<td class="text-right">
+						<div class="table-action">
+						<a href="javascript:void(0);" class="btn btn-sm bg-primary-light">
+						<i class="far fa-clock"></i> Reschedule
+						</a>
+						</div>
+						</td>
+						</tr>*@
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /Appointment Tab -->

@@ -10,31 +10,17 @@ namespace doccure.Controllers.Doctors
 
 	public class PrescriptionController : Controller
 	{
-		private readonly ILastAppointmentofPatient lastAppointmentofPatient;
 		private readonly IPrescriptionService prescriptionService;
 
-		public PrescriptionController(ILastAppointmentofPatient lastAppointmentofPatient, IPrescriptionService prescriptionService)
+		public PrescriptionController( IPrescriptionService prescriptionService)
 		{
-			this.lastAppointmentofPatient = lastAppointmentofPatient;
+			
 			this.prescriptionService = prescriptionService;
 
 		}
-		[Authorize(Roles = "doctor")]
 
-		public async Task<IActionResult> GetLastAppoitment(string Id)
-		{
-			var lastAppiontment = await lastAppointmentofPatient.LastAppoitment(User, Id);
-			if(lastAppiontment == null)
-			{
-				return RedirectToAction("Index", "PatientAppiontmentProfileDoctorView",new {id=Id });
-			}
-			else
-			{
-			ViewBag.lastAppiontment = lastAppiontment;
-			return View("Index");
-			}
-			
-		}
+
+		[Authorize(Roles = "doctor")]
 		public async Task<IActionResult> AddPrescription(PrescriptionRequest prescriptionRequest)
 		{
 			var Prescrptions=await prescriptionService.AddEditPrescription(prescriptionRequest);
@@ -72,6 +58,23 @@ namespace doccure.Controllers.Doctors
         public async Task<IActionResult> DeletePrescription(int PrescriptionID)
         {
             var Prescrptions = await prescriptionService.DeletePrescription(PrescriptionID, User);
+            if (Prescrptions == true)
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+
+        }
+        [Authorize(Roles = "doctor")]
+        [Route("/Prescription/DeleteBookingPrescription/{BookingId}")]
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteBookingPrescription(int BookingId)
+        {
+            var Prescrptions = await prescriptionService.DeleteAllPrescriptionByBookingId(BookingId);
             if (Prescrptions == true)
             {
                 return Ok();
