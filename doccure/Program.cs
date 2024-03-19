@@ -10,6 +10,7 @@ namespace doccure
     public class Program
     {
 		public delegate IUserProfileSettingsService ServiceResolver(string key);
+		public delegate IFileService ServiceResolver2(string key);
 		public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +30,8 @@ namespace doccure
             builder.Services.AddScoped<IUserAuthenticationService, UserAuthunticationService>();
             builder.Services.AddScoped<UserProfileSettingsService>();
             builder.Services.AddScoped<DoctorProfileSettingsService>();
+            builder.Services.AddScoped<ImageService>();
+            builder.Services.AddScoped<FileService>();
 			builder.Services.AddScoped<ServiceResolver>(serviceProvider => key =>
 			{
 				switch (key)
@@ -42,6 +45,19 @@ namespace doccure
 						throw new KeyNotFoundException(); // or maybe return null, up to you
 				}
 			});
+			builder.Services.AddScoped<ServiceResolver2>(serviceProvider => key =>
+			{
+				switch (key)
+				{
+					case "Image":
+						return serviceProvider.GetService<ImageService>();
+					case "File":
+						return serviceProvider.GetService<FileService>();
+
+					default:
+						throw new KeyNotFoundException(); // or maybe return null, up to you
+				}
+			});
 			builder.Services.AddScoped<ISpecalityService,SpecalityService>();
             builder.Services.AddScoped<IDeleteEducation, DeleteEducationService>();
 			builder.Services.AddScoped<IDeleteExperience, DeleteExperienceService>();
@@ -50,7 +66,6 @@ namespace doccure
 			builder.Services.AddScoped<IScheduleTimingService, ScheduleTimingService>();
 			builder.Services.AddScoped<IDoctorClinicService, DoctorClinicService>();
 			builder.Services.AddScoped<IClinicService, ClinicService>();
-			builder.Services.AddScoped<IFileService, ImageService>();
 			builder.Services.AddScoped<IDoctorSearch, DoctorSearchService>();
 			builder.Services.AddScoped<IBookingService, BookingService>();
 			builder.Services.AddScoped<IPatientsService, PatientsService>();

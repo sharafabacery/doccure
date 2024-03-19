@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using static doccure.Program;
 
 namespace doccure.Repositories.Implementaion
 {
@@ -17,12 +18,12 @@ namespace doccure.Repositories.Implementaion
 		private readonly ApplicationDbContext applicationDbContext;
 		private readonly IFileService fileService;
 
-		public UserProfileSettingsService(UserManager<Applicationuser> userManager, RoleManager<IdentityRole> roleManager,ApplicationDbContext applicationDbContext,IFileService fileService)
+		public UserProfileSettingsService(ServiceResolver2 serviceAccessor, UserManager<Applicationuser> userManager, RoleManager<IdentityRole> roleManager,ApplicationDbContext applicationDbContext)
 		{
 			this.userManager = userManager;
 			this.roleManager = roleManager;
 			this.applicationDbContext = applicationDbContext;
-			this.fileService = fileService;
+			this.fileService = serviceAccessor("Image"); 
 		}
 		public async Task<Applicationuser> GetUserData(ClaimsPrincipal user)
 		{

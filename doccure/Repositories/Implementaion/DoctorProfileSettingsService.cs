@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging;
 using System.Security.Claims;
 using System.Transactions;
+using static doccure.Program;
 using static System.Formats.Asn1.AsnWriter;
 
 namespace doccure.Repositories.Implementaion
@@ -18,12 +19,12 @@ namespace doccure.Repositories.Implementaion
 		private readonly ApplicationDbContext applicationDbContext;
 		private readonly IFileService fileService;
 
-		public DoctorProfileSettingsService(UserManager<Applicationuser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext applicationDbContext, IFileService fileService)
+		public DoctorProfileSettingsService(ServiceResolver2 serviceAccessor, UserManager<Applicationuser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext applicationDbContext)
 		{
 			this.userManager = userManager;
 			this.roleManager = roleManager;
 			this.applicationDbContext = applicationDbContext;
-			this.fileService = fileService;
+			this.fileService = serviceAccessor("Image");
 		}
 		public async Task<Applicationuser> GetUserData(ClaimsPrincipal user)
 		{
