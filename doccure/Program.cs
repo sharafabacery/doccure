@@ -74,6 +74,8 @@ namespace doccure
 			builder.Services.AddScoped<IPatientAppointmentProfile, PatientAppointmentProfileService>();
 			builder.Services.AddScoped<IPatientAppiontmentProfileDoctorSide, PatientAppiontmentProfileDoctorSideService>();
 			builder.Services.AddScoped<ILastAppointmentofPatient, LastAppointmentofPatientService>();
+			builder.Services.AddScoped<ILastMedicalRecordBookingPatientService, LastMedicalRecordBookingPatientService>();
+			builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
 			builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
 			// builder.Services.AddScoped<IUserAuthticationService, UserAuthticationService>();
 
