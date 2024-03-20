@@ -61,6 +61,5 @@ namespace doccure.Repositories.Implementaion
 			catch (Exception ex) { return false; }
 		}
 	}
-	{
-	}
+	
 }
