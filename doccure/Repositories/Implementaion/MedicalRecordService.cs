@@ -1,9 +1,11 @@
 ﻿using doccure.Data;
+using doccure.Data.Migrations;
 using doccure.Data.Models;
 using doccure.Data.RequestModels;
 using doccure.Repositories.Interfance;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using static doccure.Program;
 
 namespace doccure.Repositories.Implementaion
@@ -54,7 +56,7 @@ namespace doccure.Repositories.Implementaion
 					}
 					else
 					{
-						Book.MedicalRecord = new MedicalRecord()
+						Book.MedicalRecord = new Data.Models.MedicalRecord()
 						{
 							FilePath= FilePath,
 							Description= medicalRecordRequest.Description,
@@ -72,6 +74,47 @@ namespace doccure.Repositories.Implementaion
 			else
 			{
 				return null;
+			}
+		}
+
+		public async Task<bool> DeleteMedicalRecord(int MedicalRecordId, ClaimsPrincipal claims)
+		{
+			var MedicalRecorddb = await applicationDbContext.
+															MedicalRecord
+															.Include(b => b.booking)
+															.FirstOrDefaultAsync(p => p.Id == MedicalRecordId);
+			if (MedicalRecorddb == null)
+			{
+				return false;
+			}
+			else
+			{
+				if (MedicalRecorddb.booking.doctorId == userManager.GetUserId(claims))
+				{
+					applicationDbContext.Remove(MedicalRecorddb);
+					await applicationDbContext.SaveChangesAsync();
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+		}
+
+		public async Task<Booking> GetMedicalRecordByBookingId(int BookingId)
+		{
+			var BookMedicalRecorddb = await applicationDbContext.Bookings
+																.Include(p => p.MedicalRecord)
+																.Where(b => b.Id == BookingId)
+																.FirstOrDefaultAsync();
+			if (BookMedicalRecorddb == null)
+			{
+				return null;
+			}
+			else
+			{
+				return BookMedicalRecorddb;
 			}
 		}
 	}
