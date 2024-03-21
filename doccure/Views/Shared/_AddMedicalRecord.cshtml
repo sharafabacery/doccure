@@ -1,29 +1,26 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model doccure.Data.RequestModels.MedicalRecordRequest
 <!-- Add Medical Records Modal -->
-		<div class="modal fade custom-modal" id="add_medical_records">
+		<div class="modal fade custom-modal MedicalRecordForm" id="add_medical_records">
 			<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
 						<h3 class="modal-title">Medical Records</h3>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					</div>
-					<form>					
+			<form asp-controller="MedicalRecord" asp-action="AddMedicalRecord" enctype="multipart/form-data">
+				<input id="BookingId" name="BookingId" readonly="readonly"  />
 						<div class="modal-body">
 							<div class="form-group">
-								<label>Date</label>
-								<input type="text" class="form-control datetimepicker" value="31-10-2019">
+								<label  asp-for="dateTime">Date</label>
+								<input  asp-for="dateTime" class="form-control " value="31-10-2019">
 							</div>
 							<div class="form-group">
-								<label>Description ( Optional )</label>
-								<textarea class="form-control"></textarea>
+								<label  asp-for="Description"> Description ( Optional )</label>
+								<textarea  asp-for="Description" class="form-control"></textarea>
 							</div>
 							<div class="form-group">
 								<label>Upload File</label> 
-								<input type="file" class="form-control">
+								<input  asp-for="ImageFile"  class="upload">
 							</div>	
 							<div class="submit-section text-center">
 								<button type="submit" class="btn btn-primary submit-btn">Submit</button>

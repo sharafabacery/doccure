@@ -15,7 +15,7 @@ namespace doccure.Controllers.Doctors
 		}
 		[Authorize(Roles = "doctor")]
 
-		public async Task<IActionResult> IndexAsync(string Id)
+		public async Task<IActionResult> Index(string Id)
 		{
 			var lastMidical = await lastMedicalRecordBookingPatientService.LastMedicalRecord(User, Id);
 			if (lastMidical == null)

@@ -11,13 +11,16 @@
 
 <!-- Medical Records Tab -->
 <div class="tab-pane fade" id="medical">
-	<div class="text-right">
-		<a class="add-new-btn" data-toggle="modal" data-target="#add_medical_records">Add Medical Records</a>
+	<div class="text-right CheckMedical">
+		<input type="text" readonly="readonly" hidden="hidden" name="patientIdd" value="@Patient.Id" class="form-control" >
+
+		<a class="add-new-btn " data-toggle="modal" data-target="#add_medical_records">
+			Add Medical Records</a>
 	</div>
 	<div class="card card-table mb-0">
 		<div class="card-body">
 			<div class="table-responsive">
-				<table class="table table-hover table-center mb-0">
+				<table class="table table-hover table-center mb-0 Medical-delete-all">
 					<thead>
 						<tr>
 							<th>ID</th>
@@ -28,7 +31,7 @@
 							<th></th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody class="Medical-delete-table">
 						@{
 							for (int i = 0; i < Books.Count; i++)
 							{
@@ -55,12 +58,17 @@
 												<a href="javascript:void(0);" class="btn btn-sm bg-info-light">
 													<i class="far fa-eye"></i> View
 												</a>
-												<a href="edit-prescription.html" class="btn btn-sm bg-success-light" data-toggle="modal" data-target="#add_medical_records">
-													<i class="fas fa-edit"></i> Edit
-												</a>
-												<a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
-													<i class="far fa-trash-alt"></i> Delete
-												</a>
+												
+												@if (SignInManager.IsSignedIn(User) && @User.FindFirstValue(ClaimTypes.Role) != "patient")
+												{
+													<a class="btn btn-sm bg-success-light" data-toggle="modal" data-target="#add_medical_records">
+														<i class="fas fa-edit"></i> Edit
+													</a>
+													<a class="btn btn-sm bg-danger-light trash">
+														<input name="MedicalRecordId" readonly="readonly" hidden="hidden" value="@Books[i].MedicalRecord.Id">
+														<i class="far fa-trash-alt"></i> Delete
+													</a>
+												}
 											</div>
 										</td>
 									</tr>
