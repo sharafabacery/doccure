@@ -8,7 +8,8 @@
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					</div>
 			<form asp-controller="MedicalRecord" asp-action="AddMedicalRecord" enctype="multipart/form-data">
-				<input id="BookingId" name="BookingId" readonly="readonly"  />
+				<input id="BookingId" name="BookingId" readonly="readonly" />
+				<input id="PatientId" name="BookingId" readonly="readonly" />
 						<div class="modal-body">
 							<div class="form-group">
 								<label  asp-for="dateTime">Date</label>

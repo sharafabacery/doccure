@@ -628,6 +628,7 @@ Version      : 1.0
             .then(data => {
 
                 $("#BookingId").val(data.id)
+                $("#PatientId").val(data.patientId)
 
             })
             .catch(error => {

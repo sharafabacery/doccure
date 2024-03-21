@@ -22,7 +22,7 @@ namespace doccure.Controllers.Doctors
 			if (MedicalRecord == null)
 			{
 				//adding alernative path for nulls
-				return View();
+				return RedirectToAction("Index", "PatientAppiontmentProfileDoctorView", new { id = medicalRecordRequest.PatientId });
 			}
 			else
 			{

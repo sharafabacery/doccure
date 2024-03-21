@@ -4,6 +4,7 @@
 	{
 		public int BookingId { get; set; }
 		public string Description { get; set; }
+		public string PatientId { get; set; }
 		public DateTime dateTime { get; set; }
 		public IFormFile? ImageFile { get; set; }
 
