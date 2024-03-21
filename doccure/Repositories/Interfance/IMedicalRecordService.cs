@@ -8,6 +8,6 @@ namespace doccure.Repositories.Interfance
 	{
 		public Task<Booking> AddEditMedicalRecord(MedicalRecordRequest medicalRecordRequest);
 		public Task<bool> DeleteMedicalRecord(int MedicalRecordId, ClaimsPrincipal claims);
-		public Task<Booking> GetMedicalRecordByBookingId(int BookingId);
+		public Task<MedicalRecord> GetMedicalRecordByBookingId(int BookingId);
 	}
 }

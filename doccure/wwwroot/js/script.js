@@ -722,6 +722,36 @@ Version      : 1.0
         }
         return false;
     })
+    $(".medicalEditModal").on('click', function (e) {
+        var BookingID = $(this).find(`input[name="BookingId"]`).val()
+        if (BookingID !== undefined) {
+            $.ajax({
+                url: `/MedicalRecord/GetMedicalRecord/${BookingID}`,
+                type: 'GET',
+                contentType: false,
+                processData: false,
+                cache: false,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (response) {
+                    // Handle the success response
+                    $("#BookingId").val(response.bookingId)
+                    $("#Description").val(response.description)
+                    $("#dateTime").val(Date( response.dateTime))
+                    console.log('prescription data sent successfully.');
+                    // Perform any additional actions on success, such as showing a success message or redirecting to another page
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    // Handle the error response
+                    console.error('Failed to send prescription data.');
+                    // Handle the error case, such as showing an error message to the user
+                }
+            });
+
+        }
+        
+    })
     $(".add-more-item").on('click', function () {
         var indexPrescription = $(".prescription-count").length;
 

@@ -49,7 +49,6 @@ namespace doccure.Controllers.Doctors
 
 		}
 		[Route("/MedicalRecord/GetMedicalRecord/{BookingId}")]
-		[HttpGet]
 		public async Task<IActionResult> GetMedicalRecord(int BookingId)
 		{
 			var MedicalRecord = await medicalRecordService.GetMedicalRecordByBookingId(BookingId);

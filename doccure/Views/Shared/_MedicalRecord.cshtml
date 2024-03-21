@@ -41,7 +41,7 @@
 										<td><a href="javascript:void(0);">@Books[i].MedicalRecord.Id</a></td>
 										<td>@Books[i].MedicalRecord.Date</td>
 										<td>@Books[i].MedicalRecord.Description</td>
-										<td><a href="#">dental-test.pdf</a></td>
+										<td><a href="~/pdfs/@Books[i].MedicalRecord.FilePath" target="_blank" rel="noopener noreferrer">@Books[i].MedicalRecord.FilePath.Substring(6)</a></td>
 										<td>
 											<h2 class="table-avatar">
 												<a href="doctor-profile.html" class="avatar avatar-sm mr-2">
@@ -52,17 +52,19 @@
 										</td>
 										<td class="text-right">
 											<div class="table-action">
-												<a href="javascript:void(0);" class="btn btn-sm bg-primary-light">
-													<i class="fas fa-print"></i> Print
-												</a>
-												<a href="javascript:void(0);" class="btn btn-sm bg-info-light">
+
+												@*<a href="javascript:void(0);" class="btn btn-sm bg-primary-light">
+									<i class="fas fa-print"></i> Print
+									</a><a href="javascript:void(0);" class="btn btn-sm bg-info-light">
 													<i class="far fa-eye"></i> View
-												</a>
-												
+												</a>*@
 												@if (SignInManager.IsSignedIn(User) && @User.FindFirstValue(ClaimTypes.Role) != "patient")
 												{
-													<a class="btn btn-sm bg-success-light" data-toggle="modal" data-target="#add_medical_records">
+													<a class="btn btn-sm bg-success-light medicalEditModal" data-toggle="modal" data-target="#add_medical_records">
+														<input name="BookingId" value="@Books[i].Id" readonly="readonly" hidden="hidden" />
+
 														<i class="fas fa-edit"></i> Edit
+														
 													</a>
 													<a class="btn btn-sm bg-danger-light trash">
 														<input name="MedicalRecordId" readonly="readonly" hidden="hidden" value="@Books[i].MedicalRecord.Id">

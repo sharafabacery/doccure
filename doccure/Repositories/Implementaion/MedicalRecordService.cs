@@ -102,11 +102,10 @@ namespace doccure.Repositories.Implementaion
 			}
 		}
 
-		public async Task<Booking> GetMedicalRecordByBookingId(int BookingId)
+		public async Task<Data.Models.MedicalRecord> GetMedicalRecordByBookingId(int BookingId)
 		{
-			var BookMedicalRecorddb = await applicationDbContext.Bookings
-																.Include(p => p.MedicalRecord)
-																.Where(b => b.Id == BookingId)
+			var BookMedicalRecorddb = await applicationDbContext.MedicalRecord
+																.Where(b => b.BookingId == BookingId)
 																.FirstOrDefaultAsync();
 			if (BookMedicalRecorddb == null)
 			{
