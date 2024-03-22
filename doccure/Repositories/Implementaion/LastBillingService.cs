@@ -2,6 +2,7 @@
 using doccure.Data.Models;
 using doccure.Repositories.Interfance;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace doccure.Repositories.Implementaion
@@ -16,9 +17,20 @@ namespace doccure.Repositories.Implementaion
 			this.applicationDbContext = applicationDbContext;
 			this.userManager = userManager;
 		}
-		public Task<Booking> LastBilling(ClaimsPrincipal claims, string patientId)
+		public async Task<Booking> LastBilling(ClaimsPrincipal claims, string patientId)
 		{
-			throw new NotImplementedException();
+			var Book = await applicationDbContext.Bookings
+												.Include(p => p.Billing)
+												.Include(u => u.patient)
+												.Include(u => u.patient.address)
+												.Include(u => u.doctor)
+												.Include(u => u.doctor.doctor.Speciality)
+												.Include(u => u.doctor.address)
+												.Where(e => e.Billing.Count == 0 && e.doctorId == userManager.GetUserId(claims) && e.patientId == patientId)
+												.OrderByDescending(c => c.BookingStatus)
+												.OrderByDescending(c => c.bookingDate)
+												.FirstOrDefaultAsync();
+			return Book;
 		}
 	}
 }

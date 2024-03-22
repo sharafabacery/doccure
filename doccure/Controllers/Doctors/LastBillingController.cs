@@ -17,7 +17,16 @@ namespace doccure.Controllers.Doctors
 		public async Task<IActionResult> Index(string Id)
 		
 		{
-			return View();
+			var lastBilling = await lastBillingService.LastBilling(User, Id);
+			if (lastBilling == null)
+			{
+				return RedirectToAction("Index", "PatientAppiontmentProfileDoctorView", new { id = Id });
+			}
+			else
+			{
+				ViewBag.lastBilling = lastBilling;
+				return View("../Billing/Index");
+			}
 		}
 	}
 }
