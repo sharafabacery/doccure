@@ -1,8 +1,10 @@
 ﻿using doccure.Data;
+using doccure.Data.Migrations;
 using doccure.Data.Models;
 using doccure.Data.RequestModels;
 using doccure.Repositories.Interfance;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace doccure.Repositories.Implementaion
@@ -18,24 +20,100 @@ namespace doccure.Repositories.Implementaion
 			this.userManager = userManager;
 			
 		}
-		public Task<Booking> AddEditBilling(BillingRequest billingRequest)
+		public async Task<Booking> AddEditBilling(BillingRequest billingRequest)
 		{
-			throw new NotImplementedException();
+			var book = await applicationDbContext.Bookings.Include(p => p.Billing).Where(p => p.Id == billingRequest.BookingId).FirstOrDefaultAsync();
+			float total = 0;
+			if (book == null) { return null; }
+			else
+			{
+				foreach (var pp in billingRequest.Bills)
+				{
+					var Billdb = book.Billing.FirstOrDefault(p => p.Id == pp.Id);
+					if (Billdb == null)
+					{
+						book.Billing.Add(pp);
+					}
+					else
+					{
+						Billdb.Amount = pp.Amount;
+						Billdb.Title = pp.Title;
+					}
+					total+=pp.Amount;
+				}
+				var res = await applicationDbContext.SaveChangesAsync();
+				book.total=total;
+				if (res > 0)
+				{
+					return book;
+				}
+				else
+				{
+					return null;
+				}
+			}
 		}
 
-		public Task<bool> DeleteAllBillingByBookingId(int BookingId)
+		public async Task<bool> DeleteAllBillingByBookingId(int BookingId)
 		{
-			throw new NotImplementedException();
+			var Billdb = await applicationDbContext.Bills.Where(p => p.BookingId == BookingId).ExecuteDeleteAsync();
+			if (Billdb > 0) {
+				var Book = await applicationDbContext.Bookings.Where(b => b.Id == BookingId).FirstOrDefaultAsync();
+				Book.total = 0;
+				var res = await applicationDbContext.SaveChangesAsync();
+				if(res>0)
+				return true;
+				else
+				{
+					return false;
+				}
+			}
+			else return false;
 		}
 
-		public Task<bool> DeleteBilling(int BillingId, ClaimsPrincipal claims)
+		public async Task<bool> DeleteBilling(int BillingId, ClaimsPrincipal claims)
 		{
-			throw new NotImplementedException();
+			var Billdb = await applicationDbContext.Bills.Include(b => b.booking).FirstOrDefaultAsync(p => p.Id == BillingId);
+			if (Billdb == null)
+			{
+				return false;
+			}
+			else
+			{
+				if (Billdb.booking.doctorId == userManager.GetUserId(claims))
+				{
+					Billdb.booking.total -= Billdb.Amount;
+					await applicationDbContext.SaveChangesAsync();
+					applicationDbContext.Remove(Billdb);
+					await applicationDbContext.SaveChangesAsync();
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
 		}
 
-		public Task<Booking> GetBillingByBookingId(int BookingId)
+		public async Task<Booking> GetBillingByBookingId(int BookingId)
 		{
-			throw new NotImplementedException();
+			var BookBillsdb = await applicationDbContext.Bookings
+																.Include(p => p.patient)
+																.Include(p => p.patient.address)
+																.Include(d => d.doctor)
+																.Include(d => d.doctor.doctor.Speciality)
+																.Include(d => d.doctor.address)
+																.Include(p => p.Billing)
+																.Where(b => b.Id == BookingId)
+																.FirstOrDefaultAsync();
+			if (BookBillsdb == null)
+			{
+				return null;
+			}
+			else
+			{
+				return BookBillsdb;
+			}
 		}
 	}
 }
