@@ -77,6 +77,8 @@ namespace doccure
 			builder.Services.AddScoped<ILastMedicalRecordBookingPatientService, LastMedicalRecordBookingPatientService>();
 			builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
 			builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
+			builder.Services.AddScoped<ILastBillingService, LastBillingService>();
+			builder.Services.AddScoped<IBillingService, BillingService>();
 			// builder.Services.AddScoped<IUserAuthticationService, UserAuthticationService>();
 
 			//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
