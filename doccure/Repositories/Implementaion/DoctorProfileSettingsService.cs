@@ -151,7 +151,7 @@ namespace doccure.Repositories.Implementaion
 						foreach(var education in doctorUpdatess.Educations)
 						{
 							var educationdb = Doctor.doctor.educations.FirstOrDefault(e => e.Id == education.Id);
-							if (educationdb != null)
+							if (educationdb != null&&education.Id!=0)
 							{
 								educationdb.Degree = education.Degree;
 								educationdb.College= education.College;
@@ -173,7 +173,7 @@ namespace doccure.Repositories.Implementaion
 						foreach (var experience in doctorUpdatess.Experience)
 						{
 							var experiencedb = Doctor.doctor.experiences.FirstOrDefault(e => e.Id == experience.Id);
-							if (experiencedb != null)
+							if (experiencedb != null&&experience.Id!=0)
 							{
 								experiencedb.From = experience.From;
 								experiencedb.To = experience.To;
@@ -197,7 +197,7 @@ namespace doccure.Repositories.Implementaion
 						foreach (var award in doctorUpdatess.Awards)
 						{
 							var awarddb = Doctor.doctor.awards.FirstOrDefault(e => e.Id == award.Id);
-							if (awarddb != null)
+							if (awarddb != null&&award.Id!=0)
 							{
 								awarddb.award = award.award;
 								awarddb.year = award.year;
@@ -219,7 +219,7 @@ namespace doccure.Repositories.Implementaion
 						foreach (var membership in doctorUpdatess.Membership)
 						{
 							var membershipdb = Doctor.doctor.memberships.FirstOrDefault(e => e.Id == membership.Id);
-							if (membershipdb != null)
+							if (membershipdb != null&&membership.Id!=0)
 							{
 								membershipdb.description = membership.description;
 								
