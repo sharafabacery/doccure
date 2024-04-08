@@ -14,12 +14,35 @@ namespace doccure.Controllers.Doctors
 		}
 		public async Task<IActionResult> Index()
 		{
+			var favourites = await favouritesServcie.GetFavouriteDoctorsByPatientId(User);
+			ViewBag.Favourites = favourites;
 			return View();
 		}
 
-		public async Task<bool> CreateFavourite(string DoctorId)
+		public async Task<IActionResult> CreateFavourite(int DoctorId)
 		{
-			return true;
+			var createdFavourite = await favouritesServcie.CreateFavouriteDoctor(User, DoctorId);
+			if (createdFavourite) return Ok();
+			else
+			{
+				return NotFound();
+			}
+			
 		}
+		[HttpDelete]
+		public async Task<IActionResult> DeleteFavourite(int id)
+		{
+
+			var DeletedFavourite = await favouritesServcie.DeleteFavouriteDoctor( User,id);
+			if (DeletedFavourite == true)
+			{
+				return Ok();
+			}
+			else
+			{
+				return NotFound();
+			}
+		}
+
 	}
 }
