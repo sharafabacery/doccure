@@ -18,6 +18,7 @@ namespace doccure.Data.Models
         public Doctor? doctor { get; set; }
 		public ICollection<Booking> PatientBooking { get; } = new List<Booking>(); // Collection navigation containing dependents
 		public ICollection<Booking> DoctorBooking { get; } = new List<Booking>(); // Collection navigation containing dependents
+		public ICollection<Favourites> PatientFavourites { get; } = new List<Favourites>(); // Collection navigation containing dependents
 
 
 	}

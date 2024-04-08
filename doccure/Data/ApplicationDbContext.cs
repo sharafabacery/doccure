@@ -27,6 +27,7 @@ namespace doccure.Data
         public DbSet<Prescription> Prescriptions { set; get; }
         public DbSet<MedicalRecord> MedicalRecord { set; get; }
         public DbSet<Billing> Billings { set; get; }
+        public DbSet<Favourites> Favourites { set; get; }
 
 		public virtual DbSet<DoctorSearchReturned> DoctorSearchReturned { get; set; }
 		public virtual DbSet<ScheduleTimingBooking> ScheduleTimingBooking { get; set; }
@@ -57,6 +58,14 @@ namespace doccure.Data
 			.HasOne(b => b.doctor)
 			.WithMany(a => a.DoctorBooking)
 			.HasForeignKey(b => b.doctorId).OnDelete(DeleteBehavior.NoAction);
+
+			builder.Entity<Favourites>()
+			.HasOne(b => b.patient)
+			.WithMany(a => a.PatientFavourites)
+			.HasForeignKey(b => b.patientId).OnDelete(DeleteBehavior.Cascade);
+
+
+			
 		}
     }
 }
