@@ -20,7 +20,7 @@ namespace doccure.Repositories.Implementaion
 			this.userManager = userManager;
 			this.userProfileSettingsService = serviceAccessor("Patient");
 		}
-		public async Task<bool> CreateFavouriteDoctor(ClaimsPrincipal claims, string DoctorId)
+		public async Task<bool> CreateFavouriteDoctor(ClaimsPrincipal claims, int DoctorId)
 		{
 			var user = await userProfileSettingsService.GetUserData(claims);
 			if (user == null)
@@ -29,11 +29,16 @@ namespace doccure.Repositories.Implementaion
 			}
 			else
 			{
-				var doctorFound = user.PatientFavourites.FirstOrDefault(e => e.doctorId == DoctorId);
+				var doctor = await applicationDbContext.Doctor.FirstOrDefaultAsync(e => e.Id == DoctorId);
+				if(doctor == null)
+				{
+					return false;
+				}
+				var doctorFound = user.PatientFavourites.FirstOrDefault(e => e.doctorId == doctor.applicationuserId);
 				if (doctorFound != null) return false;
 				else
 				{
-					user.PatientFavourites.Add(new Favourites { doctorId = DoctorId, patientId = user.Id });
+					user.PatientFavourites.Add(new Favourites { doctorId = doctor.applicationuserId, patientId = user.Id });
 					var result = await userManager.UpdateAsync(user);
 
 					if (result.Succeeded)
@@ -48,7 +53,7 @@ namespace doccure.Repositories.Implementaion
 			}
 		}
 
-		public async Task<bool> DeleteFavouriteDoctor(ClaimsPrincipal claims, string DoctorId)
+		public async Task<bool> DeleteFavouriteDoctor(ClaimsPrincipal claims, int DoctorId)
 		{
 			var user = await userProfileSettingsService.GetUserData(claims);
 			if (user == null)
@@ -57,7 +62,13 @@ namespace doccure.Repositories.Implementaion
 			}
 			else
 			{
-				var doctorFound = user.PatientFavourites.FirstOrDefault(e => e.doctorId == DoctorId);
+				var doctor = await applicationDbContext.Doctor.FirstOrDefaultAsync(e => e.Id == DoctorId);
+				if (doctor == null)
+				{
+					return false;
+				}
+
+				var doctorFound = user.PatientFavourites.FirstOrDefault(e => e.doctorId == doctor.applicationuserId);
 				if (doctorFound != null) return false;
 				else
 				{
