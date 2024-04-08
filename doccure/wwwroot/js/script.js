@@ -695,6 +695,65 @@ Version      : 1.0
         } 
         return false;
     })
+    $(".bill-info").on('click', '.trash', function (e) {
+        var bill = $(this).closest('.billing-count');
+        var BillID = bill.find(`input[name="BillId"]`).val()
+        if (BillID !== undefined) {
+            BillID = Number(BillID)
+            $.ajax({
+                url: `/Billing/DeleteBilling/${BillID}`,
+                type: 'DELETE',
+                contentType: false,
+                processData: false,
+                cache: false,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (response) {
+                    // Handle the success response
+                    bill.remove();
+                    console.log('prescription data sent successfully.');
+                    // Perform any additional actions on success, such as showing a success message or redirecting to another page
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    // Handle the error response
+                    console.error('Failed to send prescription data.');
+                    // Handle the error case, such as showing an error message to the user
+                }
+            });
+        } else {
+            bill.remove();
+        }
+        return false;
+    })
+    $(".Bill-delete-all").on('click', '.trash', function (e) {
+        var billDelete = $(this).closest('.Bill-delete-table');
+        var BookingID = billDelete.find(`input[name="BookingId"]`).val()
+        if (BookingID !== undefined) {
+            $.ajax({
+                url: `/Billing/DeleteBookingBilling/${BookingID}`,
+                type: 'DELETE',
+                contentType: false,
+                processData: false,
+                cache: false,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (response) {
+                    // Handle the success response
+                    billDelete.remove();
+                    console.log('prescription data sent successfully.');
+                    // Perform any additional actions on success, such as showing a success message or redirecting to another page
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    // Handle the error response
+                    console.error('Failed to send prescription data.');
+                    // Handle the error case, such as showing an error message to the user
+                }
+            });
+        }
+        return false;
+    })
     $(".Medical-delete-all").on('click', '.trash', function (e) {
         var MedicalDelete = $(this).closest('.Medical-delete-table');
         var BookingID = MedicalDelete.find(`input[name="MedicalRecordId"]`).val()
@@ -794,6 +853,24 @@ Version      : 1.0
 											</tr>`;
 
         $(".prescription-info").append(prescriptioncontent);
+        return false;
+    });
+    $(".add-more-item-bill").on('click', function () {
+        var indexPrescription = $(".billing-count").length;
+
+        var prescriptioncontent = `<tr class="billing-count">
+												<td>
+													<input class="form-control" type="text" name=bills[${indexPrescription}].Title>
+												</td>
+												<td>
+													<input class="form-control" type="number" name=bills[${indexPrescription}].Amount>
+												</td>
+												<td class='delete'>
+													<a  class="btn bg-danger-light trash"><i class="far fa-trash-alt"></i></a>
+												</td>
+											</tr>`;
+
+        $(".bill-info").append(prescriptioncontent);
         return false;
     });
     $('.app_details').on('click', function (e) {

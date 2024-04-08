@@ -25,25 +25,29 @@ namespace doccure.Repositories.Implementaion
 			if (book == null) { return null; }
 			else
 			{
-				foreach(var pp in prescriptionRequest.prescriptions)
+				var newPrescription = prescriptionRequest.prescriptions.FindAll(p => p.Id == 0);
+				var updatePrescription = prescriptionRequest.prescriptions.FindAll(p => p.Id != 0);
+
+				foreach(var pp in newPrescription)
 				{
-					var Prescriptiondb=book.Prescription.FirstOrDefault(p=>p.Id == pp.Id);
-					if(Prescriptiondb == null)
-					{
+					
 						book.Prescription.Add(pp);
-					}
-					else
-					{
+					
+				}
+				foreach (var pp in updatePrescription)
+				{
+					var Prescriptiondb = book.Prescription.FirstOrDefault(p => p.Id == pp.Id);
+					
 						Prescriptiondb.Name = pp.Name;
 
-                        Prescriptiondb.Days=pp.Days;
-						Prescriptiondb.Quantity=pp.Quantity;
-						Prescriptiondb.Afternoon=pp.Afternoon;
-						Prescriptiondb.Morning=pp.Morning;
-						Prescriptiondb.Evening=pp.Evening;
-						Prescriptiondb.Night=pp.Night;
+						Prescriptiondb.Days = pp.Days;
+						Prescriptiondb.Quantity = pp.Quantity;
+						Prescriptiondb.Afternoon = pp.Afternoon;
+						Prescriptiondb.Morning = pp.Morning;
+						Prescriptiondb.Evening = pp.Evening;
+						Prescriptiondb.Night = pp.Night;
 
-					}
+					
 				}
 				var res=await applicationDbContext.SaveChangesAsync();
 				if (res > 0)

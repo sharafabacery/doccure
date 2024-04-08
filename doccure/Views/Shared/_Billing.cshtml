@@ -18,7 +18,7 @@
 		<div class="card-body">
 			<div class="table-responsive">
 
-				<table class="table table-hover table-center mb-0">
+				<table class="table table-hover table-center mb-0 Bill-delete-all">
 					<thead>
 						<tr>
 							<th>Invoice No</th>
@@ -28,8 +28,8 @@
 							<th></th>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
+					<tbody class="Bill-delete-table">
+						@*<tr>
 							<td>
 								<a href="invoice-view.html">#INV-0010</a>
 							</td>
@@ -53,39 +53,54 @@
 									</a>
 								</div>
 							</td>
-						</tr>
-						<tr>
-							<td>
-								<a href="invoice-view.html">#INV-0009</a>
-							</td>
-							<td>
-								<h2 class="table-avatar">
-									<a href="doctor-profile.html" class="avatar avatar-sm mr-2">
-										<img class="avatar-img rounded-circle" src="assets/img/doctors/doctor-thumb-02.jpg" alt="User Image">
-									</a>
-									<a href="doctor-profile.html">Dr. Darren Elder <span>Dental</span></a>
-								</h2>
-							</td>
-							<td>$300</td>
-							<td>13 Nov 2019</td>
-							<td class="text-right">
-								<div class="table-action">
-									<a href="javascript:void(0);" class="btn btn-sm bg-primary-light">
-										<i class="fas fa-print"></i> Print
-									</a>
-									<a href="javascript:void(0);" class="btn btn-sm bg-info-light">
-										<i class="far fa-eye"></i> View
-									</a>
-									<a href="edit-billing.html" class="btn btn-sm bg-success-light">
-										<i class="fas fa-edit"></i> Edit
-									</a>
-									<a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
-										<i class="far fa-trash-alt"></i> Delete
-									</a>
-								</div>
-							</td>
-						</tr>
-						<tr>
+						</tr>*@
+						@{
+							for (int i = 0; i < Books.Count; i++)
+							{
+								if (Books[i].Billing.Any())
+								{
+
+									<tr>
+										//<td>
+										//	<a href="invoice-view.html">#INV-0009</a>
+										//</td>
+										<td>
+											<h2 class="table-avatar">
+												<a href="doctor-profile.html" class="avatar avatar-sm mr-2">
+													<img class="avatar-img rounded-circle" src="~/img/uploads/@Books[i].doctor.Image" alt="User Image">
+												</a>
+												<a href="doctor-profile.html">Dr. @Books[i].doctor.FirstName @Books[i].doctor.LastName  <span>@Books[i].doctor.doctor.Speciality.Name</span></a>
+											</h2>
+										</td>
+										<td>@Books[i].total</td>
+										<td>@Books[i].bookingDate</td>
+										<td class="text-right">
+											<div class="table-action">
+												<a href="javascript:void(0);" class="btn btn-sm bg-primary-light">
+													<i class="fas fa-print"></i> Print
+												</a>
+												<a href="@Url.Action("ViewBills", "Billing",new { @BookingId=Books[i].Id,@PatientId = @Patient.Id,@state="View" })" class="btn btn-sm bg-info-light">
+													<i class="far fa-eye"></i> View
+												</a>
+												@if (SignInManager.IsSignedIn(User) && @User.FindFirstValue(ClaimTypes.Role) != "patient")
+												{
+													<a href="@Url.Action("ViewBills", "Billing",new { @BookingId=Books[i].Id,@PatientId = @Patient.Id,@state="Edit" })" class="btn btn-sm bg-success-light">
+														<i class="fas fa-edit"></i> Edit
+													</a>
+													<a class="btn btn-sm bg-danger-light trash">
+														<input name="BookingId" readonly="readonly" hidden="hidden" value="@Books[i].Id">
+														<i class="far fa-trash-alt"></i> Delete
+													</a>
+												}
+											</div>
+										</td>
+									</tr>
+								}
+							}
+							
+						}
+							
+						@*<tr>
 							<td>
 								<a href="invoice-view.html">#INV-0008</a>
 							</td>
@@ -284,7 +299,7 @@
 									</a>
 								</div>
 							</td>
-						</tr>
+						</tr>*@
 					</tbody>
 				</table>
 			</div>

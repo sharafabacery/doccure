@@ -27,22 +27,30 @@ namespace doccure.Repositories.Implementaion
 			if (book == null) { return null; }
 			else
 			{
-				foreach (var pp in billingRequest.Bills)
+				var newBill = billingRequest.Bills.FindAll(p => p.Id == 0);
+				var updateBill = billingRequest.Bills.FindAll(p => p.Id != 0);
+
+				foreach (var pp in newBill)
+				{
+
+					book.Billing.Add(pp);
+					total += pp.Amount;
+				}
+				foreach (var pp in updateBill)
 				{
 					var Billdb = book.Billing.FirstOrDefault(p => p.Id == pp.Id);
-					if (Billdb == null)
-					{
-						book.Billing.Add(pp);
-					}
-					else
-					{
-						Billdb.Amount = pp.Amount;
+
+					if (Billdb != null)
+					{Billdb.Amount = pp.Amount;
 						Billdb.Title = pp.Title;
+						
 					}
+					
 					total+=pp.Amount;
 				}
+				book.total = total;
 				var res = await applicationDbContext.SaveChangesAsync();
-				book.total=total;
+				
 				if (res > 0)
 				{
 					return book;
@@ -56,7 +64,7 @@ namespace doccure.Repositories.Implementaion
 
 		public async Task<bool> DeleteAllBillingByBookingId(int BookingId)
 		{
-			var Billdb = await applicationDbContext.Bills.Where(p => p.BookingId == BookingId).ExecuteDeleteAsync();
+			var Billdb = await applicationDbContext.Billings.Where(p => p.BookingId == BookingId).ExecuteDeleteAsync();
 			if (Billdb > 0) {
 				var Book = await applicationDbContext.Bookings.Where(b => b.Id == BookingId).FirstOrDefaultAsync();
 				Book.total = 0;
@@ -73,7 +81,7 @@ namespace doccure.Repositories.Implementaion
 
 		public async Task<bool> DeleteBilling(int BillingId, ClaimsPrincipal claims)
 		{
-			var Billdb = await applicationDbContext.Bills.Include(b => b.booking).FirstOrDefaultAsync(p => p.Id == BillingId);
+			var Billdb = await applicationDbContext.Billings.Include(b => b.booking).FirstOrDefaultAsync(p => p.Id == BillingId);
 			if (Billdb == null)
 			{
 				return false;

@@ -115,6 +115,8 @@
                                                             
                                                             <td>
                                                                 <input class="form-control" name="PrescriptionID" value="@prescription.Id" readonly="readonly" hidden="hidden" type="number">
+                                                                <input class="form-control" name="prescriptions[@i].ID" value="@prescription.Id" readonly="readonly" hidden="hidden" type="number">
+
 
                                                                 @if (State == "View")
                                                                 {
