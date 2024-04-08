@@ -27,7 +27,7 @@ namespace doccure.Repositories.Implementaion
 		}
 		public async Task<Applicationuser> GetUserData(ClaimsPrincipal user)
 		{
-			var UserData = await userManager.Users.Include(a => a.address).FirstOrDefaultAsync(usr => usr.Id == userManager.GetUserId(user));
+			var UserData = await userManager.Users.Include(a => a.address).Include(f=>f.PatientFavourites).FirstOrDefaultAsync(usr => usr.Id == userManager.GetUserId(user));
 			return UserData;
 
 		}
