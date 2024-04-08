@@ -11,9 +11,11 @@
 
 <!-- Billing Tab -->
 <div class="tab-pane" id="billing">
-	<div class="text-right">
-		<a href="@Url.Action("Index", "LastBilling",new { @id = @Patient.Id })" class="add-new-btn">Add Billing</a>
-	</div>
+	@if (SignInManager.IsSignedIn(User) && @User.FindFirstValue(ClaimTypes.Role) != "patient")
+	{
+		<div class="text-right">
+			<a href="@Url.Action("Index", "LastBilling",new { @id = @Patient.Id })" class="add-new-btn">Add Billing</a>
+	</div>}
 	<div class="card card-table mb-0">
 		<div class="card-body">
 			<div class="table-responsive">

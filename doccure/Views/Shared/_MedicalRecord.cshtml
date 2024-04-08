@@ -11,12 +11,14 @@
 
 <!-- Medical Records Tab -->
 <div class="tab-pane fade" id="medical">
-	<div class="text-right CheckMedical">
-		<input type="text" readonly="readonly" hidden="hidden" name="patientIdd" value="@Patient.Id" class="form-control" >
+	@if (SignInManager.IsSignedIn(User) && @User.FindFirstValue(ClaimTypes.Role) != "patient")
+	{
+		<div class="text-right CheckMedical">
+			<input type="text" readonly="readonly" hidden="hidden" name="patientIdd" value="@Patient.Id" class="form-control" >
 
 		<a class="add-new-btn " data-toggle="modal" data-target="#add_medical_records">
 			Add Medical Records</a>
-	</div>
+	</div>}
 	<div class="card card-table mb-0">
 		<div class="card-body">
 			<div class="table-responsive">

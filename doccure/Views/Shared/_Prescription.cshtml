@@ -10,9 +10,11 @@
 }
 <!-- Prescription Tab -->
 <div class="tab-pane fade" id="pres">
-	<div class="text-right">
-		<a href="@Url.Action("Index", "LastAppoitment",new { @id = @Patient.Id })" class="add-new-btn">Add Prescription</a>
-	</div>
+	@if (SignInManager.IsSignedIn(User) && @User.FindFirstValue(ClaimTypes.Role) != "patient")
+	{
+		<div class="text-right">
+			<a href="@Url.Action("Index", "LastAppoitment",new { @id = @Patient.Id })" class="add-new-btn">Add Prescription</a>
+	</div>}
 	<div class="card card-table mb-0">
 		<div class="card-body">
 			<div class="table-responsive">
