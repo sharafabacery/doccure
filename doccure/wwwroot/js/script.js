@@ -81,14 +81,14 @@ Version      : 1.0
 
     // Fancybox Gallery
 
-    if ($('.clinic-gallery a').length > 0) {
-        $('.clinic-gallery a').fancybox({
-            buttons: [
-                "thumbs",
-                "close"
-            ],
-        });
-    }
+    //if ($('.clinic-gallery a').length > 0) {
+    //    $('.clinic-gallery a').fancybox({
+    //        buttons: [
+    //            "thumbs",
+    //            "close"
+    //        ],
+    //    });
+    //}
 
     // Floating Label
 
@@ -902,6 +902,68 @@ Version      : 1.0
             });
 
     })
+    $(".doctor-action").on('click', '.fav-btn', function (e) {
+        var DoctorId = Number($(e.target).find(`input[name="DoctorId"]`).val())
+        if (DoctorId !== undefined) {
+            $.ajax({
+                url: `/Favourites/CreateFavourite`,
+                type: 'POST',
+                data: JSON.stringify({
+                    "Id":DoctorId
+                    }),
+                contentType: 'application/json; charset=utf-8',
+                processData: false,
+                cache: false,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (response) {
+                    // Handle the success response
+                    alert("Doctor Saved to Favourite list")
+                    console.log('Slot data sent successfully.');
+                    // Perform any additional actions on success, such as showing a success message or redirecting to another page
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    // Handle the error response
+                    alert("Doctor unable Save to Favourite list")
+                    console.error('Failed to send Slot data.');
+                    // Handle the error case, such as showing an error message to the user
+                }
+            });
+        } else {
+            
+        }
+        return false;
+    });
+    $(".delete-fav").on('click', '.fav-btn', function (e) {
+        var DoctorId = Number($(e.target).find(`input[name="DoctorId"]`).val())
+        if (DoctorId !== undefined) {
+            $.ajax({
+                url: `/Favourites/DeleteFavourite/${DoctorId}`,
+                type: 'DELETE',
+                contentType: false,
+                processData: false,
+                cache: false,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (response) {
+                    // Handle the success response
+                    window.location().reload()
+                    console.log('prescription data sent successfully.');
+                    // Perform any additional actions on success, such as showing a success message or redirecting to another page
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    // Handle the error response
+                    console.error('Failed to send prescription data.');
+                    // Handle the error case, such as showing an error message to the user
+                }
+            });
+        } else {
+
+        }
+        return false;
+    });
     // Content div min height set
 
     function resizeInnerDiv() {

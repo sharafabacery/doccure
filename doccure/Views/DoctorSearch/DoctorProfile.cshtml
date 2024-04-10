@@ -86,7 +86,8 @@
 							</ul>
 						</div>
 						<div class="doctor-action">
-							<a href="javascript:void(0)" class="btn btn-white fav-btn">
+							<a  class="btn btn-white fav-btn">
+								<input name="DoctorId" value="@Doctor.applicationuser?.doctor?.Id" type="number" readonly="readonly" hidden="hidden"/>
 								<i class="far fa-bookmark"></i>
 							</a>
 							<a href="chat.html" class="btn btn-white msg-btn">

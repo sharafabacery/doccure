@@ -69,7 +69,7 @@ namespace doccure.Repositories.Implementaion
 				}
 
 				var doctorFound = user.PatientFavourites.FirstOrDefault(e => e.doctorId == doctor.applicationuserId);
-				if (doctorFound != null) return false;
+				if (doctorFound == null) return false;
 				else
 				{
 
@@ -90,7 +90,7 @@ namespace doccure.Repositories.Implementaion
 
 		public async Task<List<Favourites>> GetFavouriteDoctorsByPatientId(ClaimsPrincipal claims)
 		{
-			var favourites = await applicationDbContext.Favourites.Include(e => e.doctor.doctor).Include(e => e.doctor.address).Where(e => e.patientId == userManager.GetUserId(claims)).ToListAsync();
+			var favourites = await applicationDbContext.Favourites.Include(a=>a.doctor).Include(e => e.doctor.doctor).Include(a=>a.doctor.address).Include(a=>a.doctor.doctor.Speciality).Include(e => e.doctor.address).Where(e => e.patientId == userManager.GetUserId(claims)).ToListAsync();
 			return favourites;
 
 ;		}

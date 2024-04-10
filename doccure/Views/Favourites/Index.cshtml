@@ -1,0 +1,101 @@
+﻿@using doccure.Data.Models;
+@using doccure.Data.ResponseModels;
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims;
+
+@{
+	var favourites = (List<Favourites>)ViewData["Favourites"];
+	var Patient = (Applicationuser)ViewData["patient"];
+	//var specialities = (List<Speciality>)ViewData["Specialities"];
+	
+
+}
+<div class="breadcrumb-bar">
+				<div class="container-fluid">
+					<div class="row align-items-center">
+						<div class="col-md-12 col-12">
+							<nav aria-label="breadcrumb" class="page-breadcrumb">
+								<ol class="breadcrumb">
+									<li class="breadcrumb-item"><a href="index-2.html">Home</a></li>
+									<li class="breadcrumb-item active" aria-current="page">Favourites</li>
+								</ol>
+							</nav>
+							<h2 class="breadcrumb-title">Favourites</h2>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /Breadcrumb -->
+
+			<!-- Page Content -->
+			<div class="content">
+				<div class="container-fluid">
+					<div class="row">
+							<partial name="_PatientSidebar" />
+					
+		@{
+			foreach(var doctor in favourites)
+			{
+				<div class="col-md-7 col-lg-8 col-xl-9">
+					<div class="row row-grid">
+						<div class="col-md-6 col-lg-4 col-xl-3">
+							<div class="profile-widget delete-fav">
+								<div class="doc-img">
+										<a href="@Url.Action("GetDoctor", "DoctorSearch",new { @id = doctor.doctorId })">
+											<img src="~/img/uploads/@doctor.doctor?.Image" class="img-fluid" alt="User Image">
+										</a>
+									<a class="fav-btn">
+											<input name="DoctorId" value="@doctor?.doctor?.doctor?.Id" type="number" readonly="readonly" hidden="hidden" />
+									<i class="far fa-bookmark"></i>
+									</a>
+								</div>
+								<div class="pro-content">
+									<h3 class="title">
+											<a href="@Url.Action("GetDoctor", "DoctorSearch",new { @id = doctor.doctorId })">@doctor.doctor?.FirstName @doctor.doctor?.LastName</a>
+										<i class="fas fa-check-circle verified"></i>
+									</h3>
+										<p class="speciality">@doctor.doctor?.doctor?.Speciality?.Name - @doctor.doctor?.doctor?.Specialization</p>
+									<div class="rating">
+										<i class="fas fa-star filled"></i>
+										<i class="fas fa-star filled"></i>
+										<i class="fas fa-star filled"></i>
+										<i class="fas fa-star filled"></i>
+										<i class="fas fa-star filled"></i>
+										<span class="d-inline-block average-rating">(17)</span>
+									</div>
+									<ul class="available-info">
+										<li>
+												<i class="fas fa-map-marker-alt"></i>  @doctor.doctor?.address?.Address1
+										</li>
+										
+										<li>
+											<i class="far fa-money-bill-alt"></i> @doctor.doctor?.doctor?.Price <i class="fas fa-info-circle" data-toggle="tooltip" title="Lorem Ipsum"></i>
+										</li>
+									</ul>
+									<div class="row row-sm">
+										<div class="col-6">
+												<a href="@Url.Action("GetDoctor", "DoctorSearch",new { @id = doctor.doctorId })" class="btn view-btn">View Profile</a>
+										</div>
+										<!--
+										<div class="col-6">
+											<a href="booking.html" class="btn book-btn">Book Now</a>
+										</div>
+										-->
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+
+
+					</div>
+				</div>
+			}
+		}
+	
+		</div>
+				</div>
+			</div>
+
+		
