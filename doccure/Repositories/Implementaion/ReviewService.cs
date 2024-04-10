@@ -37,6 +37,7 @@ namespace doccure.Repositories.Implementaion
 				review.Title = reviewRequest.Title;
 				review.Description=reviewRequest.Description;
 				review.BookingId = booking.Id;
+				review.createdDate = new DateTime();
 				booking.Review = review;
 				var Inserted = await applicationDbContext.SaveChangesAsync();
 				if (Inserted > 0)

@@ -573,6 +573,8 @@
 						</div>
 						<!-- /Review Listing -->
 						<!-- Write Review -->
+						@if (SignInManager.IsSignedIn(User))
+											{
 						<div class="write-review">
 							<h4>Write a review for <strong>Dr. Darren Elder</strong></h4>
 
@@ -627,10 +629,10 @@
 								</div>
 							</form>
 							<!-- /Write Review Form -->
-
+							
 						</div>
 						<!-- /Write Review -->
-
+						}
 					</div>
 					<!-- /Reviews Content -->
 					<!-- Business Hours Content -->
