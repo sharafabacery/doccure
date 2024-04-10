@@ -39,6 +39,7 @@
 		public ScheduleTiming scheduleTiming { get; set; } = null;
 		public ICollection<Prescription> Prescription { get; } = new List<Prescription>(); // Collection navigation containing dependents
 		public MedicalRecord MedicalRecord { get; set; }
+		public Review Review { get; set; }
 		public ICollection<Billing> Billing { get; } = new List<Billing>(); // Collection navigation containing dependents
 
 

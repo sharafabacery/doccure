@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using doccure.Data;
 
@@ -11,9 +12,11 @@ using doccure.Data;
 namespace doccure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240410153543_ReviewMigration")]
+    partial class ReviewMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -448,36 +451,6 @@ namespace doccure.Data.Migrations
                     b.HasIndex("ClinicId");
 
                     b.ToTable("ClinicImages");
-                });
-
-            modelBuilder.Entity("doccure.Data.Models.Comment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ParentCommentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReviewId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("createdDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ParentCommentId");
-
-                    b.HasIndex("ReviewId");
-
-                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("doccure.Data.Models.Doctor", b =>
@@ -1023,25 +996,6 @@ namespace doccure.Data.Migrations
                     b.Navigation("clinic");
                 });
 
-            modelBuilder.Entity("doccure.Data.Models.Comment", b =>
-                {
-                    b.HasOne("doccure.Data.Models.Comment", "ParentComment")
-                        .WithMany("subComments")
-                        .HasForeignKey("ParentCommentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("doccure.Data.Models.Review", "review")
-                        .WithMany("Comments")
-                        .HasForeignKey("ReviewId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ParentComment");
-
-                    b.Navigation("review");
-                });
-
             modelBuilder.Entity("doccure.Data.Models.Doctor", b =>
                 {
                     b.HasOne("doccure.Data.Models.Speciality", "Speciality")
@@ -1195,11 +1149,6 @@ namespace doccure.Data.Migrations
                     b.Navigation("scheduleTiming");
                 });
 
-            modelBuilder.Entity("doccure.Data.Models.Comment", b =>
-                {
-                    b.Navigation("subComments");
-                });
-
             modelBuilder.Entity("doccure.Data.Models.Doctor", b =>
                 {
                     b.Navigation("awards");
@@ -1211,11 +1160,6 @@ namespace doccure.Data.Migrations
                     b.Navigation("experiences");
 
                     b.Navigation("memberships");
-                });
-
-            modelBuilder.Entity("doccure.Data.Models.Review", b =>
-                {
-                    b.Navigation("Comments");
                 });
 
             modelBuilder.Entity("doccure.Data.Models.ScheduleTiming", b =>

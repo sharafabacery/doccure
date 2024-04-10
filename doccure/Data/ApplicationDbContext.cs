@@ -28,6 +28,8 @@ namespace doccure.Data
         public DbSet<MedicalRecord> MedicalRecord { set; get; }
         public DbSet<Billing> Billings { set; get; }
         public DbSet<Favourites> Favourites { set; get; }
+        public DbSet<Review> Reviews { set; get; }
+        public DbSet<Comment> Comments { set; get; }
 
 		public virtual DbSet<DoctorSearchReturned> DoctorSearchReturned { get; set; }
 		public virtual DbSet<ScheduleTimingBooking> ScheduleTimingBooking { get; set; }
@@ -64,8 +66,12 @@ namespace doccure.Data
 			.WithMany(a => a.PatientFavourites)
 			.HasForeignKey(b => b.patientId).OnDelete(DeleteBehavior.Cascade);
 
+			builder.Entity<Comment>()
+		.HasOne(c => c.ParentComment)
+		.WithMany(c => c.subComments)
+		.HasForeignKey(c => c.ParentCommentId)
+		.OnDelete(DeleteBehavior.Restrict); // or Cascade depending on your requirements
 
-			
 		}
     }
 }
