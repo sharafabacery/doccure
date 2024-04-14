@@ -2,6 +2,7 @@
 @using doccure.Data.ResponseModels;
 @using Microsoft.AspNetCore.Identity
 @using System.Security.Claims;
+@model doccure.Data.RequestModels.ReviewRequest;
 @inject SignInManager<Applicationuser> SignInManager
 @inject UserManager<Applicationuser> UserManager
 
@@ -122,7 +123,7 @@
 							<a class="nav-link" href="#doc_locations" data-toggle="tab">Locations</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="#doc_reviews" data-toggle="tab">Reviews</a>
+							<a class="nav-link doctor-reviews" href="#doc_reviews" data-toggle="tab">Reviews</a>
 						</li>
 						@*<li class="nav-item">
 							<a class="nav-link" href="#doc_business_hours" data-toggle="tab">Business Hours</a>
@@ -458,7 +459,8 @@
 												Curabitur non nulla sit amet nisl tempus
 											</p>
 											<div class="comment-reply">
-												<a class="comment-btn" href="#">
+												<a class="comment-btn comment-replay">
+													
 													<i class="fas fa-reply"></i> Reply
 												</a>
 												<p class="recommend-btn">
@@ -579,39 +581,40 @@
 							<h4>Write a review for <strong>Dr. Darren Elder</strong></h4>
 
 							<!-- Write Review Form -->
-							<form>
+								<form asp-action="AddReview" asp-controller="Review">
+									<input asp-for="DoctorID" value="@Doctor.applicationuser.doctor.Id" readonly="readonly" hidden="hidden">
 								<div class="form-group">
 									<label>Review</label>
 									<div class="star-rating">
-										<input id="star-5" type="radio" name="rating" value="star-5">
-										<label for="star-5" title="5 stars">
-											<i class="active fa fa-star"></i>
+											<input asp-for="stars" id="star-5" type="radio"  value="5">
+										<label for="star-5" title="5">
+											<i class=" fa fa-star"></i>
 										</label>
-										<input id="star-4" type="radio" name="rating" value="star-4">
-										<label for="star-4" title="4 stars">
-											<i class="active fa fa-star"></i>
+										<input asp-for="stars" id="star-4" type="radio"  value="4">
+										<label  for="star-4" title="4">
+											<i class=" fa fa-star"></i>
 										</label>
-										<input id="star-3" type="radio" name="rating" value="star-3">
-										<label for="star-3" title="3 stars">
-											<i class="active fa fa-star"></i>
+											<input asp-for ="stars" id="star-3" type="radio"  value="3">
+										<label for="star-3" title="3">
+											<i class=" fa fa-star"></i>
 										</label>
-										<input id="star-2" type="radio" name="rating" value="star-2">
-										<label for="star-2" title="2 stars">
-											<i class="active fa fa-star"></i>
+											<input asp-for="stars" id="star-2" type="radio"  value="2">
+										<label for="star-2" title="2">
+											<i class=" fa fa-star"></i>
 										</label>
-										<input id="star-1" type="radio" name="rating" value="star-1">
-										<label for="star-1" title="1 star">
-											<i class="active fa fa-star"></i>
+										<input asp-for="stars" id="star-1" type="radio"  value="1">
+										<label for="star-1" title="1">
+											<i class=" fa fa-star"></i>
 										</label>
 									</div>
 								</div>
 								<div class="form-group">
 									<label>Title of your review</label>
-									<input class="form-control" type="text" placeholder="If you could say it in one sentence, what would you say?">
+									<input asp-for="Title" class="form-control" type="text" placeholder="If you could say it in one sentence, what would you say?">
 								</div>
 								<div class="form-group">
 									<label>Your review</label>
-									<textarea id="review_desc" maxlength="100" class="form-control"></textarea>
+										<textarea asp-for="Description" id="review_desc" maxlength="100" class="form-control"></textarea>
 
 									<div class="d-flex justify-content-between mt-3"><small class="text-muted"><span id="chars">100</span> characters remaining</small></div>
 								</div>
