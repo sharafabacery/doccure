@@ -8,6 +8,19 @@ using System.Security.Claims;
 
 namespace doccure.Repositories.Implementaion
 {
+	public class ReviewDTO
+	{
+		public string FullName { get; set; }
+		public string? Image { get; set; }
+		public int BookingId { get; set; }
+		public string Title { get; set; }
+		public int starts { get; set; }
+		public int DateDays { get; set; }
+		public string Description { get; set; }
+		public int Id { get; set; }
+		public List<Comment> comments { get; set; }
+
+	}
 	public class ReviewService : IReviewService
 	{
 		private readonly UserManager<Applicationuser> userManager;
@@ -49,6 +62,28 @@ namespace doccure.Repositories.Implementaion
 					return null;
 				}
 			}
+		}
+
+		public async Task<List<ReviewDTO>> GetAllReviews(int DoctorId)
+		{
+			List<ReviewDTO> list =await applicationDbContext.Reviews
+															.Include(c=>c.Comments)
+															.Include(b=>b.booking)
+															.Include(b=>b.booking.patient)
+															.Include(b=>b.booking.doctor)
+															.Include(b=>b.booking.doctor.doctor)
+															.Where(b=>b.booking.doctor.doctor.Id==DoctorId)
+															.Select(e=>new ReviewDTO { Image=e.booking.patient.Image,FullName=e.booking.patient.FirstName+ e.booking.patient.LastName, Id=e.Id,Title=e.Title,Description=e.Description,BookingId=e.BookingId,starts=e.stars,DateDays=(DateTime.Now-e.createdDate).Days,comments=e.Comments.ToList()})
+															.ToListAsync();
+			if(list.Count > 0)
+			{
+				return list;
+			}
+			{
+				list = new List<ReviewDTO>();
+				return list;
+			}
+			
 		}
 	}
 }

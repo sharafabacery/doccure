@@ -29,9 +29,17 @@ namespace doccure.Controllers.patient
 
 			}
 		}
-		public IActionResult Index()
+		public async Task<IActionResult> Index(int id)
 		{
-			return View();
+			var reviews = await reviewService.GetAllReviews(id);
+			if (reviews.Count > 0)
+			{
+				return Ok(reviews);
+			}
+			else
+			{
+				return NotFound();
+			}
 		}
 	}
 }

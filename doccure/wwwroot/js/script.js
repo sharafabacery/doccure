@@ -964,6 +964,72 @@ Version      : 1.0
         }
         return false;
     });
+    $('.doctor-reviews').on('click', function (e) {
+        var DoctorId = Number($(e.target).find(`input[name="DoctorId"]`).val())
+        if (DoctorId !== undefined) {
+            var uri = `/Review/Index/${DoctorId}`
+            fetch(uri, {
+                method: 'get',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Error: ' + response.status);
+                    }
+                })
+                .then(data => {
+                    var result = ''
+                    console.log(data)
+                    data.forEach(e => {
+                        result +=`<li>
+										<div class="comment">
+											<img class="avatar rounded-circle" alt="User Image" src="~/img/uploads/${e.image && e.image}">
+											<div class="comment-body">
+												<div class="meta-data">
+													<span class="comment-author">${e.fullName}</span>
+													<span class="comment-date">Reviewed ${e.dateDays} Days ago</span>
+<br>													
+<div class=" rating">
+														<i class="fas fa-star filled"></i>
+														<i class="fas fa-star filled"></i>
+														<i class="fas fa-star filled"></i>
+														<i class="fas fa-star filled"></i>
+														<i class="fas fa-star filled"></i>
+													</div>
+<br>
+												</div>
+												<p class="comment-content">
+							                        ${e.title}
+                                                    ${e.description}
+												</p>
+												<div class="comment-reply">
+													<a class="comment-btn" href="#">
+														<i class="fas fa-reply"></i> Reply
+													</a>
+													
+												</div>
+											</div>
+										</div>
+									</li>`
+                    })
+                $('.comments-list').append(result)
+                    
+                })
+                .catch(error => {
+                    //location.reload();
+                });
+           
+        } else {
+
+        }
+
+    })
     // Content div min height set
 
     function resizeInnerDiv() {

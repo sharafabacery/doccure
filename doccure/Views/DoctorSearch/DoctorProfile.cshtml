@@ -123,7 +123,9 @@
 							<a class="nav-link" href="#doc_locations" data-toggle="tab">Locations</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link doctor-reviews" href="#doc_reviews" data-toggle="tab">Reviews</a>
+							<a class="nav-link doctor-reviews" href="#doc_reviews" data-toggle="tab">
+								<input name="DoctorId" value="@Doctor.applicationuser.doctor.Id" hidden="hidden" readonly="readonly"/>
+								Reviews</a>
 						</li>
 						@*<li class="nav-item">
 							<a class="nav-link" href="#doc_business_hours" data-toggle="tab">Business Hours</a>
@@ -436,6 +438,7 @@
 							<ul class="comments-list">
 
 								<!-- Comment List -->
+								<!-- 
 								<li>
 									<div class="comment">
 										<img class="avatar avatar-sm rounded-circle" alt="User Image" src="assets/img/patients/patient.jpg">
@@ -476,7 +479,7 @@
 										</div>
 									</div>
 
-									<!-- Comment Reply -->
+								
 									<ul class="comments-reply">
 										<li>
 											<div class="comment">
@@ -517,12 +520,12 @@
 											</div>
 										</li>
 									</ul>
-									<!-- /Comment Reply -->
+									
 
-								</li>
+								</li>-->
 								<!-- /Comment List -->
 								<!-- Comment List -->
-								<li>
+								<!--<li>
 									<div class="comment">
 										<img class="avatar avatar-sm rounded-circle" alt="User Image" src="assets/img/patients/patient2.jpg">
 										<div class="comment-body">
@@ -559,7 +562,7 @@
 											</div>
 										</div>
 									</div>
-								</li>
+								</li>-->
 								<!-- /Comment List -->
 
 							</ul>
