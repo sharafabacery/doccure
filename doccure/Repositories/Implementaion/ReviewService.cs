@@ -14,7 +14,7 @@ namespace doccure.Repositories.Implementaion
 		public string? Image { get; set; }
 		public int BookingId { get; set; }
 		public string Title { get; set; }
-		public int starts { get; set; }
+		public int stars { get; set; }
 		public int DateDays { get; set; }
 		public string Description { get; set; }
 		public int Id { get; set; }
@@ -73,7 +73,7 @@ namespace doccure.Repositories.Implementaion
 															.Include(b=>b.booking.doctor)
 															.Include(b=>b.booking.doctor.doctor)
 															.Where(b=>b.booking.doctor.doctor.Id==DoctorId)
-															.Select(e=>new ReviewDTO { Image=e.booking.patient.Image,FullName=e.booking.patient.FirstName+ e.booking.patient.LastName, Id=e.Id,Title=e.Title,Description=e.Description,BookingId=e.BookingId,starts=e.stars,DateDays=(DateTime.Now-e.createdDate).Days,comments=e.Comments.ToList()})
+															.Select(e=>new ReviewDTO { Image=e.booking.patient.Image,FullName=e.booking.patient.FirstName+ e.booking.patient.LastName, Id=e.Id,Title=e.Title,Description=e.Description,BookingId=e.BookingId,stars=e.stars,DateDays=(DateTime.Now-e.createdDate).Days,comments=e.Comments.ToList()})
 															.ToListAsync();
 			if(list.Count > 0)
 			{

@@ -580,7 +580,7 @@
 						<!-- Write Review -->
 						@if (SignInManager.IsSignedIn(User))
 											{
-						<div class="write-review">
+							<div class="write-review write-review-review">
 							<h4>Write a review for <strong>Dr. Darren Elder</strong></h4>
 
 							<!-- Write Review Form -->
@@ -638,6 +638,37 @@
 							
 						</div>
 						<!-- /Write Review -->
+							<div class="write-review write-review-comment" style="display: none;">
+								<h4>Write a Comment </h4>
+
+								<!-- Write Review Form -->
+								<form asp-action="AddComment2Review" asp-controller="ReviewComment">
+									<input asp-for="DoctorID" value="@Doctor.applicationuser.doctor.Id" readonly="readonly" hidden="hidden">
+									<input  asp-for="comment.ParentCommentId" readonly="readonly">
+									<input    asp-for="comment.ReviewId"  readonly="readonly" >
+									
+									<div class="form-group">
+										<label>Your review</label>
+										<textarea asp-for="comment.Description" id="review_desc" maxlength="100" class="form-control"></textarea>
+
+										<div class="d-flex justify-content-between mt-3"><small class="text-muted"><span id="chars">100</span> characters remaining</small></div>
+									</div>
+									<hr>
+									<div class="form-group">
+										<div class="terms-accept">
+											<div class="custom-checkbox">
+												<input type="checkbox" id="terms_accept">
+												<label for="terms_accept">I have read and accept <a href="#">Terms &amp; Conditions</a></label>
+											</div>
+										</div>
+									</div>
+									<div class="submit-section">
+										<button type="submit" class="btn btn-primary submit-btn">Add Comment</button>
+									</div>
+								</form>
+								<!-- /Write Review Form -->
+
+							</div>
 						}
 					</div>
 					<!-- /Reviews Content -->

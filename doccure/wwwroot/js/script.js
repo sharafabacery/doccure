@@ -964,6 +964,20 @@ Version      : 1.0
         }
         return false;
     });
+    $('.comments-list').on('click', '.comment-reply', function (e) {
+       $('.write-review-review').hide();
+        
+        var ReviewID = Number($(e.target).find(`input[name="ReviewID"]`).val())
+        var ParentCommentId = Number($(e.target).find(`input[name="ParentCommentId"]`).val())
+        $('input[name="comment.ReviewId"]').val(ReviewID)
+        if (ParentCommentId != 0) {
+            $('input[name="comment.ParentCommentId"]').val(ParentCommentId)
+
+        }
+        $('.write-review-comment').show();
+        console.log(ReviewID)
+        console.log(ParentCommentId)
+    })
     $('.doctor-reviews').on('click', function (e) {
         var DoctorId = Number($(e.target).find(`input[name="DoctorId"]`).val())
         if (DoctorId !== undefined) {
@@ -986,30 +1000,58 @@ Version      : 1.0
                 .then(data => {
                     var result = ''
                     console.log(data)
-                    data.forEach(e => {
-                        result +=`<li>
+                    for (var i = 0; i < data.length; i++) {
+                        result += `<li>
 										<div class="comment">
-											<img class="avatar rounded-circle" alt="User Image" src="~/img/uploads/${e.image && e.image}">
+											<img class="avatar rounded-circle" alt="User Image" src="~/img/uploads/${data[i].image && data[i].image}">
 											<div class="comment-body">
 												<div class="meta-data">
-													<span class="comment-author">${e.fullName}</span>
-													<span class="comment-date">Reviewed ${e.dateDays} Days ago</span>
+													<span class="comment-author">${data[i].fullName}</span>
+													<span class="comment-date">Reviewed ${data[i].dateDays} Days ago</span>
 <br>													
 <div class=" rating">
+${data[i].stars == 5 ? `<i class="fas fa-star filled"></i>
 														<i class="fas fa-star filled"></i>
 														<i class="fas fa-star filled"></i>
 														<i class="fas fa-star filled"></i>
+														<i class="fas fa-star filled"></i>`: 
+                            data[i].stars == 4 ? `<i class="fas fa-star filled"></i>
 														<i class="fas fa-star filled"></i>
 														<i class="fas fa-star filled"></i>
+														<i class="fas fa-star filled"></i>
+														<i class="fas fa-star "></i>`: 
+                                data[i].stars == 3 ? `<i class="fas fa-star filled"></i>
+														<i class="fas fa-star filled"></i>
+														<i class="fas fa-star filled"></i>
+														<i class="fas fa-star "></i>
+														<i class="fas fa-star "></i>`:
+                        data[i].stars == 2 ? `<i class="fas fa-star filled"></i>
+														<i class="fas fa-star filled"></i>
+														<i class="fas fa-star "></i>
+														<i class="fas fa-star "></i>
+														<i class="fas fa-star "></i>`:
+                                        data[i].stars == 1 ? `<i class="fas fa-star filled"></i>
+														<i class="fas fa-star "></i>
+														<i class="fas fa-star "></i>
+														<i class="fas fa-star "></i>
+														<i class="fas fa-star "></i>`: `<i class="fas fa-star "></i>
+														<i class="fas fa-star "></i>
+														<i class="fas fa-star "></i>
+														<i class="fas fa-star "></i>
+														<i class="fas fa-star "></i>`}
+														
 													</div>
 <br>
 												</div>
 												<p class="comment-content">
-							                        ${e.title}
-                                                    ${e.description}
+							                        ${data[i].title}
+                                                    ${data[i].description}
 												</p>
 												<div class="comment-reply">
-													<a class="comment-btn" href="#">
+
+													<a  class="comment-btn" >
+                                                           <input name="ReviewID" value="${data[i].id}" readonly="readonly" hidden="hidden">
+<input name="ParentCommentId"  readonly="readonly" hidden="hidden">
 														<i class="fas fa-reply"></i> Reply
 													</a>
 													
@@ -1017,7 +1059,8 @@ Version      : 1.0
 											</div>
 										</div>
 									</li>`
-                    })
+                    }
+                  
                 $('.comments-list').append(result)
                     
                 })
@@ -1030,6 +1073,7 @@ Version      : 1.0
         }
 
     })
+    
     // Content div min height set
 
     function resizeInnerDiv() {

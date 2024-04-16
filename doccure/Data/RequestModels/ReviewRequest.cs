@@ -1,4 +1,6 @@
-﻿namespace doccure.Data.RequestModels
+﻿using doccure.Data.Models;
+
+namespace doccure.Data.RequestModels
 {
 	public class ReviewRequest
 	{
@@ -6,6 +8,7 @@
 		public int stars { get; set; }
 		public string Title { get; set; }
 		public string Description { get; set; }
+		public Comment comment { get; set; }
 
 	}
 }
