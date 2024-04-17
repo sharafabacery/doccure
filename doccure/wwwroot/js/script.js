@@ -969,9 +969,9 @@ Version      : 1.0
         
         var ReviewID = Number($(e.target).find(`input[name="ReviewID"]`).val())
         var ParentCommentId = Number($(e.target).find(`input[name="ParentCommentId"]`).val())
-        $('input[name="comment.ReviewId"]').val(ReviewID)
+        $('input[name="ReviewId"]').val(ReviewID)
         if (ParentCommentId != 0) {
-            $('input[name="comment.ParentCommentId"]').val(ParentCommentId)
+            $('input[name="ParentCommentId"]').val(ParentCommentId)
 
         }
         $('.write-review-comment').show();

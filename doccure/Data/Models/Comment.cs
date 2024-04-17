@@ -8,9 +8,9 @@
 
 		public int ReviewId { get; set; }
 		public Review review { get; set; }
-		public int ParentCommentId { get; set; }
+		public int? ParentCommentId { get; set; }
 
-		public Comment ParentComment { get; set; }
+		public Comment? ParentComment { get; set; }
 		public ICollection<Comment> subComments { get; } = new List<Comment>();
 	}
 }

@@ -20,9 +20,9 @@ namespace doccure.Controllers.patient
 
 
 
-		public async Task<IActionResult> AddComment2Review(ReviewRequest comment)
+		public async Task<IActionResult> AddComment2Review(ReviewCommentRequest comment)
 		{
-			var commentdb = await reviewService.AddComment2Review(User, comment.comment);
+			var commentdb = await reviewService.AddComment2Review(User,new Comment() { Description=comment.Description,ReviewId=comment.ReviewId,ParentCommentId=comment.ParentCommentId==0?null: comment.ParentCommentId });
 			if (commentdb!=null)
 			{
 				return RedirectToActionPermanentPreserveMethod(nameof(DoctorSearchController.GetDoctor), "DoctorSearch", new { Id = commentdb.booking.doctorId });
