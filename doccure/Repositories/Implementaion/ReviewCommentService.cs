@@ -25,7 +25,7 @@ namespace doccure.Repositories.Implementaion
 			if(review!=null)
 			{
 				comment.createdDate = DateTime.Now;
-				
+				comment.User =await userManager.GetUserAsync(user);				
 				review.Comments.Add(comment);
 				var res = await applicationDbContext.SaveChangesAsync();
 				if (res > 0)
