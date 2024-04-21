@@ -1,0 +1,140 @@
+﻿@using doccure.Repositories.Implementaion;
+
+@{
+	var reviews = (List<ReviewDTO>)ViewBag.Reviews;
+}
+@functions{
+	void processSubComments(ref string st, List<CommentDTO> childComments)
+	{
+		for (var i = 0; i < childComments.Count; i++)
+		{
+			st += $@"
+					<li>
+						<div class='comment'>
+							<img class='avatar avatar-sm rounded-circle' alt ='User Image' src ='~/ img / uploads /{ childComments[i].Image}\' >
+							<div class='comment-body' >
+						<div class='meta-data' >
+						<span class='comment-author' >{ childComments[i].FullName}
+				</span>
+
+							</div>
+							<p class='comment-content' >
+								{childComments[i].Description}
+																</p>
+																<div class='comment-reply' >
+																	<a class='comment-btn' >
+
+																		<i class='fas fa-reply'></i> Reply
+																	</a>
+
+																</div>
+															</div>
+														</div>";
+			if (childComments[i].CommentDTO2 != null && childComments[i].CommentDTO2.Count > 0)
+			{
+				st += "<ul class='comments-reply'>";
+				processSubComments(ref st, childComments[i].CommentDTO2);
+				st += "</ul>";
+			}
+			st += "</li>";
+		}
+	}
+}
+<partial name="_Breadcrumb" />
+<div class="content">
+	<div class="container-fluid">
+		<div class="row">
+
+			<partial name="_DoctorSidebar" />
+			<div class="col-md-7 col-lg-8 col-xl-9">
+				<div class="doc-review review-listing">
+
+					<!-- Review Listing -->
+					<ul class="comments-list">
+						@foreach (var review in reviews)
+						{
+							<li>
+								<div class="comment">
+									<img class="avatar rounded-circle" alt="User Image" src="~/img/uploads/@review.Image">
+									<div class="comment-body">
+										<div class="meta-data">
+											<span class="comment-author">@review.FullName</span>
+											<span class="comment-date">Reviewed @review.DateDays Days ago</span>
+											<br>
+											<div class="review-count rating">
+												@for(int i=1;i<=5;i++){
+													if (i <= review.stars)
+													{
+														<i class="fas fa-star filled"></i>
+													}
+													else
+													{
+														<i class="fas fa-star"></i>
+													}
+												}
+
+											</div>
+										</div>
+										<p class="comment-content">
+											@review.Title  
+											@review.Description
+										</p>
+										<div class="comment-reply">
+											<a class="comment-btn" href="#">
+												<i class="fas fa-reply"></i> Reply
+											</a>
+											
+										</div>
+									</div>
+								</div>
+								@if (review.CommentDTO!=null&&review.CommentDTO.Count > 0)
+								{
+									<ul class="comments-reply">
+									@foreach(var comment in review.CommentDTO)
+									{
+											<li>
+												<div class="comment">
+													<img class="avatar rounded-circle" alt="User Image" src="~/img/uploads/@review.Image">
+													<div class="comment-body">
+														<div class="meta-data">
+															<span class="comment-author">@comment.FullName</span>
+															<span class="comment-date">Reviewed @comment.createdDate Days ago</span>
+														</div>
+														<p class="comment-content">
+															@comment.Description
+														</p>
+														<div class="comment-reply">
+															<a class="comment-btn" >
+																<i class="fas fa-reply"></i> Reply
+															</a>
+														</div>
+													</div>
+												</div>
+												@if(comment.CommentDTO2!=null&&comment.CommentDTO2.Count>0){
+													string s="";
+													processSubComments(ref s,comment.CommentDTO2);
+													<ul class="comments-reply">
+														@(@Html.Raw(s))
+
+													</ul>
+												}
+											</li>
+									}
+									</ul>
+								}
+								<!-- Comment Reply -->
+								
+
+							</li>
+						}
+						
+
+					</ul>
+					<!-- /Comment List -->
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
