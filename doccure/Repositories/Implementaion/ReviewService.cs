@@ -52,7 +52,7 @@ namespace doccure.Repositories.Implementaion
 			{
 				foreach (var childCategory in category.subComments)
 				{
-					descendants.Add(new CommentDTO {Id= childCategory.Id,ReviewId=childCategory.ReviewId,Description=childCategory.Description,createdDate=childCategory.createdDate,ParentCommentId=childCategory.ParentCommentId });
+					descendants.Add(new CommentDTO { FullName = category.User.FirstName + category.User.LastName, Image = category.User.Image, Id= childCategory.Id,ReviewId=childCategory.ReviewId,Description=childCategory.Description,createdDate=childCategory.createdDate,ParentCommentId=childCategory.ParentCommentId });
 					descendants.AddRange(GetAllDescendants(childCategory));
 				}
 			}

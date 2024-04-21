@@ -978,6 +978,7 @@ Version      : 1.0
         console.log(ReviewID)
         console.log(ParentCommentId)
     })
+    
     $('.doctor-reviews').on('click', function (e) {
         var DoctorId = Number($(e.target).find(`input[name="DoctorId"]`).val())
         if (DoctorId !== undefined) {
@@ -1001,47 +1002,42 @@ Version      : 1.0
                     var result = ''
                     console.log(data)
                     for (var i = 0; i < data.length; i++) {
-                        var replay = '';
+                        var replay = '<ul class="comments-reply">';
                         for (var j = 0; j < data[i].commentDTO.length; j++) {
                             replay +=`<li>
 														<div class="comment">
-															<img class="avatar avatar-sm rounded-circle" alt="User Image" src="assets/img/patients/patient1.jpg">
+															<img class="avatar avatar-sm rounded-circle" alt="User Image" src="~/img/uploads/${data[i].commentDTO[j].image && data[i].commentDTO[j].image}">
 															<div class="comment-body">
 																<div class="meta-data">
-																	<span class="comment-author">Charlene Reed</span>
-																	<span class="comment-date">Reviewed 3 Days ago</span>
-																	<div class="review-count rating">
-																		<i class="fas fa-star filled"></i>
-																		<i class="fas fa-star filled"></i>
-																		<i class="fas fa-star filled"></i>
-																		<i class="fas fa-star filled"></i>
-																		<i class="fas fa-star"></i>
-																	</div>
+																	<span class="comment-author">${data[i].commentDTO[j].fullName}</span>
+																	
 																</div>
 																<p class="comment-content">
-																	Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-																	sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-																	Ut enim ad minim veniam.
-																	Curabitur non nulla sit amet nisl tempus
+																	${data[i].commentDTO[j].description}
 																</p>
 																<div class="comment-reply">
-																	<a class="comment-btn" href="#">
+																	<a class="comment-btn" >
+<input name="ReviewID" value="${data[i].commentDTO[j].reviewId}" readonly="readonly" hidden="hidden">
+<input name="ParentCommentId"  value="${data[i].commentDTO[j].id}" readonly="readonly" hidden="hidden">
 																		<i class="fas fa-reply"></i> Reply
 																	</a>
-																	<p class="recommend-btn">
-																		<span>Recommend?</span>
-																		<a href="#" class="like-btn">
-																			<i class="far fa-thumbs-up"></i> Yes
-																		</a>
-																		<a href="#" class="dislike-btn">
-																			<i class="far fa-thumbs-down"></i> No
-																		</a>
-																	</p>
+																	
 																</div>
 															</div>
-														</div>
-													</li>`
+														</div>`
+                            if (data[i].commentDTO[j].commentDTO2&&data[i].commentDTO[j].commentDTO2.length > 0) {
+                                var sub_replay = '<ul class="comments-reply">';
+                                var obj = { sub_replay }
+                                renderChildComments(obj, data[i].commentDTO[j].commentDTO2)
+                                obj.sub_replay += `</ul>`
+                                replay += `	${obj.sub_replay }</li >`
+                            } else {
+                                replay += `	</li >`
+                            }
+                           
+								
                         }
+                        replay +=`</ul>`
                         result += `<li>
 										<div class="comment">
 											<img class="avatar rounded-circle" alt="User Image" src="~/img/uploads/${data[i].image && data[i].image}">
@@ -1099,6 +1095,7 @@ ${data[i].stars == 5 ? `<i class="fas fa-star filled"></i>
 												</div>
 											</div>
 										</div>
+${replay}
 									</li>`
                     }
                   
@@ -1114,7 +1111,45 @@ ${data[i].stars == 5 ? `<i class="fas fa-star filled"></i>
         }
 
     })
-    
+    function renderChildComments(obj, childComments) {
+        for (var i = 0; i < childComments.length; i++) {
+            obj.sub_replay += `<li>
+														<div class="comment">
+															<img class="avatar avatar-sm rounded-circle" alt="User Image" src="~/img/uploads/${childComments[i].image && childComments[i].image}">
+															<div class="comment-body">
+																<div class="meta-data">
+																	<span class="comment-author">${childComments[i].fullName}</span>
+																	
+																</div>
+																<p class="comment-content">
+																	${childComments[i].description}
+																</p>
+																<div class="comment-reply">
+																	<a class="comment-btn">
+<input name="ReviewID" value="${childComments[i].reviewId}" readonly="readonly" hidden="hidden">
+<input name="ParentCommentId"  value="${childComments[i].id}" readonly="readonly" hidden="hidden">
+																		<i class="fas fa-reply"></i> Reply
+																	</a>
+																	
+																</div>
+															</div>
+														</div>`
+            if (childComments[i].commentDTO2&&childComments[i].commentDTO2.length > 0) {
+                obj.sub_replay += '<ul class="comments-reply">';
+                renderChildComments(obj, childComments[i].commentDTO2);
+                obj.sub_replay += '</ul>';
+            } 
+            obj.sub_replay += `</li>`
+        }
+        //$.each(childComments, function (index, childComment) {
+        //    html += '<li>' + childComment.text + '</li>';
+        //    if (childComment.childComments.length > 0) {
+        //        html += '<ul>';
+        //        renderChildComments(childComment.childComments);
+        //        html += '</ul>';
+        //    }
+        //});
+    }
     // Content div min height set
 
     function resizeInnerDiv() {
