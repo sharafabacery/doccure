@@ -1150,6 +1150,12 @@ ${replay}
         //    }
         //});
     }
+    $('.Doctor-Reply').on('click', '.comment-reply', function () {
+        var ReviewID = Number($(e.target).find(`input[name="ReviewID"]`).val())
+        var ParentCommentId = Number($(e.target).find(`input[name="ParentCommentId"]`).val())
+        $('input[name="ReviewId"]').val(ReviewID)
+        $('input[name="ParentCommentId"]').val(ParentCommentId)
+    })
     // Content div min height set
 
     function resizeInnerDiv() {

@@ -22,8 +22,9 @@
 								{childComments[i].Description}
 																</p>
 																<div class='comment-reply' >
-																	<a class='comment-btn' >
-
+																	<a class='comment-btn' data-toggle='modal' href='#Doctor-Reply' >
+												<input name='ReviewID' value='{childComments[i].ReviewId}' readonly='readonly' hidden='hidden'>
+												<input name='ParentCommentId'value='{childComments[i].Id}'  readonly='readonly' hidden='hidden'>
 																		<i class='fas fa-reply'></i> Reply
 																	</a>
 
@@ -60,8 +61,7 @@
 										<div class="meta-data">
 											<span class="comment-author">@review.FullName</span>
 											<span class="comment-date">Reviewed @review.DateDays Days ago</span>
-											<br>
-											<div class="review-count rating">
+												<div class=" rating">
 												@for(int i=1;i<=5;i++){
 													if (i <= review.stars)
 													{
@@ -80,7 +80,9 @@
 											@review.Description
 										</p>
 										<div class="comment-reply">
-											<a class="comment-btn" href="#">
+											<a class="comment-btn" data-toggle="modal" href="#Doctor-Reply">
+												<input name="ReviewID" value="@review.Id" readonly="readonly" hidden="hidden">
+												<input name="ParentCommentId"  readonly="readonly" hidden="hidden">
 												<i class="fas fa-reply"></i> Reply
 											</a>
 											
@@ -104,7 +106,9 @@
 															@comment.Description
 														</p>
 														<div class="comment-reply">
-															<a class="comment-btn" >
+															<a class="comment-btn" data-toggle="modal" href="#Doctor-Reply">
+																<input name="ReviewID" value="@review.Id" readonly="readonly" hidden="hidden">
+																<input name="ParentCommentId" readonly="readonly" hidden="hidden">
 																<i class="fas fa-reply"></i> Reply
 															</a>
 														</div>
@@ -138,3 +142,6 @@
 
 	</div>
 </div>
+@section DoctorReply {
+	<partial name="_DoctorReply" />
+}

@@ -1,0 +1,39 @@
+﻿@using doccure.Data.Models;
+@model doccure.Data.RequestModels.ReviewCommentRequest;
+
+<div class="modal fade custom-modal" id="Doctor-Reply">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Reply Review / Comment</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form asp-action="AddComment2Review" asp-controller="ReviewCommentDoctor">
+					<div >
+						<input type="number" class="form-control" asp-for="ReviewId" value="" readonly>
+									<input type="number" class="form-control" asp-for="ParentCommentId" value="" readonly>
+									</div>
+					<div class="row form-row "> 
+						<div class="col-12 col-md-10">
+							<div class="row form-row">
+									<div class="form-group">
+										<label>Comment Description</label>
+										<input type="text" class="form-control" asp-for="Description" >
+									</div>
+							</div>
+
+							<div class="submit-section text-center">
+								<button type="submit" class="btn btn-primary submit-btn">Save Changes</button>
+							</div>
+
+						</div>
+					</div>
+				</form>
+
+			</div>
+		</div>
+	</div>
+</div>
