@@ -118,9 +118,13 @@ namespace doccure
 			//app.UseCors("AllowAll");
 			app.UseAuthentication();
             app.UseAuthorization();
-            
 
-            app.MapControllerRoute(
+			app.MapAreaControllerRoute(
+				name: "AdminCorner",
+				areaName: "AdminCorner",
+				pattern: "AdminCorner/{controller=Home}/{action=Index}/{id?}");
+
+			app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             //app.MapRazorPages();
