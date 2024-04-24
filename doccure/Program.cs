@@ -4,6 +4,7 @@ using doccure.Repositories.Implementaion;
 using doccure.Repositories.Interfance;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using static doccure.Repositories.Implementaion.DoctorDTO;
 
 namespace doccure
 {
@@ -58,6 +59,7 @@ namespace doccure
 						throw new KeyNotFoundException(); // or maybe return null, up to you
 				}
 			});
+			
 			builder.Services.AddScoped<ISpecalityService,SpecalityService>();
             builder.Services.AddScoped<IDeleteEducation, DeleteEducationService>();
 			builder.Services.AddScoped<IDeleteExperience, DeleteExperienceService>();
@@ -83,6 +85,7 @@ namespace doccure
 			builder.Services.AddScoped<IFavouritesServcie, FavouritesServcie>();
 			builder.Services.AddScoped<IReviewService, ReviewService>();
 			builder.Services.AddScoped<IReviewCommentService, ReviewCommentService>();
+			builder.Services.AddScoped<IDoctorListDashboardService, DoctorListDashboardService>();
 			// builder.Services.AddScoped<IUserAuthticationService, UserAuthticationService>();
 
 			//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
