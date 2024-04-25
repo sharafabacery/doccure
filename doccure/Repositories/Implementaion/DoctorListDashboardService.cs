@@ -28,13 +28,13 @@ namespace doccure.Repositories.Implementaion
 		}
 		public async Task<List<DoctorDTO>> GetAllUsers()
 		{
-			var doctorUserIds = await userManager.GetUsersInRoleAsync("doctor");
-
+			
 					var users = await userManager.Users
-			.Where(u => doctorUserIds.Contains(u)) // Filter users with the "employee" role
 			.Include(u => u.address) // Include the Department navigation property
 			.Include(u => u.DoctorBooking) // Include the Department navigation property
 			.Include(u => u.doctor.Speciality) // Include the Department navigation property
+			.Where(u =>u.doctor!=null) // Filter users with the "employee" role
+
 			.Select(e=>new DoctorDTO
 			{
 				Id=e.Id,
