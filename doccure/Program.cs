@@ -88,6 +88,7 @@ namespace doccure
 			builder.Services.AddScoped<IDoctorListDashboardService, DoctorListDashboardService>();
 			builder.Services.AddScoped<IPatientListService, PatientListService>();
 			builder.Services.AddScoped<ITransactionsListService, TransactionsListService>();
+			builder.Services.AddScoped<IReviewListService, ReviewListService>();
 			// builder.Services.AddScoped<IUserAuthticationService, UserAuthticationService>();
 
 			//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)

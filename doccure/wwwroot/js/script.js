@@ -949,7 +949,7 @@ Version      : 1.0
                 },
                 success: function (response) {
                     // Handle the success response
-                    window.location().reload()
+                    window.location.reload()
                     console.log('prescription data sent successfully.');
                     // Perform any additional actions on success, such as showing a success message or redirecting to another page
                 },

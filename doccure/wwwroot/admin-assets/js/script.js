@@ -111,11 +111,11 @@ Version      : 1.0
 	
     // Datatable
 
-    if ($('.datatable').length > 0) {
-        $('.datatable').DataTable({
-            "bFilter": false,
-        });
-    }
+    //if ($('.datatable').length > 0) {
+    //    $('.datatable').DataTable({
+    //        "bFilter": false,
+    //    });
+    //}
 	
 	// Email Inbox
 
@@ -235,5 +235,36 @@ Version      : 1.0
 		}
 	});
 
-	
+	$(".actions-reviews").on('click', function (e) {
+		var ReviewID = $(e.target).find(`input[name="reviewId"]`).val()
+		$('.trash').val(ReviewID)
+		
+	})
+	$(".delete-review").on('click', '.trash', function (e) {
+		var ReviewID = e.target.value
+		if (ReviewID !== undefined) {
+			$.ajax({
+				url: `/AdminCorner/Review/DeleteReview/${ReviewID}`,
+				type: 'DELETE',
+				contentType: false,
+				processData: false,
+				cache: false,
+				xhrFields: {
+					withCredentials: true
+				},
+				success: function (response) {
+					// Handle the success response
+					window.location.reload()
+					console.log('prescription data sent successfully.');
+					// Perform any additional actions on success, such as showing a success message or redirecting to another page
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					// Handle the error response
+					console.error('Failed to send prescription data.');
+					// Handle the error case, such as showing an error message to the user
+				}
+			});
+		}
+
+	})
 })(jQuery);
