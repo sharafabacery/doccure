@@ -59,7 +59,7 @@
 														<a href="profile.html">@Appointment.PatientName </a>
 													</h2>
 												</td>
-												<td>@Appointment.BookingDate.Day @Appointment.BookingDate.Month @Appointment.BookingDate.Year<span class="text-primary d-block">@Appointment.StartTime - @Appointment.EndTime</span></td>
+												<td>@Appointment.BookingDate.Day / @Appointment.BookingDate.Month / @Appointment.BookingDate.Year<span class="text-primary d-block">@Appointment.StartTime - @Appointment.EndTime</span></td>
 												<td>
 													<div class="status-toggle">
 														@if (@Appointment.Status == BookingStatus.Accepted || @Appointment.Status == BookingStatus.Complete)
