@@ -47,7 +47,7 @@
 											foreach (var patient in Transactions)
 											{
 												<tr>
-													<td><a href="invoice.html">#IN000 @patient.TransactionId </td>
+													<td><a asp-area="AdminCorner" asp-controller="Transaction" asp-action="GetTransaction" asp-route-id="@patient.TransactionId" />#IN @patient.TransactionId </td>
 													<td>@patient.PatientId.Substring(0,5)</td>
 													<td>
 														<h2 class="table-avatar">

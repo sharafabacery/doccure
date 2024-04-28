@@ -21,5 +21,11 @@ namespace doccure.Areas.AdminCorner.AdminCorner.Controllers
 			ViewBag.Transactions = Transactions;
 			return View();
 		}
+		public async Task<IActionResult> GetTransaction(int id)
+		{
+			var Transaction = await transactionsListService.GetTransaction(id);
+			ViewBag.Transaction = Transaction;
+			return View("Transaction");
+		}
 	}
 }
