@@ -1,0 +1,94 @@
+﻿@using doccure.Data.Models;
+@using doccure.Repositories.Implementaion;
+@{
+	var Appointments = (List<AppointmentDTO>)ViewBag.Appointments;
+}
+
+<div class="main-wrapper">
+
+	<partial name="_Header" />
+	<partial name="_AdminSidebar" /><!-- /Sidebar -->
+	<!-- Page Wrapper -->
+	<div class="page-wrapper">
+		<div class="content container-fluid">
+
+			<!-- Page Header -->
+			<div class="page-header">
+				<div class="row">
+					<div class="col-sm-12">
+						<h3 class="page-title">List of Doctors</h3>
+						<ul class="breadcrumb">
+							<li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+							<li class="breadcrumb-item active">Appointments</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!-- /Page Header -->
+
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="card">
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="datatable table table-hover table-center mb-0">
+									<thead>
+										<tr>
+													<th>Doctor Name</th>
+													<th>Speciality</th>
+													<th>Patient Name</th>
+													<th>Apointment Time</th>
+													<th>Status</th>
+													<th class="text-right">Amount</th>
+												</tr>
+									</thead>
+									<tbody>
+										@foreach (var Appointment in Appointments)
+										{
+											<tr>
+												<td>
+													<h2 class="table-avatar">
+														<a href="profile.html" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="~/img/uploads/@Appointment.DoctortImage" alt="User Image"></a>
+														<a href="profile.html">Dr. @Appointment.DoctortName</a>
+													</h2>
+												</td>
+												<td>@Appointment.Speciality</td>
+												<td>
+													<h2 class="table-avatar">
+														<a href="profile.html" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="~/img/uploads/@Appointment.PatienImage" alt="User Image"></a>
+														<a href="profile.html">@Appointment.PatientName </a>
+													</h2>
+												</td>
+												<td>@Appointment.BookingDate.Day @Appointment.BookingDate.Month @Appointment.BookingDate.Year<span class="text-primary d-block">@Appointment.StartTime - @Appointment.EndTime</span></td>
+												<td>
+													<div class="status-toggle">
+														@if (@Appointment.Status == BookingStatus.Accepted || @Appointment.Status == BookingStatus.Complete)
+														{
+															<input type="checkbox" id="status_1" class="check" checked readonly="readonly">
+														}
+														else
+														{
+															<input type="checkbox" id="status_1" class="check" readonly="readonly">
+														}
+
+														<label for="status_1" class="checktoggle">checkbox</label>
+													</div>
+												</td>
+												<td class="text-right">
+													$@Appointment.Total
+												</td>
+											</tr>
+										}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<!-- /Page Wrapper -->
+
+</div>
