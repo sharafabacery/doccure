@@ -18,7 +18,7 @@ namespace doccure.Areas.AdminCorner.AdminCorner.Controllers
 		public async Task< IActionResult> Index()
 		{
 			var users =await userDashboardService.GetAllUsers();
-			ViewBag.users = users;
+			ViewBag.doctors = users;
 			return View();
 		}
 	}
