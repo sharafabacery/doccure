@@ -39,6 +39,8 @@ namespace doccure
 				{
 					case "Patient":
 						return serviceProvider.GetService<UserProfileSettingsService>();
+					case "admin":
+						return serviceProvider.GetService<UserProfileSettingsService>();
 					case "Doctor":
 						return serviceProvider.GetService<DoctorProfileSettingsService>();
 					
