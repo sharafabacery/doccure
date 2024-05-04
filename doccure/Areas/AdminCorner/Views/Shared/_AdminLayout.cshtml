@@ -31,6 +31,9 @@
 </head>
 <body>
 	@RenderBody()
+	@RenderSection("AddSpecialitySlot", required: false)
+	@RenderSection("EditSpecialitySlot", required: false)
+	@RenderSection("DeleteSpecialitySlot", required: false)
 	<!-- jQuery -->
 	<script src="~/admin-assets/js/jquery-3.2.1.min.js"></script>
 
@@ -48,7 +51,7 @@
 	<script src="~/admin-assets/js/chart.morris.js"></script>
 
 	<!-- Custom JS -->
-	<script src="~/admin-assets/js/script.js"></script>
+	<script src="~/admin-assets/js/script.js" asp-append-version="true"></script>
 
 </body>
 

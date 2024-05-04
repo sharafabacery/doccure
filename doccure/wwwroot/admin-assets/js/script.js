@@ -234,7 +234,45 @@ Version      : 1.0
 			return false;
 		}
 	});
+	$(".edit-speciality").on('click', function (e) {
+		var specialityID = $(e.target).find(`input[name="Id"]`).val()
+		var specialityName = $(e.target).find(`input[name="name"]`).val()
+		$('.Speciality-Id').val(specialityID)
+		$('.Speciality-Name').val(specialityName)
 
+	})
+	$(".delete-speciality").on('click', function (e) {
+		var specialityID = $(e.target).find(`input[name="Id"]`).val()
+		$('.trash').val(specialityID)
+
+	})
+	$(".delete-speciality").on('click','.trash', function (e) {
+		var specialityID = e.target.value
+		if (specialityID !== undefined) {
+			$.ajax({
+				url: `/AdminCorner/Specialities/DeleteSpeciality/${specialityID}`,
+				type: 'DELETE',
+				contentType: false,
+				processData: false,
+				cache: false,
+				xhrFields: {
+					withCredentials: true
+				},
+				success: function (response) {
+					// Handle the success response
+					window.location.reload()
+					console.log('prescription data sent successfully.');
+					// Perform any additional actions on success, such as showing a success message or redirecting to another page
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					// Handle the error response
+					console.error('Failed to send prescription data.');
+					// Handle the error case, such as showing an error message to the user
+				}
+			});
+		}
+
+	})
 	$(".actions-reviews").on('click', function (e) {
 		var ReviewID = $(e.target).find(`input[name="reviewId"]`).val()
 		$('.trash').val(ReviewID)

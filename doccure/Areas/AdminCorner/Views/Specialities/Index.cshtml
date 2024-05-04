@@ -1,0 +1,104 @@
+﻿@using doccure.Data.Models;
+@{
+    var Specialities = (List<Speciality>)ViewBag.Specialities;
+}
+		<!-- Main Wrapper -->
+		<div class="main-wrapper">
+
+	<partial name="_Header" />
+	<partial name="_AdminSidebar" />
+
+			<!-- Page Wrapper -->
+			<div class="page-wrapper">
+				<div class="content container-fluid">
+
+					<!-- Page Header -->
+					<div class="page-header">
+						<div class="row">
+							<div class="col-sm-7 col-auto">
+								<h3 class="page-title">Specialities</h3>
+								<ul class="breadcrumb">
+									<li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+									<li class="breadcrumb-item active">Specialities</li>
+								</ul>
+							</div>
+							<div class="col-sm-5 col">
+								<a href="#Add_Specialities_details" data-toggle="modal" class="btn btn-primary float-right mt-2">Add</a>
+							</div>
+						</div>
+					</div>
+					<!-- /Page Header -->
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="card">
+								<div class="card-body">
+									<div class="table-responsive">
+										<table class="datatable table table-hover table-center mb-0">
+											<thead>
+												<tr>
+													<th>#</th>
+													<th>Specialities</th>
+													<th class="text-right">Actions</th>
+												</tr>
+											</thead>
+											<tbody>
+										@{
+											foreach(var sp in Specialities)
+											{
+												<tr>
+													<td>#SP00 @sp.Id</td>
+
+													<td>
+														<h2 class="table-avatar">
+															<a href="profile.html" class="avatar avatar-sm mr-2">
+																<img class="avatar-img" src="~/img/uploads/@sp.image" alt="Speciality">
+															</a>
+															<a >@sp.Name</a>
+														</h2>
+													</td>
+
+													<td class="text-right">
+														<div class="actions delete-speciality edit-speciality">
+															<a class="btn btn-sm bg-success-light" data-toggle="modal" href="#edit_specialities_details">
+																<input name="Id" value="@sp.Id" readonly="readonly"hidden="hidden" />
+																<input name="name" value="@sp.Name" readonly="readonly" hidden="hidden" />
+																<i class="fe fe-pencil"></i> Edit
+															</a>
+															<a data-toggle="modal" href="#delete_modal" class="btn btn-sm bg-danger-light">
+																<input name="Id" value="@sp.Id" readonly="readonly" hidden="hidden" />
+																<i class="fe fe-trash"></i> Delete
+															</a>
+														</div>
+													</td>
+												</tr>
+											}
+										}
+
+												
+												
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>			
+					</div>
+				</div>			
+			</div>
+			<!-- /Page Wrapper -->
+	@section AddSpecialitySlot {
+		<partial name="_AddSpecialityModal" />
+	}
+	@section EditSpecialitySlot {
+		<partial name="_EditSpecialityModal" />
+	}
+	@section DeleteSpecialitySlot {
+		<partial name="_DeleteSpecialityModal" />
+	}
+
+			
+
+			
+
+
+		</div>
