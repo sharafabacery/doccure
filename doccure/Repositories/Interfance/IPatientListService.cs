@@ -4,6 +4,6 @@ namespace doccure.Repositories.Interfance
 {
 	public interface IPatientListService
 	{
-		public Task<List<PatientDTO>> GetAllUsers();
+		public Task<List<PatientDTO>> GetAllUsers(bool pagination);
 	}
 }

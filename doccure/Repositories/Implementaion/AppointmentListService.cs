@@ -27,9 +27,10 @@ namespace doccure.Repositories.Implementaion
 		{
 			this.applicationDbContext = applicationDbContext;
 		}
-		public async Task<List<AppointmentDTO>> GetAllAppointments()
+		public async Task<List<AppointmentDTO>> GetAllAppointments(bool pagination)
 		{
-			var Appointments = await applicationDbContext.Bookings.Include(p => p.patient).Include(d => d.doctor).Include(d => d.doctor.doctor.Speciality).Include(s=>s.scheduleTiming)
+			List<AppointmentDTO> AppointmentsLst;
+			IQueryable<AppointmentDTO> Appointments =  applicationDbContext.Bookings.Include(p => p.patient).Include(d => d.doctor).Include(d => d.doctor.doctor.Speciality).Include(s=>s.scheduleTiming)
 							.OrderByDescending(e => e.bookingDate).Select(e => new AppointmentDTO
 							{
 								Id = e.Id,
@@ -43,8 +44,10 @@ namespace doccure.Repositories.Implementaion
 								Total = e.total,
 								StartTime = e.scheduleTiming.StartTime,
 								EndTime = e.scheduleTiming.EndTime
-							}).ToListAsync();
-			return Appointments;
+							});
+			if (pagination) Appointments = Appointments.Take(5);
+			AppointmentsLst=await Appointments.ToListAsync();
+			return AppointmentsLst;
 		}
 	}
 }

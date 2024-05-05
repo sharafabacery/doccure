@@ -1,20 +1,13 @@
 $(function(){
 	
 	/* Morris Area Chart */
-	
+	var AreaData = JSON.parse( document.getElementById('morrisArea').dataset.mydata)
 	window.mA = Morris.Area({
-	    element: 'morrisArea',
-	    data: [
-	        { y: '2013', a: 60},
-	        { y: '2014', a: 100},
-	        { y: '2015', a: 240},
-	        { y: '2016', a: 120},
-	        { y: '2017', a: 80},
-	        { y: '2018', a: 100},
-	        { y: '2019', a: 300},
-	    ],
-	    xkey: 'y',
-	    ykeys: ['a'],
+		element: 'morrisArea',
+
+	    data: AreaData,
+	    xkey: 'Key',
+	    ykeys: ['Value'],
 	    labels: ['Revenue'],
 	    lineColors: ['#1b5a90'],
 	    lineWidth: 2,
@@ -27,19 +20,14 @@ $(function(){
 	});
 	
 	/* Morris Line Chart */
-	
+	AreaData = JSON.parse(document.getElementById('morrisLine').dataset.mydata)
 	window.mL = Morris.Line({
 	    element: 'morrisLine',
-	    data: [
-	        { y: '2015', a: 100, b: 30},
-	        { y: '2016', a: 20,  b: 60},
-	        { y: '2017', a: 90,  b: 120},
-	        { y: '2018', a: 50,  b: 80},
-	        { y: '2019', a: 120,  b: 150},
-	    ],
-	    xkey: 'y',
-	    ykeys: ['a', 'b'],
-	    labels: ['Doctors', 'Patients'],
+	    data: 
+				AreaData,
+	    xkey: 'Key',
+	    ykeys: ['Value'],
+	    labels: ['users'],
 	    lineColors: ['#1b5a90','#ff9d00'],
 	    lineWidth: 1,
 	    gridTextSize: 10,

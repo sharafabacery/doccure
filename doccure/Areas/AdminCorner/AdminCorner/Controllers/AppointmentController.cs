@@ -17,7 +17,8 @@ namespace doccure.Areas.AdminCorner.AdminCorner.Controllers
 		}
 		public async Task< IActionResult> Index()
 		{
-			var Appointments=await appointmentListService.GetAllAppointments();
+			bool pagination = false;
+			var Appointments=await appointmentListService.GetAllAppointments(pagination);
 			ViewBag.Appointments = Appointments;
 			return View();
 		}

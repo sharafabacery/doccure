@@ -16,7 +16,8 @@ namespace doccure.Areas.AdminCorner.AdminCorner.Controllers
 		}
 		public async Task<IActionResult> Index()
 		{
-			var users = await patientListService.GetAllUsers();
+			bool pagination = false;
+			var users = await patientListService.GetAllUsers(pagination);
 			ViewBag.users = users;
 			return View();
 		}

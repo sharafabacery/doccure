@@ -68,9 +68,10 @@ namespace doccure.Repositories.Implementaion
 
                     Email = registerRequest.Email,
                     UserName = registerRequest.Username,
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    CreatedTime = DateTime.Now
 
-                };
+				};
                 var userCreation = await userManager.CreateAsync(applicationUser, registerRequest.Password);
                 if (userCreation.Succeeded) 
                 { 

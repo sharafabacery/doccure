@@ -4,6 +4,6 @@ namespace doccure.Repositories.Interfance
 {
 	public interface IAppointmentListService
 	{
-		public Task<List<AppointmentDTO>> GetAllAppointments();
+		public Task<List<AppointmentDTO>> GetAllAppointments(bool pagination);
 	}
 }

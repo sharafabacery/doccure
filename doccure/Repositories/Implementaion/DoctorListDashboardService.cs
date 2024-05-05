@@ -26,10 +26,10 @@ namespace doccure.Repositories.Implementaion
 			this.roleManager = roleManager;
 			this.applicationDbContext = applicationDbContext;
 		}
-		public async Task<List<DoctorDTO>> GetAllUsers()
+		public async Task<List<DoctorDTO>> GetAllUsers(bool pagination=false)
 		{
-			
-					var users = await userManager.Users
+			List<DoctorDTO> doctors;
+					IQueryable<DoctorDTO> users =  userManager.Users
 			.Include(u => u.address) // Include the Department navigation property
 			.Include(u => u.DoctorBooking) // Include the Department navigation property
 			.Include(u => u.doctor.Speciality) // Include the Department navigation property
@@ -43,8 +43,12 @@ namespace doccure.Repositories.Implementaion
 				Earned=(int)e.DoctorBooking.Sum(c=>c.total),
 				Image=e.Image
 			})
-			.ToListAsync(); 
-			return users;
+			;
+			if (pagination) {
+				users =  users.Take(5);
+			}
+			doctors = await users.ToListAsync();
+			return doctors;
 		}
 	}
 }

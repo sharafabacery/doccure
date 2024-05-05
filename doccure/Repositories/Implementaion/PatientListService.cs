@@ -28,11 +28,11 @@ namespace doccure.Repositories.Implementaion
 			this.roleManager = roleManager;
 			this.applicationDbContext = applicationDbContext;
 		}
-		public async Task<List<PatientDTO>> GetAllUsers()
+		public async Task<List<PatientDTO>> GetAllUsers(bool pagination)
 		{
 			var adminUserIds = await userManager.GetUsersInRoleAsync("admin");
-
-			var users = await applicationDbContext.Users
+			List<PatientDTO> userslist;
+			IQueryable<PatientDTO> users =  applicationDbContext.Users
 			.Include(u => u.address) // Include the Department navigation property
 			.Include(u => u.doctor) // Include the Department navigation property
 			.Include(u => u.PatientBooking) // Include the Department navigation property
@@ -52,9 +52,10 @@ namespace doccure.Repositories.Implementaion
 					Paid = e.PatientBooking.FirstOrDefault(c => c.Id == e.PatientBooking.Max(e => e.Id)) == null ? null : e.PatientBooking.FirstOrDefault(c => c.Id == e.PatientBooking.Max(e => e.Id)).total
 				}
 
-			)
-			.ToListAsync();
-			return users;
+			);
+			if (pagination) users.Take(5);
+			userslist = await users.ToListAsync();
+			return userslist;
 		}
 	}
 }
