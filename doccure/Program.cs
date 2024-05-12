@@ -4,6 +4,7 @@ using doccure.Repositories.Implementaion;
 using doccure.Repositories.Interfance;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
 using static doccure.Repositories.Implementaion.DoctorDTO;
 
 namespace doccure
@@ -98,7 +99,7 @@ namespace doccure
 			//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
 			//     .AddEntityFrameworkStores<ApplicationDbContext>();
 			builder.Services.AddControllersWithViews();
-   //         builder.Services.AddCors(options =>
+			//         builder.Services.AddCors(options =>
 			//{
 			//	options.AddPolicy("AllowAll", builder =>
 			//	{
@@ -107,6 +108,7 @@ namespace doccure
 			//			   .AllowAnyHeader();
 			//	});
 			//});
+			builder.Services.AddSignalR();
 			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
