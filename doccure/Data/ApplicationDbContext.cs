@@ -30,10 +30,14 @@ namespace doccure.Data
         public DbSet<Favourites> Favourites { set; get; }
         public DbSet<Review> Reviews { set; get; }
         public DbSet<Comment> Comments { set; get; }
+        public DbSet<UserConnected> UserConnected { set; get; }
+        public DbSet<Group> Groups { set; get; }
+        public DbSet<UserGroups> UserGroups { set; get; }
 
 		public virtual DbSet<DoctorSearchReturned> DoctorSearchReturned { get; set; }
 		public virtual DbSet<ScheduleTimingBooking> ScheduleTimingBooking { get; set; }
 		public virtual DbSet<Patients> Patients { get; set; }
+		public virtual DbSet<Messages> Messages { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -72,6 +76,16 @@ namespace doccure.Data
 		.HasForeignKey(c => c.ParentCommentId)
 		.OnDelete(DeleteBehavior.Restrict); // or Cascade depending on your requirements
 
+			builder.Entity<Messages>()
+			.HasOne(b => b.Sender)
+			.WithMany(a => a.SenderMessages)
+			.HasForeignKey(b => b.senderId).OnDelete(DeleteBehavior.NoAction);
+
+
+			builder.Entity<Messages>()
+			.HasOne(b => b.Receiver)
+			.WithMany(a => a.ReceiverMessages)
+			.HasForeignKey(b => b.receiverId).OnDelete(DeleteBehavior.NoAction);
 		}
     }
 }

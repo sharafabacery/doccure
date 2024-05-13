@@ -20,7 +20,11 @@ namespace doccure.Data.Models
 		public ICollection<Booking> PatientBooking { get; } = new List<Booking>(); // Collection navigation containing dependents
 		public ICollection<Booking> DoctorBooking { get; } = new List<Booking>(); // Collection navigation containing dependents
 		public ICollection<Favourites> PatientFavourites { get; } = new List<Favourites>(); // Collection navigation containing dependents
-		//public ICollection<Review> DoctorPatientReview { get; } = new List<Review>(); // Collection navigation containing dependents
+		public ICollection<UserConnected> UserConnecteds { get; } = new List<UserConnected>(); // Collection navigation containing dependents
+		public ICollection<UserGroups> UserGroups { get; } = new List<UserGroups>(); // Collection navigation containing dependents
+																					 //public ICollection<Review> DoctorPatientReview { get; } = new List<Review>(); // Collection navigation containing dependents
+		public ICollection<Messages> SenderMessages { get; } = new List<Messages>(); // Collection navigation containing dependents
+		public ICollection<Messages> ReceiverMessages { get; } = new List<Messages>(); // Collection navigation containing dependents
 
 
 	}

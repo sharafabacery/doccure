@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using doccure.Data;
 
@@ -11,9 +12,11 @@ using doccure.Data;
 namespace doccure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240513194433_GroupList")]
+    partial class GroupList
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -680,46 +683,6 @@ namespace doccure.Data.Migrations
                     b.ToTable("Memberships");
                 });
 
-            modelBuilder.Entity("doccure.Data.Models.Messages", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("File")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Read")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("SoftDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("receiverId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("senderId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("receiverId");
-
-                    b.HasIndex("senderId");
-
-                    b.ToTable("Messages");
-                });
-
             modelBuilder.Entity("doccure.Data.Models.Prescription", b =>
                 {
                     b.Property<int>("Id")
@@ -863,30 +826,6 @@ namespace doccure.Data.Migrations
                     b.HasIndex("applicationuserId");
 
                     b.ToTable("UserConnected");
-                });
-
-            modelBuilder.Entity("doccure.Data.Models.UserGroups", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("GroupId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("applicationuserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GroupId");
-
-                    b.HasIndex("applicationuserId");
-
-                    b.ToTable("UserGroups");
                 });
 
             modelBuilder.Entity("doccure.Data.ResponseModels.DoctorSearchReturned", b =>
@@ -1236,25 +1175,6 @@ namespace doccure.Data.Migrations
                     b.Navigation("doctor");
                 });
 
-            modelBuilder.Entity("doccure.Data.Models.Messages", b =>
-                {
-                    b.HasOne("doccure.Data.Models.Applicationuser", "Receiver")
-                        .WithMany("ReceiverMessages")
-                        .HasForeignKey("receiverId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("doccure.Data.Models.Applicationuser", "Sender")
-                        .WithMany("SenderMessages")
-                        .HasForeignKey("senderId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Receiver");
-
-                    b.Navigation("Sender");
-                });
-
             modelBuilder.Entity("doccure.Data.Models.Prescription", b =>
                 {
                     b.HasOne("doccure.Data.Models.Booking", "booking")
@@ -1299,25 +1219,6 @@ namespace doccure.Data.Migrations
                     b.Navigation("applicationuser");
                 });
 
-            modelBuilder.Entity("doccure.Data.Models.UserGroups", b =>
-                {
-                    b.HasOne("doccure.Data.Models.Group", "group")
-                        .WithMany()
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("doccure.Data.Models.Applicationuser", "applicationuser")
-                        .WithMany("UserGroups")
-                        .HasForeignKey("applicationuserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("applicationuser");
-
-                    b.Navigation("group");
-                });
-
             modelBuilder.Entity("doccure.Data.Models.Applicationuser", b =>
                 {
                     b.Navigation("DoctorBooking");
@@ -1326,13 +1227,7 @@ namespace doccure.Data.Migrations
 
                     b.Navigation("PatientFavourites");
 
-                    b.Navigation("ReceiverMessages");
-
-                    b.Navigation("SenderMessages");
-
                     b.Navigation("UserConnecteds");
-
-                    b.Navigation("UserGroups");
 
                     b.Navigation("address");
 
