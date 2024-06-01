@@ -23,7 +23,7 @@ for patient it could be like a portable electronic health record (EHR).
 
 
 
-## Features (NotComplete)
+## Features (Not-Complete) Still Under-Development
 
 [X] Text Chating
 
