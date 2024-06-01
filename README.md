@@ -63,6 +63,7 @@ Add Admin User manully to SQLSERVER And  Its Rules
 ## Related
 
 This App was templete based for Frontend ,I download the Templete Thin I Create Backend.
+This App still in Development Mode Could be Some Bugs I need T fix.
 
 ## Feedback
 
