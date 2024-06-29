@@ -11,11 +11,13 @@ namespace doccure.Controllers.patient
     {
 
         private readonly IUserAuthenticationService authenticationService;
+		private readonly IForgetPassword forgetPassword;
 
-        public UserAuthunticationController(IUserAuthenticationService authenticationService)
+		public UserAuthunticationController(IUserAuthenticationService authenticationService,IForgetPassword forgetPassword)
         {
             this.authenticationService = authenticationService;
-        }
+			this.forgetPassword = forgetPassword;
+		}
         public IActionResult Register()
         {
             return View();
@@ -66,6 +68,37 @@ namespace doccure.Controllers.patient
 				
 				return RedirectToAction(nameof(Login));
 			}
+		}
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
+		[HttpPost]
+		public async Task<IActionResult> ForgetPassword(ForgetPasswordTokenRequest loginModel)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(loginModel);
+			}
+			var result = await forgetPassword.SendToken(loginModel);
+			if (!result)
+			{
+				return RedirectToAction(nameof(ForgetPassword));
+			}
+			else
+			{
+
+				return RedirectToAction(nameof(ChangePassword));
+			}
+		}
+		public IActionResult ChangePassword()
+		{
+			return View();
+		}
+		[HttpPost]
+		public IActionResult ChangePassword(ForgetPasswordRequest loginModel)
+		{
+			return View();
 		}
 		[Authorize]
 		public async Task<IActionResult> Logout()

@@ -14,6 +14,7 @@ namespace doccure.Data.Models
         public string? Image { get; set; }
         public bool? Gender { get; set; }
         public DateTime? CreatedTime { get; set; }
+        public string? ForgetPasswordToken { get; set; }
 
         public Address? address { get; set; }
         public Doctor? doctor { get; set; }
