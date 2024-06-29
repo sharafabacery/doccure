@@ -96,9 +96,23 @@ namespace doccure.Controllers.patient
 			return View();
 		}
 		[HttpPost]
-		public IActionResult ChangePassword(ForgetPasswordRequest loginModel)
+		public async Task<IActionResult> ChangePasswordAsync(ForgetPasswordRequest loginModel)
 		{
-			return View();
+			if (!ModelState.IsValid)
+			{
+				return View(loginModel);
+			}
+			var result = await forgetPassword.UpdatePassword(loginModel);
+			if (result==null)
+			{
+				ViewBag.msg = "error in update";
+				return RedirectToAction(nameof(ForgetPassword));
+			}
+			else
+			{
+
+				return RedirectToAction(nameof(Login));
+			}
 		}
 		[Authorize]
 		public async Task<IActionResult> Logout()
