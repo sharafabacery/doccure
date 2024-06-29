@@ -21,7 +21,7 @@ for patient it could be like a portable electronic health record (EHR).
 
 [✔] Add Doctor's profile and clinic information
 
-
+[✔] Forget Password Feature
 
 ## Features (Not-Complete) Still Under-Development
 
@@ -30,8 +30,6 @@ for patient it could be like a portable electronic health record (EHR).
 [X] Video Chating
 
 [X] Seeding Database
-
-[X] Forget Password Feature
 
 [X] Login with 3rd party Authuntication
 
