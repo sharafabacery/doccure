@@ -25,9 +25,25 @@ namespace doccure
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddIdentity<Applicationuser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+			builder.Services.AddAuthentication(o =>
+			{
+				o.DefaultScheme = "Application";
+				o.DefaultSignInScheme = "External";
+			})
+	.AddCookie("Application")
+	.AddCookie("External").AddGoogle(googleOptions =>
+			{
+				googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+				googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+				
+			});
 
-
-            builder.Services.ConfigureApplicationCookie(op => op.LoginPath = "/UserAuthuntication/Login");
+			builder.Services.ConfigureApplicationCookie(op => op.LoginPath = "/UserAuthuntication/Login");
+			builder.Services.AddLogging(loggingBuilder =>
+			{
+				loggingBuilder.AddConsole();
+				loggingBuilder.AddDebug();
+			});
 
 			builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailProvider"));
 			builder.Services.AddTransient<IMailService, MailService>();

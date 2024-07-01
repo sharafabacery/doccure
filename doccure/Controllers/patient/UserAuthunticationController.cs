@@ -114,6 +114,12 @@ namespace doccure.Controllers.patient
 				return RedirectToAction(nameof(Login));
 			}
 		}
+		public async Task<IActionResult> LoginGoogle()
+		{
+			var xx = User;
+			await authenticationService.LogoutAsync();
+			return RedirectToAction("Index", "Home");
+		}
 		[Authorize]
 		public async Task<IActionResult> Logout()
 		{
