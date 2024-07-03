@@ -1,22 +1,32 @@
 ﻿using doccure.Data.RequestModels;
 using doccure.Repositories.Implementaion;
 using doccure.Repositories.Interfance;
+using Google.Apis.Auth;
+using Google.Apis.Auth.AspNetCore3;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Auth;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Drive.v3;
+using Google.Apis.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Common;
 
 namespace doccure.Controllers.patient
 {
     public class UserAuthunticationController : Controller
     {
-
-        private readonly IUserAuthenticationService authenticationService;
+		private readonly IGoogleAuthProvider googleAuth;
+		private readonly IUserAuthenticationService authenticationService;
 		private readonly IForgetPassword forgetPassword;
-
-		public UserAuthunticationController(IUserAuthenticationService authenticationService,IForgetPassword forgetPassword)
+		//private readonly IGoogleAuthProvider google;
+		public UserAuthunticationController(IGoogleAuthProvider googleAuth, IUserAuthenticationService authenticationService,IForgetPassword forgetPassword)
         {
-            this.authenticationService = authenticationService;
+			this.googleAuth = googleAuth;
+			this.authenticationService = authenticationService;
 			this.forgetPassword = forgetPassword;
+			//this.google = google;
 		}
         public IActionResult Register()
         {
@@ -114,11 +124,24 @@ namespace doccure.Controllers.patient
 				return RedirectToAction(nameof(Login));
 			}
 		}
-		public async Task<IActionResult> LoginGoogle()
+		
+		public async Task<IActionResult> LoginGoogle(string credential,string type)
 		{
-			var xx = User;
-			await authenticationService.LogoutAsync();
-			return RedirectToAction("Index", "Home");
+			GoogleJsonWebSignature.Payload payload = await GoogleJsonWebSignature.ValidateAsync(credential);
+			if (payload == null)
+			{
+				return RedirectToAction(nameof(Login));
+			}
+			var result = await authenticationService.LoginExtnal(new ExternalLoginRequestcs { Email = payload.Email,UserName=payload.Name, Name = payload.GivenName, FamilyName =payload.FamilyName,Picture=payload.Picture,Type=type });
+			if (result)
+			{
+				return RedirectToAction("Index", "Home");
+			}
+			else
+			{
+
+				return RedirectToAction(nameof(Login));
+			}
 		}
 		[Authorize]
 		public async Task<IActionResult> Logout()

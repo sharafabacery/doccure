@@ -2,6 +2,8 @@ using doccure.Data;
 using doccure.Data.Models;
 using doccure.Repositories.Implementaion;
 using doccure.Repositories.Interfance;
+using Google.Apis.Auth.AspNetCore3;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,18 +29,21 @@ namespace doccure
             builder.Services.AddIdentity<Applicationuser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 			builder.Services.AddAuthentication(o =>
 			{
-				o.DefaultScheme = "Application";
-				o.DefaultSignInScheme = "External";
+				
+				o.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 			})
-	.AddCookie("Application")
-	.AddCookie("External").AddGoogle(googleOptions =>
+		.AddCookie().AddGoogleOpenIdConnect(googleOptions =>
 			{
 				googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
 				googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+
 				
 			});
-
+			
+			//builder.Services.ConfigureApplicationCookie(op => op.LoginPath = "/UserAuthuntication/Login");
 			builder.Services.ConfigureApplicationCookie(op => op.LoginPath = "/UserAuthuntication/Login");
+			//builder.Services.ConfigureApplicationCookie(op => op.LoginPath = "/UserAuthuntication/LoginGoogle");
+			//builder.Services.ConfigureExternalCookie(op => op.LoginPath = "/UserAuthuntication/LoginGoogle");
 			builder.Services.AddLogging(loggingBuilder =>
 			{
 				loggingBuilder.AddConsole();
