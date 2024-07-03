@@ -101,6 +101,7 @@ namespace doccure.Repositories.Implementaion
 				{
 					authClaims.Add(new Claim(ClaimTypes.Role, userRole));
 				}
+				//await 
 
 				result = true;
 			}
