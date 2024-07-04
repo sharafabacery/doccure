@@ -23,6 +23,8 @@ for patient it could be like a portable electronic health record (EHR).
 
 [✔] Forget Password Feature
 
+[✔] Login with 3rd party Authuntication
+
 ## Features (Not-Complete) Still Under-Development
 
 [X] Text Chating
@@ -30,8 +32,6 @@ for patient it could be like a portable electronic health record (EHR).
 [X] Video Chating
 
 [X] Seeding Database
-
-[X] Login with 3rd party Authuntication
 
 
 
@@ -46,6 +46,13 @@ Run the command to run migration.
 ```
 
 Add Admin User manully to SQLSERVER And  Its Rules
+
+Add secerts of google clientid
+
+```bash 
+  dotnet user-secrets set "Authentication:Google:ClientId" "<client-id>"
+  dotnet user-secrets set "Authentication:Google:ClientSecret" "<client-secret>"
+```
 
 ## Tech Stack
 
