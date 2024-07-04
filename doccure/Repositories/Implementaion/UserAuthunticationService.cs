@@ -2,9 +2,10 @@
 using doccure.Data.RequestModels;
 using doccure.Repositories.Interfance;
 using Google.Apis.Drive.v3.Data;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
-
 namespace doccure.Repositories.Implementaion
 {
     public class UserAuthunticationService : IUserAuthenticationService
@@ -52,7 +53,7 @@ namespace doccure.Repositories.Implementaion
 			
 		}
 
-        public async Task<bool> LoginExtnal(ExternalLoginRequestcs loginModel)
+        public async Task<bool> RegisterExtnal(ExternalLoginRequestcs loginModel)
         {
             bool result = false;
             var userExists = await userManager.FindByEmailAsync(loginModel.Email);
@@ -91,19 +92,15 @@ namespace doccure.Repositories.Implementaion
 			}
 			else
 			{
-				var userRoles = await userManager.GetRolesAsync(userExists);
-				var authClaims = new List<Claim> {
-				new Claim(ClaimTypes.Name,userExists.UserName),
-				new Claim(ClaimTypes.NameIdentifier,userExists.Id),
+				result = false;
+				
 
-				};
-				foreach (var userRole in userRoles)
-				{
-					authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-				}
-				//await 
+				//await HttpContext(
+				//	CookieAuthenticationDefaults.AuthenticationScheme,
+				//	new ClaimsPrincipal(claimsIdentity),
+				//	authProperties);
 
-				result = true;
+				//result = true;
 			}
 			return result;
 		}
@@ -151,5 +148,27 @@ namespace doccure.Repositories.Implementaion
             
             return result;
         }
-    }
+
+		public async Task<bool> LoginExtnal(ExternalLoginRequestcs loginModel)
+		{
+			bool result = false;
+			var userExists = await userManager.FindByEmailAsync(loginModel.Email);
+			var authClaims = new List<Claim>();
+			if (userExists !=null)
+			{
+				 await signInManager.SignInAsync(userExists,false);
+
+				var userRoles = await userManager.GetRolesAsync(userExists);
+				authClaims.Add(new Claim(ClaimTypes.Name, userExists.UserName));
+				authClaims.Add(new Claim(ClaimTypes.NameIdentifier, userExists.Id));
+				
+				foreach (var userRole in userRoles)
+				{
+					authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+				}
+				result = true;
+			}
+			return result;
+		}
+	}
 }

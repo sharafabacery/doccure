@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Common;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 
 namespace doccure.Controllers.patient
 {
@@ -132,15 +134,21 @@ namespace doccure.Controllers.patient
 			{
 				return RedirectToAction(nameof(Login));
 			}
-			var result = await authenticationService.LoginExtnal(new ExternalLoginRequestcs { Email = payload.Email,UserName=payload.Name, Name = payload.GivenName, FamilyName =payload.FamilyName,Picture=payload.Picture,Type=type });
+			var result = await authenticationService.RegisterExtnal(new ExternalLoginRequestcs { Email = payload.Email,UserName=payload.Name, Name = payload.GivenName, FamilyName =payload.FamilyName,Picture=payload.Picture,Type=type });
 			if (result)
 			{
 				return RedirectToAction("Index", "Home");
 			}
 			else
 			{
+				var clamisUser=await authenticationService.LoginExtnal(new ExternalLoginRequestcs { Email = payload.Email, UserName = payload.Name, Name = payload.GivenName, FamilyName = payload.FamilyName, Picture = payload.Picture, Type = type });
+				if (!clamisUser)
+				{
+					return RedirectToAction(nameof(Login));
+				}
+				else {
 
-				return RedirectToAction(nameof(Login));
+					return RedirectToAction("Index", "Home"); }
 			}
 		}
 		[Authorize]

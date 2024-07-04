@@ -39,9 +39,9 @@ namespace doccure
 
 				
 			});
-			
+
 			//builder.Services.ConfigureApplicationCookie(op => op.LoginPath = "/UserAuthuntication/Login");
-			builder.Services.ConfigureApplicationCookie(op => op.LoginPath = "/UserAuthuntication/Login");
+			builder.Services.ConfigureApplicationCookie(op => { op.LoginPath = "/UserAuthuntication/Login"; op.Cookie.Name = "authCookie"; });
 			//builder.Services.ConfigureApplicationCookie(op => op.LoginPath = "/UserAuthuntication/LoginGoogle");
 			//builder.Services.ConfigureExternalCookie(op => op.LoginPath = "/UserAuthuntication/LoginGoogle");
 			builder.Services.AddLogging(loggingBuilder =>

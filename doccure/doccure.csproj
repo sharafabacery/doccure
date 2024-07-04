@@ -19,6 +19,7 @@
     <PackageReference Include="Google.Apis.Auth.AspNetCore3" Version="1.68.0" />
     <PackageReference Include="Google.Apis.Drive.v3" Version="1.68.0.3428" />
     <PackageReference Include="MailKit" Version="4.7.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.17" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.1" />
