@@ -23,7 +23,7 @@ for patient it could be like a portable electronic health record (EHR).
 
 [✔] Forget Password Feature
 
-[✔] Login with 3rd party Authuntication
+[✔] Login with 3rd party Authuntication (Google)
 
 ## Features (Not-Complete) Still Under-Development
 
