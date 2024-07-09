@@ -1,6 +1,8 @@
-﻿namespace doccure.Repositories.Implementaion
+﻿using doccure.Repositories.Interfance;
+
+namespace doccure.Repositories.Implementaion
 {
-	public class MessageService
+	public class MessageService: IMessageService
 	{
 	}
 }
