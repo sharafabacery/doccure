@@ -1,5 +1,6 @@
 using doccure.Data;
 using doccure.Data.Models;
+using doccure.Hub;
 using doccure.Repositories.Implementaion;
 using doccure.Repositories.Interfance;
 using Google.Apis.Auth.AspNetCore3;
@@ -52,6 +53,7 @@ namespace doccure
 
 			builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailProvider"));
 			builder.Services.AddTransient<IMailService, MailService>();
+			builder.Services.AddSingleton<IChatService, ChatService>();
 			builder.Services.AddScoped<IUserAuthenticationService, UserAuthunticationService>();
             builder.Services.AddScoped<UserProfileSettingsService>();
             builder.Services.AddScoped<DoctorProfileSettingsService>();
@@ -163,8 +165,8 @@ namespace doccure
 			app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-            //app.MapRazorPages();
-
+			//app.MapRazorPages();
+			app.MapHub<ChatHub>("/chathub");
             app.Run();
         }
     }
