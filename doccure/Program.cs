@@ -54,6 +54,7 @@ namespace doccure
 			builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailProvider"));
 			builder.Services.AddTransient<IMailService, MailService>();
 			builder.Services.AddSingleton<IChatService, ChatService>();
+			builder.Services.AddSingleton<IMessageService, MessageService>();
 			builder.Services.AddScoped<IUserAuthenticationService, UserAuthunticationService>();
             builder.Services.AddScoped<UserProfileSettingsService>();
             builder.Services.AddScoped<DoctorProfileSettingsService>();
