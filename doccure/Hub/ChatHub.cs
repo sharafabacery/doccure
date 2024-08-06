@@ -36,6 +36,22 @@ using System.Threading.Tasks;
 			var users=await chatService.AllowToTalk(Context.UserIdentifier);
 			await Clients.Caller.SendAsync("AllowToTalk", Context.ConnectionId, users);
 		}
+		public async Task RemoveConnection()
+		{
+			await chatService.DisConnect(Context.ConnectionId);
+		}
+		public override async Task OnConnectedAsync()
+		{
+			await AddConnection();
+			await Task.WhenAll(GetGroups(), AuthUsersToTalk());
+			await base.OnConnectedAsync();
+
+		}
+		public override async Task OnDisconnectedAsync(Exception exception)
+		{
+			await RemoveConnection();
+			await base.OnDisconnectedAsync(exception);
+		}
 
 	}
 }
