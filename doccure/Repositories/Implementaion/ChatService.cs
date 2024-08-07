@@ -132,7 +132,8 @@ namespace doccure.Repositories.Implementaion
 
 		public async Task<List<GroupResponse>> UserAuthuicatedGroups(string Id)
 		{
-			var groups=await applicationDbContext.UserGroups.Include(p=>p.group).Where(p=>p.applicationuserId==Id).Select(e=>new GroupResponse { Group = e.group,User=e.group.user.FirstOrDefault(e=>e.Id!=Id) }).ToListAsync();
+			//var group = await applicationDbContext.UserGroups.Include(p => p.group).Include(p => p.group.user).Where(p => p.applicationuserId == Id).ToListAsync();
+			var groups =await applicationDbContext.UserGroups.Include(p=>p.group).Include(p=>p.group.user).Where(p=>p.applicationuserId==Id).Select(e=>new GroupResponse { Group = e.group,User=e.group.user.FirstOrDefault() }).ToListAsync();
 			return groups;
 		}
 	}
