@@ -278,6 +278,7 @@
 	@RenderSection("PatientAppointment", required: false)
 	@RenderSection("AddMedicalRecord", required: false)
 	@RenderSection("DoctorReply", required: false)
+	@RenderSection("AddContacts", required: false)
 
 	<script src="https://accounts.google.com/gsi/client" async></script>
 	
@@ -300,6 +301,8 @@
 
 		<script src="~/js/slick.js"></script>
 	<script src="~/js/script.js" asp-append-version="true"></script>
+	@RenderSection("ChatFeature", required: false)
+
 		<!-- await RenderSectionAsync("Scripts", required: false)-->
 </body>
 </html>

@@ -7,6 +7,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace doccure.Repositories.Implementaion
 {
+	public class GroupResponse
+	{
+		public Group? Group { set; get; }
+		public Applicationuser? User { set; get; }
+
+	}
 	public class ChatService : IChatService
 	{
 		private readonly UserManager<Applicationuser> userManager;
@@ -28,6 +34,8 @@ namespace doccure.Repositories.Implementaion
 			{
 				groupFound = new Group();
 				groupFound.Name = group.Name;
+				await applicationDbContext.Groups.AddAsync(groupFound);
+
 				var res = await applicationDbContext.SaveChangesAsync();
 
 				if (res > 0)
@@ -55,6 +63,7 @@ namespace doccure.Repositories.Implementaion
 			{
 				groupFound = new UserGroups();
 				groupFound = userGroups;
+				await applicationDbContext.UserGroups.AddAsync(groupFound);
 				var res = await applicationDbContext.SaveChangesAsync();
 
 				if (res > 0)
@@ -90,6 +99,7 @@ namespace doccure.Repositories.Implementaion
 			{
 				groupFound = new UserConnected();
 				groupFound = userConnected;
+				await applicationDbContext.UserConnected.AddAsync(groupFound);
 				var res = await applicationDbContext.SaveChangesAsync();
 
 				if (res > 0)
@@ -120,9 +130,9 @@ namespace doccure.Repositories.Implementaion
 			}
 		}
 
-		public async Task<List<Group>> UserAuthuicatedGroups(string Id)
+		public async Task<List<GroupResponse>> UserAuthuicatedGroups(string Id)
 		{
-			var groups=await applicationDbContext.UserGroups.Include(p=>p.group).Where(p=>p.applicationuserId==Id).Select(e=>e.group).ToListAsync();
+			var groups=await applicationDbContext.UserGroups.Include(p=>p.group).Where(p=>p.applicationuserId==Id).Select(e=>new GroupResponse { Group = e.group,User=e.group.user.FirstOrDefault(e=>e.Id!=Id) }).ToListAsync();
 			return groups;
 		}
 	}
