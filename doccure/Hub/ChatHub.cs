@@ -2,6 +2,7 @@
 namespace doccure.Hub
 {
 	using doccure.Data.Models;
+	using doccure.Data.RequestModels;
 	using doccure.Repositories.Interfance;
 	using Google.Apis.Drive.v3.Data;
 	using Microsoft.AspNetCore.SignalR;
@@ -12,10 +13,12 @@ using System.Threading.Tasks;
 	public class ChatHub : Hub
 	{
 		private readonly IChatService chatService;
+		private readonly IMessageService messageService;
 
-		public ChatHub(IChatService chatService)
+		public ChatHub(IChatService chatService,IMessageService messageService)
 		{
 			this.chatService = chatService;
+			this.messageService = messageService;
 		}
 		public async Task AddConnection()
 		{
@@ -73,6 +76,21 @@ using System.Threading.Tasks;
 		{
 			var users=await chatService.AllowToTalk(Context.UserIdentifier);
 			await Clients.Caller.SendAsync("AllowToTalk", Context.ConnectionId, users);
+		}
+		public async Task GetMessages(string Id,DateTime dateTime)
+		{
+			var messages = await messageService.GetMessages(new Data.RequestModels.MessageQueryRequest() { date = dateTime, Sender = Context.UserIdentifier, Reciver = Id });
+			await Clients.Caller.SendAsync("MessagesSendClient", Context.ConnectionId, messages);
+		}
+		public async Task MarkRead(string Id,string groupNmae)
+		{
+			var res = await messageService.UpdateMessage(new Data.RequestModels.MessageUser() { Sender = Context.UserIdentifier, Reciver = Id });
+			await Clients.Group(groupNmae).SendAsync("MessagesReadClient", Context.ConnectionId, res);
+		}
+		public async Task AddMessage(MessageRequest messageRequest)
+		{
+			var res = await messageService.AddMessage(messageRequest, Context.UserIdentifier);
+			await Clients.Group(messageRequest.GroupName).SendAsync("MessageSent", Context.ConnectionId, res);
 		}
 		public async Task RemoveConnection()
 		{

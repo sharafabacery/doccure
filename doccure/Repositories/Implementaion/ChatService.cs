@@ -3,6 +3,7 @@ using doccure.Data.Models;
 using doccure.Data.RequestModels;
 using doccure.Repositories.Interfance;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace doccure.Repositories.Implementaion
@@ -128,6 +129,13 @@ namespace doccure.Repositories.Implementaion
 					return true;
 
 			}
+		}
+
+		public async Task<UserConnected> GetConnectionByUserId(string userId)
+		{
+			var connection = await applicationDbContext.UserConnected.Where(e => e.applicationuserId == userId).FirstOrDefaultAsync();
+			if (connection != null) return connection;
+			else return null;
 		}
 
 		public async Task<List<GroupResponse>> GetUserGroups(string Id,List<Group> groups)
