@@ -1,6 +1,7 @@
 ﻿
 namespace doccure.Hub
 {
+	using doccure.Data.Models;
 	using doccure.Repositories.Interfance;
 	using Google.Apis.Drive.v3.Data;
 	using Microsoft.AspNetCore.SignalR;
@@ -55,11 +56,18 @@ using System.Threading.Tasks;
 		{
 
 			var groups=await chatService.UserAuthuicatedGroups(Context.UserIdentifier);
-			foreach(var group in groups)
+			//var groupTalk = await chatService.GetUserGroups(Context.UserIdentifier, groups);
+
+			foreach (var group in groups)
 			{
-				await Groups.AddToGroupAsync(Context.ConnectionId, group.Group.Name);
+				await Groups.AddToGroupAsync(Context.ConnectionId, group.Name);
 			}
-			await Clients.Caller.SendAsync("UserGroups",Context.ConnectionId,groups);
+			await Clients.Caller.SendAsync("Groups",Context.ConnectionId, groups);
+		}
+		public async Task GetUserGroups(List<Group> groups)
+		{
+			var groupTalk = await chatService.GetUserGroups(Context.UserIdentifier, groups);
+			await Clients.Caller.SendAsync("UserGroups", Context.ConnectionId, groupTalk);
 		}
 		public async Task AuthUsersToTalk()
 		{

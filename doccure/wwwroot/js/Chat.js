@@ -28,10 +28,38 @@ connection.on("UserConnected", (user, msg) => {
     connection.on("Info", (user, msg) => {
         alert(msg)
     });
-connection.on("UserGroups", (user, groups) => {
-    alert(msg)
+    connection.on("Groups", async (user,groups) => {
+        console.log(groups)
+        try {
+            await connection.send("GetUserGroups", groups);
+        } catch (err) {
+            console.error(err);
+        }
 });
-
+    connection.on("UserGroups", (user, msg) => {
+        var result = ``
+        msg.forEach((u, index) => {
+            result +=`<a href="javascript:void(0);" class="media">
+									<div class="media-img-wrap">
+										<div class="avatar avatar-away">
+											<img src="~/img/doctors/doctor-thumb-01.jpg" alt="User Image" class="avatar-img rounded-circle">
+										</div>
+									</div>
+									<div class="media-body">
+										<div>
+											<div class="user-name">Dr. ${u.user.firstName} ${u.user.lastName}</div>
+<input type="text" class="form-control" name="userId" value=${u.user.id} readonly hidden>
+<input type="text" class="form-control" name="groupId" value=${u.group.id} readonly hidden>
+<input type="text" class="form-control" name="groupName" value=${u.group.name} readonly hidden>
+											
+										</div>
+										
+									</div>
+								</a>`
+        })
+        $(".chatGroups").append(result);
+        //alert(groupTalk)
+    });
 connection.on("AllowToTalk", (user, users) => {
     var result = ``;
     users.forEach((u, index) => {
