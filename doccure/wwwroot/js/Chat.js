@@ -39,18 +39,19 @@ connection.on("UserConnected", (user, msg) => {
     connection.on("UserGroups", (user, msg) => {
         var result = ``
         msg.forEach((u, index) => {
-            result +=`<a href="javascript:void(0);" class="media">
+            result +=`<a  class="media chatGroupLink">
 									<div class="media-img-wrap">
 										<div class="avatar avatar-away">
-											<img src="~/img/doctors/doctor-thumb-01.jpg" alt="User Image" class="avatar-img rounded-circle">
+											<img src="~/img/uploads/${u.user.image}" alt="User Image" class="avatar-img rounded-circle profileImage">
 										</div>
 									</div>
-									<div class="media-body">
+									<div class="media-body ">
 										<div>
 											<div class="user-name">Dr. ${u.user.firstName} ${u.user.lastName}</div>
-<input type="text" class="form-control" name="userId" value=${u.user.id} readonly hidden>
+<input type="text" class="form-control" name="userIdGroup" value=${u.user.id} readonly hidden>
 <input type="text" class="form-control" name="groupId" value=${u.group.id} readonly hidden>
 <input type="text" class="form-control" name="groupName" value=${u.group.name} readonly hidden>
+<input type="text" class="form-control" name="userNameGroup" value="Dr. ${u.user.firstName} ${u.user.lastName}" readonly hidden>
 											
 										</div>
 										
@@ -79,7 +80,12 @@ connection.on("AllowToTalk", (user, users) => {
     $(".ContactsGroups").append(result);
 });
 
+    connection.on("MessagesSendClient", (user, msgs) => {
+        console.log("MessagesSendClient fired")
+        var chatObject = JSON.parse(localStorage.getItem('chatUser'))
+        console.log(chatObject)
 
+    });
     $('.ContactsGroups').on("click", '.talk', async function (e) {
         var user1 = $(this).find(`input[name="userId"]`).val()
         console.log(user1)
@@ -90,7 +96,76 @@ connection.on("AllowToTalk", (user, users) => {
         }
        
     })
+    $('.chatGroups').on("click", '.chatGroupLink', async function (e) {
+        var userId = $(this).find(`input[name="userIdGroup"]`).val()
+        var userName = $(this).find(`input[name="userNameGroup"]`).val()
+        var groupId = $(this).find(`input[name="groupId"]`).val()
+        var groupName = $(this).find(`input[name="groupName"]`).val()
+        var profileImage = $(this).find('.profileImage').prop('src')
 
+        var chatObject = {
+            "userId":userId,
+            "groupId": groupId,
+            "groupName": groupName,
+            "userName": userName,
+            "profileImage": profileImage
+        }
+       localStorage.setItem("chatUser", JSON.stringify(chatObject))
+        try {
+            await connection.invoke("GetMessages", chatObject.userId, new Date());
+            let htmlChat =`<div class="chat-header">
+							<a id="back_user_list" href="javascript:void(0)" class="back-user-list">
+								<i class="material-icons">chevron_left</i>
+							</a>
+							<div class="media">
+								<div class="media-img-wrap">
+									<div class="avatar avatar-online">
+										<img src="${chatObject.profileImage}" alt="User Image" class="avatar-img rounded-circle">
+									</div>
+								</div>
+								<div class="media-body">
+									<div class="user-name">${chatObject.userName}</div>
+									<div class="user-status">online</div>
+								</div>
+							</div>
+							<div class="chat-options">
+								<a href="javascript:void(0)" data-toggle="modal" data-target="#voice_call">
+									<i class="material-icons">local_phone</i>
+								</a>
+								<a href="javascript:void(0)" data-toggle="modal" data-target="#video_call">
+									<i class="material-icons">videocam</i>
+								</a>
+								<a href="javascript:void(0)">
+									<i class="material-icons">more_vert</i>
+								</a>
+							</div>
+						</div>
+<div class="chat-body">
+<div class="chat-scroll">
+								<ul class="list-unstyled"></ul>
+</div>
+</div>
+<div class="chat-footer">
+<form  method="POST" class="MessageForm" enctype="multipart/form-data">
+							<div class="input-group">
+								<div class="input-group-prepend">
+									<div class="btn-file btn">
+										<i class="fa fa-paperclip"></i>
+										<input type="file" name="messageAttachment">
+									</div>
+								</div>
+								<input type="text" class="input-msg-send form-control" placeholder="Type something" name"messageContent">
+								<div class="input-group-append">
+									<button type="submit" value="Submit" class="btn msg-send-btn"><i class="fab fa-telegram-plane"></i></button>
+								</div>
+							</div>
+</form>
+						</div>`
+            $(".chat-cont-right").append(htmlChat)
+        } catch (err) {
+            console.error(err);
+        }
+    })
     var chatAppTarget = $('.chat-window');
     (function () {
         if ($(window).width() > 991)
