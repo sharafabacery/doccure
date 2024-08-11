@@ -1,4 +1,15 @@
-﻿(function ($) {
+﻿/**
+ * 1. Open 2 browser tabs one for doctor and one for patient
+ * 2. Get data from Form and send by signalR to process (saved to database and send it to each user if reciver show it mark it as read)
+ * 3. View all previous messages to user and update mark as read
+ * 4. when user scroll update user chat messages
+ * 5. show if user currently online
+ * 6. exculude if user now I will talk from (AllowToTalk)
+ * 7.show how many messages user cant read it until now
+ * */
+
+
+(function ($) {
     "use strict";
 const connection = new signalR.HubConnectionBuilder()
     .withUrl("/chathub")
