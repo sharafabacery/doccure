@@ -166,6 +166,10 @@ connection.on("AllowToTalk", (user, users) => {
             console.error(err);
         }
     })
+    $(".chat-cont-right").submit('.MessageForm',function (e) {
+        e.preventDefault()
+        alert("Submitted");
+    });
     var chatAppTarget = $('.chat-window');
     (function () {
         if ($(window).width() > 991)
