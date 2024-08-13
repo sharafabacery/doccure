@@ -1,5 +1,4 @@
 ﻿/**
- * 1. Open 2 browser tabs one for doctor and one for patient
  * 2. Get data from Form and send by signalR to process (saved to database and send it to each user if reciver show it mark it as read)
  * 3. View all previous messages to user and update mark as read
  * 4. when user scroll update user chat messages
@@ -22,14 +21,17 @@ async function start() {
         console.log("SignalR Connected.");
     } catch (err) {
         console.log(err);
-        setTimeout(start, 5000);
+        //setTimeout(start, 5000);
     }
 };
+    window.onbeforeunload = function () {
+        connection.stop().then(function () {
+            console.log('Closed');
+            connection = null;
+        });
 
-connection.onclose(async () => {
-    await start();
-});
-
+    }
+    
 // Start the connection.
 start()
 
@@ -160,10 +162,10 @@ connection.on("AllowToTalk", (user, users) => {
 <form  method="POST" class="MessageForm" enctype="multipart/form-data">
 							<div class="input-group">
 								<div class="input-group-prepend">
-									<div class="btn-file btn">
+									<!-- <div class="btn-file btn">
 										<i class="fa fa-paperclip"></i>
 										<input type="file" name="messageAttachment">
-									</div>
+									</div> -->
 								</div>
 								<input type="text" class="input-msg-send form-control" placeholder="Type something" name"messageContent">
 								<div class="input-group-append">
@@ -172,14 +174,36 @@ connection.on("AllowToTalk", (user, users) => {
 							</div>
 </form>
 						</div>`
+            $(".chat-cont-right").empty();
             $(".chat-cont-right").append(htmlChat)
         } catch (err) {
             console.error(err);
         }
     })
-    $(".chat-cont-right").submit('.MessageForm',function (e) {
+    $(".chat-cont-right").submit('.MessageForm',async function (e) {
         e.preventDefault()
-        alert("Submitted");
+        var chatObject = JSON.parse(localStorage.getItem('chatUser'))
+        var x = $(".MessageForm").serializeArray();
+        console.log(x)
+        $.each(x, function (i, field) {
+
+            //$("#results1").append(field.name + ":" + field.value + "<br><br>");
+
+            //$("#results2").append(field.value);
+            console.log(field)
+
+        });
+         //var fileInput = $(this).find(`input[name="messageAttachment"]`)[0];
+        //var file = fileInput != undefined ? fileInput.files[0] : null;
+       
+        var obj = {
+            "message": data['messageContent'],
+            "groupName": chatObject.groupName,
+            "reciver": chatObject.userId
+        }
+        console.log(data)
+        await connection.invoke("AddMessage", obj);
+       // alert("Submitted");
     });
     var chatAppTarget = $('.chat-window');
     (function () {

@@ -5,6 +5,7 @@ namespace doccure.Hub
 	using doccure.Data.RequestModels;
 	using doccure.Repositories.Interfance;
 	using Google.Apis.Drive.v3.Data;
+	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -87,7 +88,7 @@ using System.Threading.Tasks;
 			var res = await messageService.UpdateMessage(new Data.RequestModels.MessageUser() { Sender = Context.UserIdentifier, Reciver = Id });
 			await Clients.Group(groupNmae).SendAsync("MessagesReadClient", Context.ConnectionId, res);
 		}
-		public async Task AddMessage(MessageRequest messageRequest)
+		public async Task AddMessage( MessageRequest messageRequest)
 		{
 			var res = await messageService.AddMessage(messageRequest, Context.UserIdentifier);
 			await Clients.Group(messageRequest.GroupName).SendAsync("MessageSent", Context.ConnectionId, res);

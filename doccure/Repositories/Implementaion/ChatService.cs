@@ -82,8 +82,8 @@ namespace doccure.Repositories.Implementaion
 		{
 			var user = await applicationDbContext.Users.FirstOrDefaultAsync(r=>r.Id==Id);
 			var role = await userManager.GetRolesAsync(user);
-			var patient = role.FirstOrDefault(e => e == "Patient");
-			var allowedTalk = await applicationDbContext.Bookings.Where(p => p.doctorId == Id || p.patientId == Id).Select( p =>patient!=null?p.patient:p.doctor).ToListAsync();
+			var patient = role.FirstOrDefault(e => e == "patient");
+			var allowedTalk = await applicationDbContext.Bookings.Where(p => p.doctorId == Id || p.patientId == Id).Select( p =>patient==null?p.patient:p.doctor).ToListAsync();
 			return allowedTalk;
 		}
 
