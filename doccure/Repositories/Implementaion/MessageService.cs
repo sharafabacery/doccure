@@ -12,15 +12,15 @@ namespace doccure.Repositories.Implementaion
 	{
 		private readonly ApplicationDbContext applicationDbContext;
 		private readonly UserManager<Applicationuser> userManager;
-		private readonly IFileService ImageService;
-		private readonly IFileService fileService;
+		//private readonly IFileService ImageService;
+		//private readonly IFileService fileService;
 
-		public MessageService(ApplicationDbContext applicationDbContext, UserManager<Applicationuser> userManager, ServiceResolver2 serviceAccessorImage, ServiceResolver2 serviceAccessorFile)
+		public MessageService(ApplicationDbContext applicationDbContext, UserManager<Applicationuser> userManager)
 		{
 			this.applicationDbContext = applicationDbContext;
 			this.userManager = userManager;
-			this.ImageService = serviceAccessorImage("Image");
-			this.fileService = serviceAccessorFile("File");
+			//this.ImageService = serviceAccessorImage("Image");
+			//this.fileService = serviceAccessorFile("File");
 		}
 		public async Task<Messages> AddMessage(MessageRequest messageRequest, string sender)
 		{
@@ -31,21 +31,8 @@ namespace doccure.Repositories.Implementaion
 			message.CreatedTime = DateTime.Now;
 			message.Read = false;
 			message.SoftDelete = false;
-			if (messageRequest.UploadedFile != null)
-			{
-				IFormFile file = messageRequest.UploadedFile;
-				var image =  ImageService.SaveFile(file);
-				var fileSaved = fileService.SaveFile(file);
-				if (image != "")
-				{
-					filePath = image;
-				}else if (fileSaved != "")
-				{
-					filePath=fileSaved;
-				}
-				
-			}
-			message.File = filePath;
+			
+			message.File = messageRequest.UploadedFile;
 			await applicationDbContext.Messages.AddAsync(message);
 			var res = await applicationDbContext.SaveChangesAsync();
 			if (res > 0) return message;

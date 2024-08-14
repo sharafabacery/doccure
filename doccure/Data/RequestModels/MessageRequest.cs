@@ -4,7 +4,7 @@
 	{
 		public string Message { get; set; }
 		public string GroupName { get; set; }
-		public IFormFile? UploadedFile { get; set; }
+		public string? UploadedFile { get; set; }
 		public string Reciver { get; set; }
 
 	}

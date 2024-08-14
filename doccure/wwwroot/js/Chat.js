@@ -126,56 +126,10 @@ connection.on("AllowToTalk", (user, users) => {
        localStorage.setItem("chatUser", JSON.stringify(chatObject))
         try {
             await connection.invoke("GetMessages", chatObject.userId, new Date());
-            let htmlChat =`<div class="chat-header">
-							<a id="back_user_list" href="javascript:void(0)" class="back-user-list">
-								<i class="material-icons">chevron_left</i>
-							</a>
-							<div class="media">
-								<div class="media-img-wrap">
-									<div class="avatar avatar-online">
-										<img src="${chatObject.profileImage}" alt="User Image" class="avatar-img rounded-circle">
-									</div>
-								</div>
-								<div class="media-body">
-									<div class="user-name">${chatObject.userName}</div>
-									<div class="user-status">online</div>
-								</div>
-							</div>
-							<div class="chat-options">
-								<a href="javascript:void(0)" data-toggle="modal" data-target="#voice_call">
-									<i class="material-icons">local_phone</i>
-								</a>
-								<a href="javascript:void(0)" data-toggle="modal" data-target="#video_call">
-									<i class="material-icons">videocam</i>
-								</a>
-								<a href="javascript:void(0)">
-									<i class="material-icons">more_vert</i>
-								</a>
-							</div>
-						</div>
-<div class="chat-body">
-<div class="chat-scroll">
-								<ul class="list-unstyled"></ul>
-</div>
-</div>
-<div class="chat-footer">
-<form  method="POST" class="MessageForm" enctype="multipart/form-data">
-							<div class="input-group">
-								<div class="input-group-prepend">
-									<!-- <div class="btn-file btn">
-										<i class="fa fa-paperclip"></i>
-										<input type="file" name="messageAttachment">
-									</div> -->
-								</div>
-								<input type="text" class="input-msg-send form-control" placeholder="Type something" name"messageContent">
-								<div class="input-group-append">
-									<button type="submit" value="Submit" class="btn msg-send-btn"><i class="fab fa-telegram-plane"></i></button>
-								</div>
-							</div>
-</form>
-						</div>`
-            $(".chat-cont-right").empty();
-            $(".chat-cont-right").append(htmlChat)
+            $(".reciver-name").text(chatObject.userName); 
+            $(".reciver-img").attr("src", chatObject.profileImage);
+            //$(".chat-cont-right").empty();
+            //$(".chat-cont-right").append(htmlChat)
         } catch (err) {
             console.error(err);
         }
@@ -183,28 +137,39 @@ connection.on("AllowToTalk", (user, users) => {
     $(".chat-cont-right").submit('.MessageForm',async function (e) {
         e.preventDefault()
         var chatObject = JSON.parse(localStorage.getItem('chatUser'))
-        var x = $(".MessageForm").serializeArray();
-        console.log(x)
-        $.each(x, function (i, field) {
 
-            //$("#results1").append(field.name + ":" + field.value + "<br><br>");
+        var messageContent = $(this).find(`input[name="messageContent"]`).val();
 
-            //$("#results2").append(field.value);
-            console.log(field)
-
-        });
-         //var fileInput = $(this).find(`input[name="messageAttachment"]`)[0];
-        //var file = fileInput != undefined ? fileInput.files[0] : null;
-       
         var obj = {
-            "message": data['messageContent'],
+            "message": messageContent,
             "groupName": chatObject.groupName,
-            "reciver": chatObject.userId
+            "reciver": chatObject.userId,
+            "uploadedFile": localStorage.getItem('path')
         }
-        console.log(data)
+        console.log(obj)
         await connection.invoke("AddMessage", obj);
        // alert("Submitted");
     });
+
+    $('.ffile').change('.messageAttachment', function () {
+        var fileInput = $(this).find(`input[name="messageAttachment"]`)[0];
+        var file = fileInput != undefined ? fileInput.files[0] : null;
+
+        if (file != null) {
+            var form = new FormData()
+            form.append('ImageFile', file)
+            var form = new FormData()
+            form.append('ImageFile', file)
+            fetch('/ImageUploader/UploagImage/', {
+                method: 'POST',
+                body: form
+            })
+                .then(response => response.json())
+                .then(data => localStorage.setItem('path', data.path))
+                .catch(error => console.error('Error uploading image:', error));
+
+        }
+    })
     var chatAppTarget = $('.chat-window');
     (function () {
         if ($(window).width() > 991)

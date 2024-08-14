@@ -48,7 +48,54 @@
 					<!-- /Chat Left -->
 					<!-- Chat Right -->
 					<div class="chat-cont-right">
-						
+						<div class="chat-header">
+							<a id="back_user_list" href="javascript:void(0)" class="back-user-list">
+								<i class="material-icons">chevron_left</i>
+							</a>
+							<div class="media">
+								<div class="media-img-wrap">
+									<div class="avatar avatar-online">
+										<img src="" alt="User Image" class="avatar-img rounded-circle reciver-img">
+									</div>
+								</div>
+								<div class="media-body">
+									<div class="user-name reciver-name">.......</div>
+									<div class="user-status">online</div>
+								</div>
+							</div>
+							<div class="chat-options">
+								<a href="javascript:void(0)" data-toggle="modal" data-target="#voice_call">
+									<i class="material-icons">local_phone</i>
+								</a>
+								<a href="javascript:void(0)" data-toggle="modal" data-target="#video_call">
+									<i class="material-icons">videocam</i>
+								</a>
+								<a href="javascript:void(0)">
+									<i class="material-icons">more_vert</i>
+								</a>
+							</div>
+						</div>
+						<div class="chat-body">
+							<div class="chat-scroll">
+								<ul class="list-unstyled"></ul>
+							</div>
+						</div>
+						<div class="chat-footer">
+							<form method="POST" class="MessageForm" enctype="multipart/form-data">
+								<div class="input-group">
+									<div class="input-group-prepend">
+										 <div class="btn-file btn ffile">
+											<i class="fa fa-paperclip"></i>
+											<input runat="server" id="fileUpload1" type="file" name="messageAttachment" >
+										</div> 
+									</div>
+									<input type="text" class="input-msg-send form-control" placeholder="Type something" name="messageContent">
+									<div class="input-group-append">
+										<button type="submit" value="Submit" class="btn msg-send-btn"><i class="fab fa-telegram-plane"></i></button>
+									</div>
+								</div>
+							</form>
+						</div>
 						@*<div class="chat-header">
 							<a id="back_user_list" href="javascript:void(0)" class="back-user-list">
 								<i class="material-icons">chevron_left</i>
