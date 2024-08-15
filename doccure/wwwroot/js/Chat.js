@@ -1,5 +1,5 @@
 ﻿/**
- * 2. Get data from Form and send by signalR to process (saved to database and send it to each user if reciver show it mark it as read)
+ * 2. send it to each user if reciver show it mark it as read)
  * 3. View all previous messages to user and update mark as read
  * 4. when user scroll update user chat messages
  * 5. show if user currently online
@@ -55,7 +55,7 @@ connection.on("UserConnected", (user, msg) => {
             result +=`<a  class="media chatGroupLink">
 									<div class="media-img-wrap">
 										<div class="avatar avatar-away">
-											<img src="~/img/uploads/${u.user.image}" alt="User Image" class="avatar-img rounded-circle profileImage">
+											<img src="/img/uploads/${u.user.image}" alt="User Image" class="avatar-img rounded-circle profileImage">
 										</div>
 									</div>
 									<div class="media-body ">
@@ -93,12 +93,118 @@ connection.on("AllowToTalk", (user, users) => {
     $(".ContactsGroups").append(result);
 });
 
-    connection.on("MessagesSendClient", (user, msgs) => {
-        console.log("MessagesSendClient fired")
+    connection.on("MessageSent", (user, msg) => {
+        console.log(msg)
         var chatObject = JSON.parse(localStorage.getItem('chatUser'))
-        console.log(chatObject)
+        var msgBox = `<li class="${msg.receiverId != chatObject.userId ? "media sent": "media received"}"> 
+            <div class="media-body">
+                <div class="msg-box">
+${msg.file != null ?` <div class="chat-msg-attachments">
+                            <div class="chat-attachment">
+                                <img src="/img/uploads/${msg.file}" alt="Attachment">
+                                    <div class="chat-attach-caption">placeholder.jpg</div>
+                                    <a href="/img/uploads/${msg.file}" class="chat-attach-download">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                            </div>
+                    <div>
+                   
+                
+`:''}
+               <div>
+                        <p>${msg.message}</p>
+                        <ul class="chat-msg-info">
+                            <li>
+                                <div class="chat-time">
+                                    <span>${new Date(msg.createdTime).toLocaleTimeString() }</span>
+                                    <span class="messageSeen">${msg.read?"seen":"" }</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div >
+                </div>
+            </div>
+        </li>`
+        $('.chat-cont-right').find('.list-unstyled').append(msgBox)
+        if (msg.receiverId == chatObject.userId) {
 
-    });
+        }
+        //<li class="media sent">
+        //    <div class="media-body">
+        //        <div class="msg-box">
+        //            <div>
+        //                <p>Hello. What can I do for you?</p>
+        //                <ul class="chat-msg-info">
+        //                    <li>
+        //                        <div class="chat-time">
+        //                            <span>8:30 AM</span>
+        //                        </div>
+        //                    </li>
+        //                </ul>
+        //            </div>
+        //        </div>
+        //    </div>
+        //</li>
+        //<li class="media received">
+        //    <div class="avatar">
+        //        <img src="assets/img/doctors/doctor-thumb-02.jpg" alt="User Image" class="avatar-img rounded-circle">
+        //    </div>
+        //    <div class="media-body">
+        //        <div class="msg-box">
+        //            <div>
+        //                <p>I'm just looking around.</p>
+        //                <p>Will you tell me something about yourself?</p>
+        //                <ul class="chat-msg-info">
+        //                    <li>
+        //                        <div class="chat-time">
+        //                            <span>8:35 AM</span>
+        //                        </div>
+        //                    </li>
+        //                </ul>
+        //            </div>
+        //        </div>
+        //        <div class="msg-box">
+        //            <div>
+        //                <p>Are you there? That time!</p>
+        //                <ul class="chat-msg-info">
+        //                    <li>
+        //                        <div class="chat-time">
+        //                            <span>8:40 AM</span>
+        //                        </div>
+        //                    </li>
+        //                </ul>
+        //            </div>
+        //        </div>
+        //        <div class="msg-box">
+        //            <div>
+                        //<div class="chat-msg-attachments">
+                        //    <div class="chat-attachment">
+                        //        <img src="assets/img/img-02.jpg" alt="Attachment">
+                        //            <div class="chat-attach-caption">placeholder.jpg</div>
+                        //            <a href="#" class="chat-attach-download">
+                        //                <i class="fas fa-download"></i>
+                        //            </a>
+                        //    </div>
+                            //<div class="chat-attachment">
+                            //    <img src="assets/img/img-03.jpg" alt="Attachment">
+                            //        <div class="chat-attach-caption">placeholder.jpg</div>
+                            //        <a href="#" class="chat-attach-download">
+                            //            <i class="fas fa-download"></i>
+                            //        </a>
+                            //</div>
+        //                </div>
+                        //<ul class="chat-msg-info">
+                        //    <li>
+                        //        <div class="chat-time">
+                        //            <span>8:41 AM</span>
+                        //        </div>
+                        //    </li>
+                        //</ul>
+        //            </div>
+        //        </div>
+        //    </div>
+        //</li>
+    })
     $('.ContactsGroups').on("click", '.talk', async function (e) {
         var user1 = $(this).find(`input[name="userId"]`).val()
         console.log(user1)
@@ -125,7 +231,8 @@ connection.on("AllowToTalk", (user, users) => {
         }
        localStorage.setItem("chatUser", JSON.stringify(chatObject))
         try {
-            await connection.invoke("GetMessages", chatObject.userId, new Date());
+            //uncomment it 
+            //await connection.invoke("GetMessages", chatObject.userId, new Date());
             $(".reciver-name").text(chatObject.userName); 
             $(".reciver-img").attr("src", chatObject.profileImage);
             //$(".chat-cont-right").empty();
@@ -147,6 +254,7 @@ connection.on("AllowToTalk", (user, users) => {
             "uploadedFile": localStorage.getItem('path')
         }
         console.log(obj)
+        localStorage.removeItem('path')
         await connection.invoke("AddMessage", obj);
        // alert("Submitted");
     });

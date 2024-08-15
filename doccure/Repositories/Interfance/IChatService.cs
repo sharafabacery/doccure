@@ -13,6 +13,7 @@ namespace doccure.Repositories.Interfance
 		public Task<List<Group>> UserAuthuicatedGroups(string Id);
 		public Task<List<Applicationuser>> AllowToTalk(string Id);
 		public Task<UserConnected> GetConnectionByUserId(string userId);
+		public Task<bool>IsGroupConnected(int Id);
 
 	}
 }

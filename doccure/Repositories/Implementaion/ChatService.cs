@@ -145,6 +145,12 @@ namespace doccure.Repositories.Implementaion
 			
 		}
 
+		public  async Task<bool> IsGroupConnected(int Id)
+		{
+			//var usersConnected = await applicationDbContext.UserGroups.Include(e => e.applicationuser.UserConnecteds).Where(e => e.GroupId == Id);
+			return false;
+		}
+
 		public async Task<List<Group>> UserAuthuicatedGroups(string Id)
 		{
 			//var group = await applicationDbContext.UserGroups.Include(p => p.group).Include(p => p.group.user).Where(p => p.applicationuserId == Id).ToListAsync();

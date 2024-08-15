@@ -31,7 +31,7 @@ namespace doccure.Repositories.Implementaion
 			message.CreatedTime = DateTime.Now;
 			message.Read = false;
 			message.SoftDelete = false;
-			
+			message.Message = messageRequest.Message;
 			message.File = messageRequest.UploadedFile;
 			await applicationDbContext.Messages.AddAsync(message);
 			var res = await applicationDbContext.SaveChangesAsync();
@@ -48,6 +48,7 @@ namespace doccure.Repositories.Implementaion
 
 		public async Task<bool> UpdateMessage(MessageUser messageUser)
 		{
+					
 			var res = await applicationDbContext.Messages
 							.Where(e => e.senderId == messageUser.Sender && e.receiverId == messageUser.Reciver).ExecuteUpdateAsync(e => e.SetProperty(s => s.Read, true));
 			if (res > 0) return true;
