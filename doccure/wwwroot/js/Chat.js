@@ -1,10 +1,8 @@
 ﻿/**
- * 2. send it to each user if reciver show it mark it as read)
- * 3. View all previous messages to user and update mark as read
- * 4. when user scroll update user chat messages
- * 5. show if user currently online
- * 6. exculude if user now I will talk from (AllowToTalk)
- * 7.show how many messages user cant read it until now
+ * 1. View all previous messages to user and update mark as read
+ * 2. when user scroll update user chat messages
+ * 3. exculude if user now I will talk from (AllowToTalk)
+ * 4. show how many messages user cant read it until now
  * */
 
 
@@ -15,6 +13,9 @@ const connection = new signalR.HubConnectionBuilder()
     .configureLogging(signalR.LogLevel.Information)
     .build();
 
+    function ResetlocalStorage() {
+        localStorage.removeItem('chatUser')
+    }
 async function start() {
     try {
         await connection.start();
@@ -33,6 +34,7 @@ async function start() {
     }
     
 // Start the connection.
+ResetlocalStorage()
 start()
 
 connection.on("UserConnected", (user, msg) => {
@@ -54,7 +56,7 @@ connection.on("UserConnected", (user, msg) => {
         msg.forEach((u, index) => {
             result +=`<a  class="media chatGroupLink">
 									<div class="media-img-wrap">
-										<div class="avatar avatar-away">
+										<div class="user-avatar ${u.online == true ?"avatar avatar-online":"avatar avatar-away"}">
 											<img src="/img/uploads/${u.user.image}" alt="User Image" class="avatar-img rounded-circle profileImage">
 										</div>
 									</div>
@@ -93,7 +95,7 @@ connection.on("AllowToTalk", (user, users) => {
     $(".ContactsGroups").append(result);
 });
 
-    connection.on("MessageSent", (user, msg) => {
+    connection.on("MessageSent", async(user, msg) => {
         console.log(msg)
         var chatObject = JSON.parse(localStorage.getItem('chatUser'))
         var msgBox = `<li class="${msg.receiverId != chatObject.userId ? "media sent": "media received"}"> 
@@ -117,7 +119,7 @@ ${msg.file != null ?` <div class="chat-msg-attachments">
                             <li>
                                 <div class="chat-time">
                                     <span>${new Date(msg.createdTime).toLocaleTimeString() }</span>
-                                    <span class="messageSeen">${msg.read?"seen":"" }</span>
+                                    <span class="messageSeen_${msg.id}">${msg.read ? "✓✓" :"✓" }</span>
                                 </div>
                             </li>
                         </ul>
@@ -126,9 +128,22 @@ ${msg.file != null ?` <div class="chat-msg-attachments">
             </div>
         </li>`
         $('.chat-cont-right').find('.list-unstyled').append(msgBox)
-        if (msg.receiverId == chatObject.userId) {
 
-        }
+
+            var obj = {
+                "reciver": msg.receiverId,
+                "groupName": chatObject.groupName,
+                "messageId": msg.id,
+                "groupId": parseInt( chatObject.groupId)
+
+                }
+            try {
+                await connection.invoke("MarkRead", obj);
+            } catch (err) {
+                console.error(err);
+            }
+            
+       
         //<li class="media sent">
         //    <div class="media-body">
         //        <div class="msg-box">
@@ -205,9 +220,21 @@ ${msg.file != null ?` <div class="chat-msg-attachments">
         //    </div>
         //</li>
     })
+    connection.on('MessagesReadClient', (user, res,msgId) => {
+        if (res) {
+            $('.chat-cont-right').find(`.messageSeen_${msgId}`).text('✓✓')   
+            var classArr = classes.split(/\s+/);
+            var zz = $('#user_avatars')
+            var classes = zz.attr("class");
+            var classArr = classes.split(/\s+/);
+            zz.removeClass("avatar-away")
+            zz.addClass("avatar-online")
+            $('.user-status').text(classArr.findIndex(cc => cc == "avatar-away") == -1 ? "offline" : "online")      
+        }
+    })
     $('.ContactsGroups').on("click", '.talk', async function (e) {
         var user1 = $(this).find(`input[name="userId"]`).val()
-        console.log(user1)
+
         try {
             await connection.invoke("AddUserToGroup", user1);
         } catch (err) {
@@ -216,12 +243,33 @@ ${msg.file != null ?` <div class="chat-msg-attachments">
        
     })
     $('.chatGroups').on("click", '.chatGroupLink', async function (e) {
+
+        var pastChatObject = localStorage.getItem('chatUser')
+        if (pastChatObject != null) {
+            console.log("a7a")
+            pastChatObject = JSON.parse(pastChatObject)
+            try {
+                await connection.invoke("ActivationUserInGroup", parseInt(pastChatObject.groupId));
+            } catch (err) {
+                console.log(err)
+            }
+        }
         var userId = $(this).find(`input[name="userIdGroup"]`).val()
         var userName = $(this).find(`input[name="userNameGroup"]`).val()
         var groupId = $(this).find(`input[name="groupId"]`).val()
         var groupName = $(this).find(`input[name="groupName"]`).val()
         var profileImage = $(this).find('.profileImage').prop('src')
-
+        var xx = $(this).find('.user-avatar')
+        if (xx != undefined || xx != null) {
+            var classes = xx.attr("class");
+            var classArr = classes.split(/\s+/);
+            var zz = $('#user_avatars')
+            $('.user-status').text(classArr.findIndex(cc => cc =="avatar-online")==-1?"offline":"online")
+            $.each(classArr, function (index, value) {
+                zz.addClass( value)
+            });
+            console.log(classArr)
+        }
         var chatObject = {
             "userId":userId,
             "groupId": groupId,
@@ -232,6 +280,7 @@ ${msg.file != null ?` <div class="chat-msg-attachments">
        localStorage.setItem("chatUser", JSON.stringify(chatObject))
         try {
             //uncomment it 
+            await connection.invoke("ActivationUserInGroup", parseInt(chatObject.groupId));
             //await connection.invoke("GetMessages", chatObject.userId, new Date());
             $(".reciver-name").text(chatObject.userName); 
             $(".reciver-img").attr("src", chatObject.profileImage);

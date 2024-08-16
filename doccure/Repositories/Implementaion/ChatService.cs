@@ -12,6 +12,7 @@ namespace doccure.Repositories.Implementaion
 	{
 		public Group? Group { set; get; }
 		public Applicationuser? User { set; get; }
+		public bool Online { set; get; }
 
 	}
 	public class ChatService : IChatService
@@ -114,6 +115,19 @@ namespace doccure.Repositories.Implementaion
 			}
 		}
 
+		public async Task<bool> DeActivateUserGroups(string userId)
+		{
+			var res = await applicationDbContext.UserGroups.Where(e => e.applicationuserId == userId).ExecuteUpdateAsync(c => c.SetProperty(cc => cc.Active, false));
+			if (res > 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
 		public async Task<bool> DisConnect(string ConnectionId)
 		{
 			var connetion = await applicationDbContext.UserConnected.FirstOrDefaultAsync(e => e.ConnectionID == ConnectionId);
@@ -140,15 +154,23 @@ namespace doccure.Repositories.Implementaion
 
 		public async Task<List<GroupResponse>> GetUserGroups(string Id,List<Group> groups)
 		{
-			var usersTalk = await applicationDbContext.UserGroups.Include(p => p.applicationuser).Include(p=>p.group).Where(e => groups.Any(c => c.Equals(e.group))&&e.applicationuserId!=Id).Select(e=>new GroupResponse { Group=e.group,User=e.applicationuser}).ToListAsync();
+			var usersTalk = await applicationDbContext.UserGroups.Include(p => p.applicationuser).Include(p=>p.group).Where(e => groups.Any(c => c.Equals(e.group))&&e.applicationuserId!=Id).Select(e=>new GroupResponse { Group=e.group,User=e.applicationuser,Online=e.Active}).ToListAsync();
 			return usersTalk;
 			
 		}
 
-		public  async Task<bool> IsGroupConnected(int Id)
+		public  async Task<UserGroups> IsUserActiveInGroup(string userId, int groupId)
 		{
+			var res = await applicationDbContext.UserGroups
+							.Where(e => e.GroupId == groupId && e.applicationuserId == userId).FirstOrDefaultAsync();
+			if (res != null)
+			{
+				res.Active = !res.Active;
+			}
+			var result = await applicationDbContext.SaveChangesAsync();
+			if (result > 0) return res;
 			//var usersConnected = await applicationDbContext.UserGroups.Include(e => e.applicationuser.UserConnecteds).Where(e => e.GroupId == Id);
-			return false;
+			return null;
 		}
 
 		public async Task<List<Group>> UserAuthuicatedGroups(string Id)

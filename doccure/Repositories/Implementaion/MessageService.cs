@@ -48,9 +48,11 @@ namespace doccure.Repositories.Implementaion
 
 		public async Task<bool> UpdateMessage(MessageUser messageUser)
 		{
-					
+			var user = await applicationDbContext.UserGroups.Where(e => e.applicationuserId == messageUser.Reciver && e.Active == true).FirstOrDefaultAsync();
+			if (user == null) return false;
 			var res = await applicationDbContext.Messages
-							.Where(e => e.senderId == messageUser.Sender && e.receiverId == messageUser.Reciver).ExecuteUpdateAsync(e => e.SetProperty(s => s.Read, true));
+							.Where(e => e.senderId == messageUser.Sender && e.receiverId == messageUser.Reciver && e.Id==messageUser.MessageId)
+							.ExecuteUpdateAsync(e => e.SetProperty(s => s.Read, true));
 			if (res > 0) return true;
 			else return false;
 		}

@@ -83,19 +83,45 @@ using System.Threading.Tasks;
 			var messages = await messageService.GetMessages(new Data.RequestModels.MessageQueryRequest() { date = dateTime, Sender = Context.UserIdentifier, Reciver = Id });
 			await Clients.Caller.SendAsync("MessagesSendClient", Context.ConnectionId, messages);
 		}
-		public async Task MarkRead(string Id,string groupNmae)
+		public async Task MarkRead( MessageUser messageUser)
 		{
-			var res = await messageService.UpdateMessage(new Data.RequestModels.MessageUser() { Sender = Context.UserIdentifier, Reciver = Id });
-			await Clients.Group(groupNmae).SendAsync("MessagesReadClient", Context.ConnectionId, res);
+			messageUser.Sender = Context.UserIdentifier;
+			var res = await messageService.UpdateMessage(messageUser);
+			await Clients.Group(messageUser.GroupName).SendAsync("MessagesReadClient", Context.ConnectionId, res,messageUser.MessageId);
 		}
 		public async Task AddMessage(MessageRequest messageRequest)
 		{
 			var res = await messageService.AddMessage(messageRequest, Context.UserIdentifier);
 			await Clients.Group(messageRequest.GroupName).SendAsync("MessageSent", Context.ConnectionId, res);
 		}
+		public async Task ActivationUserInGroup(int groupId)
+		{
+			var res = await chatService.IsUserActiveInGroup(Context.UserIdentifier, groupId);
+			if (res!=null)
+			{
+				await Clients.Caller.SendAsync("Info", Context.ConnectionId, res);
+			}
+			else
+			{
+				await Clients.Caller.SendAsync("Info", Context.ConnectionId, "error happen");
+			}
+		}
 		public async Task RemoveConnection()
 		{
 			await chatService.DisConnect(Context.ConnectionId);
+		}
+		public async Task RemoveGroups()
+		{
+			var groups = await chatService.UserAuthuicatedGroups(Context.UserIdentifier);
+			foreach (var group in groups)
+			{
+				await Groups.RemoveFromGroupAsync(Context.ConnectionId,group.Name);
+			}
+			
+		}
+		public async Task DeactivateUserGroups()
+		{
+			await chatService.DeActivateUserGroups(Context.UserIdentifier);
 		}
 		public override async Task OnConnectedAsync()
 		{
@@ -108,6 +134,8 @@ using System.Threading.Tasks;
 		}
 		public override async Task OnDisconnectedAsync(Exception exception)
 		{
+			await RemoveGroups();
+			await DeactivateUserGroups();
 			await RemoveConnection();
 			await base.OnDisconnectedAsync(exception);
 		}
