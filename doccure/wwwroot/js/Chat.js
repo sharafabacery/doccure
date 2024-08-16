@@ -305,7 +305,6 @@ ${msg.file != null ?` <div class="chat-msg-attachments">
         console.log(obj)
         localStorage.removeItem('path')
         await connection.invoke("AddMessage", obj);
-       // alert("Submitted");
     });
 
     $('.ffile').change('.messageAttachment', function () {
