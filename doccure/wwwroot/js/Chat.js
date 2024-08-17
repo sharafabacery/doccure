@@ -1,7 +1,6 @@
 ﻿/**
- * 1. when user scroll update user chat messages
- * 2. exculude if user now I will talk from (AllowToTalk)
- * 3. show how many messages user cant read it until now
+ * 1. exculude if user now I will talk from (AllowToTalk)
+ * 2. show how many messages user cant read it until now
  * */
 
 
@@ -44,6 +43,7 @@ async function start() {
     var currentDateTracked = null
     var trackClassChatdate = 0
     var touch = false
+    var MessageLeft = true
 // Start the connection.
 ResetlocalStorage()
 start()
@@ -219,15 +219,19 @@ ${msg.file != null ?` <div class="chat-msg-attachments">
         try {
             //uncomment it 
             await connection.invoke("ActivationUserInGroup", parseInt(chatObject.groupId));
-            var date = new Date();
-            date.setDate(date.getDate() - daysLeft);
-            var objDate = {
-                'reciver': chatObject.userId,
-                'date': date
-            }
-            console.log(objDate)
             $('.chat-cont-right').find('.list-unstyled').empty()
-            await connection.invoke("GetMessages", objDate);
+            
+                var date = new Date();
+                date.setDate(date.getDate() - daysLeft);
+                var objDate = {
+                    'reciver': chatObject.userId,
+                    'date': date
+                }
+                console.log(objDate)
+
+                await connection.invoke("GetMessages", objDate);
+     
+            
             $(".reciver-name").text(chatObject.userName); 
             $(".reciver-img").attr("src", chatObject.profileImage);
             //$(".chat-cont-right").empty();
@@ -242,8 +246,16 @@ ${msg.file != null ?` <div class="chat-msg-attachments">
         var date = new Date();
         date.setDate(date.getDate() - daysLeft);
         currentDateTracked = date.toLocaleString()
+        if (msgs == null) {
+            MessageLeft = false;
+            console.log('no')
+            return;
+        }
+        var result =''
+        if (msgs.length > 0) {
+            result+= `<li class="chat-date chat-date-${trackClassChatdate}">${date.toLocaleString()}</li>`
 
-        var result = `<li class="chat-date chat-date-${trackClassChatdate}">${date.toLocaleString() }</li>`
+        }
         msgs.forEach((msg,index) => {
             result += `<li class="${msg.receiverId != chatObject.userId ? "media sent" : "media received"}"> 
             <div class="media-body">
@@ -330,25 +342,44 @@ ${msg.file != null ? ` <div class="chat-msg-attachments">
 
         }
     })
-    $('.chat-scroll').on('scroll', async () => {
-        var targetElement = $('.chat-cont-right').find(`.chat-date-${trackClassChatdate}`);
-        if (isInViewport(targetElement) && !touch) {
-            trackClassChatdate++;
-            touch = true;
-            var date = new Date();
-            date.setDate(date.getDate() - daysLeft);
-            var chatObject = JSON.parse(localStorage.getItem('chatUser'))
+    $('.loadmore').on('click', async () => {
+        var date = new Date();
+        date.setDate(date.getDate() - daysLeft);
+        var chatObject = JSON.parse(localStorage.getItem('chatUser'))
+        if (chatObject != null) {
             var objDate = {
                 'reciver': chatObject.userId,
                 'date': date
             }
             console.log(objDate)
             await connection.invoke("GetMessages", objDate);
+        }
+
+    })
+    $('.chat-scroll').on('scroll', async () => {
+        var targetElement = $('.chat-cont-right').find(`.chat-date-${trackClassChatdate}`);
+        if (isInViewport(targetElement) && !touch && MessageLeft) {
+            trackClassChatdate++;
+            touch = true;
+            var date = new Date();
+            date.setDate(date.getDate() - daysLeft);
+            var chatObject = JSON.parse(localStorage.getItem('chatUser'))
+            if (chatObject != null) {
+                var objDate = {
+                    'reciver': chatObject.userId,
+                    'date': date
+                }
+                console.log(objDate)
+                await connection.invoke("GetMessages", objDate);
+            }
+
 
         }
     })
+
     var chatAppTarget = $('.chat-window');
-    (function () {
+    (async function () { 
+            
         if ($(window).width() > 991)
             chatAppTarget.removeClass('chat-slide');
 
@@ -364,5 +395,6 @@ ${msg.file != null ? ` <div class="chat-msg-attachments">
             }
             return false;
         });
-    })();
+    }
+        )();
 })(jQuery);
