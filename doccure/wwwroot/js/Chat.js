@@ -15,6 +15,15 @@ const connection = new signalR.HubConnectionBuilder()
     function ResetlocalStorage() {
         localStorage.removeItem('chatUser')
     }
+    function isInViewport($element) {
+        var elementTop = $element.offset().top;
+        var elementBottom = elementTop + $element.outerHeight();
+
+        var viewportTop = $('.chat-scroll').scrollTop();
+        var viewportBottom = viewportTop + $('.chat-scroll').height();
+
+        return elementBottom > viewportTop+10 && elementTop < viewportBottom;
+    }
 async function start() {
     try {
         await connection.start();
@@ -32,6 +41,9 @@ async function start() {
 
     }
     var daysLeft = 0;
+    var currentDateTracked = null
+    var trackClassChatdate = 0
+    var touch = false
 // Start the connection.
 ResetlocalStorage()
 start()
@@ -176,6 +188,10 @@ ${msg.file != null ?` <div class="chat-msg-attachments">
                 console.log(err)
             }
         }
+        //daysLeft = 0;
+        currentDateTracked = null
+        trackClassChatdate = 0
+        touch = false
         var userId = $(this).find(`input[name="userIdGroup"]`).val()
         var userName = $(this).find(`input[name="userNameGroup"]`).val()
         var groupId = $(this).find(`input[name="groupId"]`).val()
@@ -204,12 +220,13 @@ ${msg.file != null ?` <div class="chat-msg-attachments">
             //uncomment it 
             await connection.invoke("ActivationUserInGroup", parseInt(chatObject.groupId));
             var date = new Date();
-           // date.setDate(date.getDate() - daysLeft);
+            date.setDate(date.getDate() - daysLeft);
             var objDate = {
                 'reciver': chatObject.userId,
                 'date': date
             }
             console.log(objDate)
+            $('.chat-cont-right').find('.list-unstyled').empty()
             await connection.invoke("GetMessages", objDate);
             $(".reciver-name").text(chatObject.userName); 
             $(".reciver-img").attr("src", chatObject.profileImage);
@@ -224,8 +241,9 @@ ${msg.file != null ?` <div class="chat-msg-attachments">
         var chatObject = JSON.parse(localStorage.getItem('chatUser'))
         var date = new Date();
         date.setDate(date.getDate() - daysLeft);
-        
-        var result = `<li class="chat-date">${date.toLocaleString() }</li>`
+        currentDateTracked = date.toLocaleString()
+
+        var result = `<li class="chat-date chat-date-${trackClassChatdate}">${date.toLocaleString() }</li>`
         msgs.forEach((msg,index) => {
             result += `<li class="${msg.receiverId != chatObject.userId ? "media sent" : "media received"}"> 
             <div class="media-body">
@@ -257,7 +275,7 @@ ${msg.file != null ? ` <div class="chat-msg-attachments">
             </div>
         </li>`
         })
-        $('.chat-cont-right').find('.list-unstyled').empty()
+        
         $('.chat-cont-right').find('.list-unstyled').prepend(result)
         var obj = {
             "sender": chatObject.userId,
@@ -309,6 +327,23 @@ ${msg.file != null ? ` <div class="chat-msg-attachments">
                 .then(response => response.json())
                 .then(data => localStorage.setItem('path', data.path))
                 .catch(error => console.error('Error uploading image:', error));
+
+        }
+    })
+    $('.chat-scroll').on('scroll', async () => {
+        var targetElement = $('.chat-cont-right').find(`.chat-date-${trackClassChatdate}`);
+        if (isInViewport(targetElement) && !touch) {
+            trackClassChatdate++;
+            touch = true;
+            var date = new Date();
+            date.setDate(date.getDate() - daysLeft);
+            var chatObject = JSON.parse(localStorage.getItem('chatUser'))
+            var objDate = {
+                'reciver': chatObject.userId,
+                'date': date
+            }
+            console.log(objDate)
+            await connection.invoke("GetMessages", objDate);
 
         }
     })
