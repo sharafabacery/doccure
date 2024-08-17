@@ -78,9 +78,11 @@ using System.Threading.Tasks;
 			var users=await chatService.AllowToTalk(Context.UserIdentifier);
 			await Clients.Caller.SendAsync("AllowToTalk", Context.ConnectionId, users);
 		}
-		public async Task GetMessages(string Id,DateTime dateTime)
+		public async Task GetMessages( MessageQueryRequest messageQueryRequest)
 		{
-			var messages = await messageService.GetMessages(new Data.RequestModels.MessageQueryRequest() { date = dateTime, Sender = Context.UserIdentifier, Reciver = Id });
+			messageQueryRequest.Sender = Context.UserIdentifier;
+		
+			var messages = await messageService.GetMessages(messageQueryRequest);
 			await Clients.Caller.SendAsync("MessagesSendClient", Context.ConnectionId, messages);
 		}
 		public async Task MarkRead( MessageUser messageUser)

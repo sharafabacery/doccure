@@ -1,5 +1,5 @@
 ﻿/**
- * 1. View all previous messages to user and update mark as read
+ * 1. after view all messages update mark as read
  * 2. when user scroll update user chat messages
  * 3. exculude if user now I will talk from (AllowToTalk)
  * 4. show how many messages user cant read it until now
@@ -32,7 +32,7 @@ async function start() {
         });
 
     }
-    
+    var daysLeft = 0;
 // Start the connection.
 ResetlocalStorage()
 start()
@@ -142,83 +142,6 @@ ${msg.file != null ?` <div class="chat-msg-attachments">
             } catch (err) {
                 console.error(err);
             }
-            
-       
-        //<li class="media sent">
-        //    <div class="media-body">
-        //        <div class="msg-box">
-        //            <div>
-        //                <p>Hello. What can I do for you?</p>
-        //                <ul class="chat-msg-info">
-        //                    <li>
-        //                        <div class="chat-time">
-        //                            <span>8:30 AM</span>
-        //                        </div>
-        //                    </li>
-        //                </ul>
-        //            </div>
-        //        </div>
-        //    </div>
-        //</li>
-        //<li class="media received">
-        //    <div class="avatar">
-        //        <img src="assets/img/doctors/doctor-thumb-02.jpg" alt="User Image" class="avatar-img rounded-circle">
-        //    </div>
-        //    <div class="media-body">
-        //        <div class="msg-box">
-        //            <div>
-        //                <p>I'm just looking around.</p>
-        //                <p>Will you tell me something about yourself?</p>
-        //                <ul class="chat-msg-info">
-        //                    <li>
-        //                        <div class="chat-time">
-        //                            <span>8:35 AM</span>
-        //                        </div>
-        //                    </li>
-        //                </ul>
-        //            </div>
-        //        </div>
-        //        <div class="msg-box">
-        //            <div>
-        //                <p>Are you there? That time!</p>
-        //                <ul class="chat-msg-info">
-        //                    <li>
-        //                        <div class="chat-time">
-        //                            <span>8:40 AM</span>
-        //                        </div>
-        //                    </li>
-        //                </ul>
-        //            </div>
-        //        </div>
-        //        <div class="msg-box">
-        //            <div>
-                        //<div class="chat-msg-attachments">
-                        //    <div class="chat-attachment">
-                        //        <img src="assets/img/img-02.jpg" alt="Attachment">
-                        //            <div class="chat-attach-caption">placeholder.jpg</div>
-                        //            <a href="#" class="chat-attach-download">
-                        //                <i class="fas fa-download"></i>
-                        //            </a>
-                        //    </div>
-                            //<div class="chat-attachment">
-                            //    <img src="assets/img/img-03.jpg" alt="Attachment">
-                            //        <div class="chat-attach-caption">placeholder.jpg</div>
-                            //        <a href="#" class="chat-attach-download">
-                            //            <i class="fas fa-download"></i>
-                            //        </a>
-                            //</div>
-        //                </div>
-                        //<ul class="chat-msg-info">
-                        //    <li>
-                        //        <div class="chat-time">
-                        //            <span>8:41 AM</span>
-                        //        </div>
-                        //    </li>
-                        //</ul>
-        //            </div>
-        //        </div>
-        //    </div>
-        //</li>
     })
     connection.on('MessagesReadClient', (user, res,msgId) => {
         if (res) {
@@ -281,7 +204,13 @@ ${msg.file != null ?` <div class="chat-msg-attachments">
         try {
             //uncomment it 
             await connection.invoke("ActivationUserInGroup", parseInt(chatObject.groupId));
-            //await connection.invoke("GetMessages", chatObject.userId, new Date());
+            var date = new Date();
+            var objDate = {
+                'reciver': chatObject.userId,
+                'date': date
+            }
+            console.log(objDate)
+            await connection.invoke("GetMessages", objDate);
             $(".reciver-name").text(chatObject.userName); 
             $(".reciver-img").attr("src", chatObject.profileImage);
             //$(".chat-cont-right").empty();
@@ -289,6 +218,47 @@ ${msg.file != null ?` <div class="chat-msg-attachments">
         } catch (err) {
             console.error(err);
         }
+    })
+    connection.on('MessagesSendClient', (u, msgs) => {
+        console.log(msgs)
+        var chatObject = JSON.parse(localStorage.getItem('chatUser'))
+        var date = new Date();
+        date.setDate(date.getDate() - daysLeft);
+        daysLeft++;
+        var result = `<li class="chat-date">${date.toLocaleString() }</li>`
+        msgs.forEach((msg,index) => {
+            result += `<li class="${msg.receiverId != chatObject.userId ? "media sent" : "media received"}"> 
+            <div class="media-body">
+                <div class="msg-box">
+${msg.file != null ? ` <div class="chat-msg-attachments">
+                            <div class="chat-attachment">
+                                <img src="/img/uploads/${msg.file}" alt="Attachment">
+                                    <div class="chat-attach-caption">placeholder.jpg</div>
+                                    <a href="/img/uploads/${msg.file}" class="chat-attach-download">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                            </div>
+                    <div>
+                   
+                
+`: ''}
+               <div>
+                        <p>${msg.message}</p>
+                        <ul class="chat-msg-info">
+                            <li>
+                                <div class="chat-time">
+                                    <span>${new Date(msg.createdTime).toLocaleTimeString()}</span>
+                                    <span class="messageSeen_${msg.id}">${msg.read ? "✓✓" : "✓"}</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div >
+                </div>
+            </div>
+        </li>`
+        })
+        $('.chat-cont-right').find('.list-unstyled').empty()
+        $('.chat-cont-right').find('.list-unstyled').prepend(result)
     })
     $(".chat-cont-right").submit('.MessageForm',async function (e) {
         e.preventDefault()

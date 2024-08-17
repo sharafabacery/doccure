@@ -4,6 +4,7 @@
 	{
 		public string Sender { get; set; }
 		public string Reciver { get; set; }
-		public DateTime? date { get; set; }
+		public DateTime? Date { get; set; }
+		public string DateString { get; set; }
 	}
 }

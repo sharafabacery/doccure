@@ -1,8 +1,10 @@
 ﻿using doccure.Data;
 using doccure.Data.Models;
 using doccure.Data.RequestModels;
+using doccure.Data.ResponseModels;
 using doccure.Repositories.Interfance;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.CodeAnalysis.Elfie.Serialization;
 using Microsoft.EntityFrameworkCore;
 using static doccure.Program;
 
@@ -40,9 +42,11 @@ namespace doccure.Repositories.Implementaion
 			
 		}
 
-		public async Task<List<Messages>> GetMessages(MessageQueryRequest messageQuery)
+		public async Task<List<MessageDTOResponse>> GetMessages(MessageQueryRequest messageQuery)
 		{
-			var messages = await applicationDbContext.Messages.Include(e=>e.Receiver).Include(e=>e.Sender).Where(e=>((e.senderId==messageQuery.Sender &&e.receiverId==messageQuery.Reciver)||(e.senderId == messageQuery.Reciver && e.receiverId == messageQuery.Sender)&&e.CreatedTime.Year==messageQuery.date.Value.Year && e.CreatedTime.Month == messageQuery.date.Value.Month && e.CreatedTime.Day == messageQuery.date.Value.Day)).OrderByDescending(e=>e.Read).OrderByDescending(e=>e.CreatedTime).ToListAsync();
+			var messages = await applicationDbContext.Messages.Include(e=>e.Receiver).Include(e=>e.Sender).Where(e=>(((e.senderId==messageQuery.Sender &&e.receiverId==messageQuery.Reciver)||(e.senderId == messageQuery.Reciver && e.receiverId == messageQuery.Sender))&&e.CreatedTime.Year==messageQuery.Date.Value.Year && e.CreatedTime.Month == messageQuery.Date.Value.Month && e.CreatedTime.Day == messageQuery.Date.Value.Day)).OrderByDescending(e=>e.Read).OrderByDescending(e=>e.CreatedTime)
+				.Select(cc=>  new MessageDTOResponse() { Id =cc.Id, Message=cc.Message, CreatedTime=cc.CreatedTime.ToString(), Read=cc.Read, SoftDelete=cc.SoftDelete, File=cc.File,receiverId=cc.receiverId,senderId=cc.senderId })
+				.ToListAsync();
 			return messages;
 		}
 
