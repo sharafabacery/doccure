@@ -9,5 +9,6 @@ namespace doccure.Repositories.Interfance
 		public Task<Messages> AddMessage(MessageRequest messageRequest, string sender);
 		public Task<List<MessageDTOResponse>> GetMessages(MessageQueryRequest messageQuery);
 		public Task<bool> UpdateMessage(MessageUser messageUser);
+		public Task<bool> MarkReadMessages(MessageQueryRequest messageQuery);
 	}
 }

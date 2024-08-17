@@ -1,8 +1,7 @@
 ﻿/**
- * 1. after view all messages update mark as read
- * 2. when user scroll update user chat messages
- * 3. exculude if user now I will talk from (AllowToTalk)
- * 4. show how many messages user cant read it until now
+ * 1. when user scroll update user chat messages
+ * 2. exculude if user now I will talk from (AllowToTalk)
+ * 3. show how many messages user cant read it until now
  * */
 
 
@@ -119,7 +118,7 @@ ${msg.file != null ?` <div class="chat-msg-attachments">
                             <li>
                                 <div class="chat-time">
                                     <span>${new Date(msg.createdTime).toLocaleTimeString() }</span>
-                                    <span class="messageSeen_${msg.id}">${msg.read ? "✓✓" :"✓" }</span>
+                                    <span class="messageSeen messageSeen_${msg.id}">${msg.read ? "✓✓" :"✓" }</span>
                                 </div>
                             </li>
                         </ul>
@@ -205,6 +204,7 @@ ${msg.file != null ?` <div class="chat-msg-attachments">
             //uncomment it 
             await connection.invoke("ActivationUserInGroup", parseInt(chatObject.groupId));
             var date = new Date();
+           // date.setDate(date.getDate() - daysLeft);
             var objDate = {
                 'reciver': chatObject.userId,
                 'date': date
@@ -219,12 +219,12 @@ ${msg.file != null ?` <div class="chat-msg-attachments">
             console.error(err);
         }
     })
-    connection.on('MessagesSendClient', (u, msgs) => {
+    connection.on('MessagesSendClient', async (u, msgs) => {
         console.log(msgs)
         var chatObject = JSON.parse(localStorage.getItem('chatUser'))
         var date = new Date();
         date.setDate(date.getDate() - daysLeft);
-        daysLeft++;
+        
         var result = `<li class="chat-date">${date.toLocaleString() }</li>`
         msgs.forEach((msg,index) => {
             result += `<li class="${msg.receiverId != chatObject.userId ? "media sent" : "media received"}"> 
@@ -248,7 +248,7 @@ ${msg.file != null ? ` <div class="chat-msg-attachments">
                             <li>
                                 <div class="chat-time">
                                     <span>${new Date(msg.createdTime).toLocaleTimeString()}</span>
-                                    <span class="messageSeen_${msg.id}">${msg.read ? "✓✓" : "✓"}</span>
+                                    <span class="messageSeen messageSeen_${msg.id}">${msg.read ? "✓✓" : "✓"}</span>
                                 </div>
                             </li>
                         </ul>
@@ -259,6 +259,22 @@ ${msg.file != null ? ` <div class="chat-msg-attachments">
         })
         $('.chat-cont-right').find('.list-unstyled').empty()
         $('.chat-cont-right').find('.list-unstyled').prepend(result)
+        var obj = {
+            "sender": chatObject.userId,
+            "date": date
+            }
+        daysLeft++;
+        try {
+            await connection.invoke("MarkAllRead", obj);
+        } catch (err) {
+            console.error(err);
+        }
+
+    })
+    connection.on('MarkAllRead', (_, res) => {
+        if (res) {
+            $('.chat-cont-right').find('.list-unstyled').find('.messageSeen').text('✓✓')
+        }
     })
     $(".chat-cont-right").submit('.MessageForm',async function (e) {
         e.preventDefault()

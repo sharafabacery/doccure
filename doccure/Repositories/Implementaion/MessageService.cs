@@ -50,6 +50,15 @@ namespace doccure.Repositories.Implementaion
 			return messages;
 		}
 
+		public async Task<bool> MarkReadMessages(MessageQueryRequest messageQuery)
+		{
+			var res = await applicationDbContext.Messages
+							.Where(e => e.senderId == messageQuery.Sender && e.receiverId == messageQuery.Reciver && e.CreatedTime.Year == messageQuery.Date.Value.Year && e.CreatedTime.Month == messageQuery.Date.Value.Month && e.CreatedTime.Day == messageQuery.Date.Value.Day)
+							.ExecuteUpdateAsync(e => e.SetProperty(s => s.Read, true));
+			if (res > 0) return true;
+			else return false;
+		}
+
 		public async Task<bool> UpdateMessage(MessageUser messageUser)
 		{
 			var user = await applicationDbContext.UserGroups.Where(e => e.applicationuserId == messageUser.Reciver && e.Active == true).FirstOrDefaultAsync();

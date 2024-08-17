@@ -91,6 +91,12 @@ using System.Threading.Tasks;
 			var res = await messageService.UpdateMessage(messageUser);
 			await Clients.Group(messageUser.GroupName).SendAsync("MessagesReadClient", Context.ConnectionId, res,messageUser.MessageId);
 		}
+		public async Task MarkAllRead(MessageQueryRequest messageQuery)
+		{
+			messageQuery.Reciver= Context.UserIdentifier;
+			var res = await messageService.MarkReadMessages(messageQuery);
+			await Clients.Caller.SendAsync("MarkAllRead", Context.ConnectionId, res);
+		}
 		public async Task AddMessage(MessageRequest messageRequest)
 		{
 			var res = await messageService.AddMessage(messageRequest, Context.UserIdentifier);
