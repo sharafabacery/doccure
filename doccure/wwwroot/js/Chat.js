@@ -1,6 +1,5 @@
 ﻿/**
  * 1. exculude if user now I will talk from (AllowToTalk)
- * 2. show how many messages user cant read it until now
  * */
 
 
@@ -61,8 +60,8 @@ connection.on("UserConnected", (user, msg) => {
         } catch (err) {
             console.error(err);
         }
-});
-    connection.on("UserGroups", (user, msg) => {
+    });
+    connection.on("UserGroups", async (user, msg) => {
         var result = ``
         msg.forEach((u, index) => {
             result +=`<a  class="media chatGroupLink">
@@ -80,11 +79,22 @@ connection.on("UserConnected", (user, msg) => {
 <input type="text" class="form-control" name="userNameGroup" value="Dr. ${u.user.firstName} ${u.user.lastName}" readonly hidden>
 											
 										</div>
-										
+										<div>
+											
+											<div class="badge badge-success badge-pill ${u.group.name}"></div>
+										</div>
 									</div>
 								</a>`
         })
         $(".chatGroups").append(result);
+        if (msg.length > 0) {
+            try {
+                console.log(msg)
+                await connection.invoke("GetNumberOfRemianingMessages",msg);
+            } catch (err) {
+                console.error(err);
+            }
+        }
         //alert(groupTalk)
     });
 connection.on("AllowToTalk", (user, users) => {
@@ -166,6 +176,13 @@ ${msg.file != null ?` <div class="chat-msg-attachments">
             $('.user-status').text(classArr.findIndex(cc => cc == "avatar-away") == -1 ? "offline" : "online")      
         }
     })
+    connection.on('RemainingMessages', (_, rem) => {
+        rem.forEach((re => {
+            if (re.count > 0) {
+                $('.chatGroups').find(`.${re.groupName}`).text(re.count)
+            }
+        }))
+    })
     $('.ContactsGroups').on("click", '.talk', async function (e) {
         var user1 = $(this).find(`input[name="userId"]`).val()
 
@@ -196,6 +213,7 @@ ${msg.file != null ?` <div class="chat-msg-attachments">
         var userName = $(this).find(`input[name="userNameGroup"]`).val()
         var groupId = $(this).find(`input[name="groupId"]`).val()
         var groupName = $(this).find(`input[name="groupName"]`).val()
+        $('.chatGroups').find(`.${groupName}`).text('')
         var profileImage = $(this).find('.profileImage').prop('src')
         var xx = $(this).find('.user-avatar')
         if (xx != undefined || xx != null) {

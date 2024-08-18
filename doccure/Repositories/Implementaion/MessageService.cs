@@ -3,9 +3,11 @@ using doccure.Data.Models;
 using doccure.Data.RequestModels;
 using doccure.Data.ResponseModels;
 using doccure.Repositories.Interfance;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis.Elfie.Serialization;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using static doccure.Program;
 
 namespace doccure.Repositories.Implementaion
@@ -50,6 +52,26 @@ namespace doccure.Repositories.Implementaion
 				.Select(cc=>  new MessageDTOResponse() { Id =cc.Id, Message=cc.Message, CreatedTime=cc.CreatedTime.ToString(), Read=cc.Read, SoftDelete=cc.SoftDelete, File=cc.File,receiverId=cc.receiverId,senderId=cc.senderId })
 				.ToListAsync();
 			return messages;
+		}
+
+		public async Task<List<UnreadMessages>> GetNumberReminaingUnmarkMessage(List<GroupResponse> groups,string Id)
+		{
+			
+				List<string> userGroups = groups.Select(g => new string( g.User.Id )).ToList();
+				var unreadMessageDTO = await applicationDbContext.Messages
+						 .Where(e => e.receiverId == Id && userGroups.Contains(e.senderId)&& e.Read == false)
+						 .GroupBy(e => e.senderId)
+						 .Select(e => new UnreadMessageDTO { Count = e.Count(), UserId = e.Key })
+						 .ToListAsync();
+
+				var unreadMessages = unreadMessageDTO.Join(groups, re => re.UserId, group => group.User.Id, (re, group) => new UnreadMessages
+				{
+					GroupName = group.Group.Name,
+					Count = re.Count
+				}).ToList();
+				
+			return unreadMessages;
+			
 		}
 
 		public async Task<bool> MarkReadMessages(MessageQueryRequest messageQuery)

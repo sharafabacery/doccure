@@ -1,6 +1,7 @@
 ﻿using doccure.Data.Models;
 using doccure.Data.RequestModels;
 using doccure.Data.ResponseModels;
+using doccure.Repositories.Implementaion;
 
 namespace doccure.Repositories.Interfance
 {
@@ -10,5 +11,6 @@ namespace doccure.Repositories.Interfance
 		public Task<List<MessageDTOResponse>> GetMessages(MessageQueryRequest messageQuery);
 		public Task<bool> UpdateMessage(MessageUser messageUser);
 		public Task<bool> MarkReadMessages(MessageQueryRequest messageQuery);
+		public Task<List<UnreadMessages>> GetNumberReminaingUnmarkMessage(List<GroupResponse> groups, string Id);
 	}
 }

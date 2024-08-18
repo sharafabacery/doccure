@@ -10,7 +10,7 @@ namespace doccure.Repositories.Implementaion
 {
 	public class GroupResponse
 	{
-		public Group? Group { set; get; }
+		public Group Group { set; get; }
 		public Applicationuser? User { set; get; }
 		public bool Online { set; get; }
 

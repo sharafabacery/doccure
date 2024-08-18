@@ -3,6 +3,7 @@ namespace doccure.Hub
 {
 	using doccure.Data.Models;
 	using doccure.Data.RequestModels;
+	using doccure.Repositories.Implementaion;
 	using doccure.Repositories.Interfance;
 	using Google.Apis.Drive.v3.Data;
 	using Microsoft.AspNetCore.Mvc;
@@ -72,6 +73,10 @@ using System.Threading.Tasks;
 		{
 			var groupTalk = await chatService.GetUserGroups(Context.UserIdentifier, groups);
 			await Clients.Caller.SendAsync("UserGroups", Context.ConnectionId, groupTalk);
+		}
+		public async Task GetNumberOfRemianingMessages(List<GroupResponse> Groups) {
+			var remaining = await messageService.GetNumberReminaingUnmarkMessage(Groups, Context.UserIdentifier);
+			await Clients.Caller.SendAsync("RemainingMessages", Context.ConnectionId, remaining);
 		}
 		public async Task AuthUsersToTalk()
 		{
