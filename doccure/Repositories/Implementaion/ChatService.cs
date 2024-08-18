@@ -82,10 +82,15 @@ namespace doccure.Repositories.Implementaion
 		public async Task<List<Applicationuser>> AllowToTalk(string Id)
 		{
 			var user = await applicationDbContext.Users.FirstOrDefaultAsync(r=>r.Id==Id);
+			var authGroups = await this.UserAuthuicatedGroups(Id);
+			var talking = authGroups.Select(e=>new string( e.Name.Replace(Id,""))).ToList();
 			var role = await userManager.GetRolesAsync(user);
 			var patient = role.FirstOrDefault(e => e == "patient");
-			var allowedTalk = await applicationDbContext.Bookings.Where(p => p.doctorId == Id || p.patientId == Id).Select( p =>patient==null?p.patient:p.doctor).ToListAsync();
-			return allowedTalk;
+			var allowedTalk = await applicationDbContext.Bookings
+				.Where(p => p.doctorId == Id || p.patientId == Id)
+				.Select( p =>patient==null?p.patient:p.doctor).ToListAsync();
+			var finalAllowedTalk = allowedTalk.Where(e=>!talking.Contains(e.Id)).ToList();
+			return finalAllowedTalk;
 		}
 
 		public async Task<UserConnected> Connect(UserConnected userConnected)

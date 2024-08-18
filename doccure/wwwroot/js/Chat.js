@@ -1,8 +1,4 @@
-﻿/**
- * 1. exculude if user now I will talk from (AllowToTalk)
- * */
-
-
+﻿
 (function ($) {
     "use strict";
 const connection = new signalR.HubConnectionBuilder()

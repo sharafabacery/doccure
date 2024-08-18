@@ -4480,8 +4480,7 @@ html.menu-opened body {
 	.chat-cont-right .chat-body .loadmore {
 		position: absolute;
 		right: 0;
-		width:50px;
-		height:50px
+		
 	}
 .chat-cont-right .chat-footer .input-group .input-group-append .btn.msg-send-btn {
 	background-color: #0de0fe;
