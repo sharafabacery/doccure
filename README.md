@@ -25,9 +25,9 @@ for patient it could be like a portable electronic health record (EHR).
 
 [✔] Login with 3rd party Authuntication (Google)
 
-## Features (Not-Complete) Still Under-Development
+[✔] Text Chating
 
-[X] Text Chating
+## Features (Not-Complete) Still Under-Development
 
 [X] Video Chating
 
