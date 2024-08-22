@@ -168,7 +168,8 @@ namespace doccure
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 			//app.MapRazorPages();
 			app.MapHub<ChatHub>("/chathub");
-            app.Run();
+			app.MapHub<MediaHub>("/mediahub");
+			app.Run();
         }
     }
 }

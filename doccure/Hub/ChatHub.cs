@@ -135,14 +135,16 @@ using System.Threading.Tasks;
 		public async Task MakeCall(string userId,string groupName,string MediaType)
 		{
 			var res = await chatService.UserConnected(userId);
-			await Clients.OthersInGroup(groupName).SendAsync("OpenCallModel", res, MediaType);
-			await Clients.Caller.SendAsync("CloseCallModel", res, MediaType);
+			var user = await chatService.GetUser(Context.UserIdentifier);
+			await Clients.OthersInGroup(groupName).SendAsync("OpenCallModel", res, MediaType, user);
+			await Clients.Caller.SendAsync("CloseCallModel", res, MediaType, user);
 
 		}
 		public async Task CloseModel(string userId, string groupName, string MediaType)
 		{
-			await Clients.GroupExcept(groupName, Context.ConnectionId).SendAsync("CloseCallModel",false, MediaType);
+			await Clients.OthersInGroup(groupName).SendAsync("CloseCallModel",null, MediaType);
 		}
+		
 		public async Task DeactivateUserGroups()
 		{
 			await chatService.DeActivateUserGroups(Context.UserIdentifier);

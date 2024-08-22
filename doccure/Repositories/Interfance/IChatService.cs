@@ -1,4 +1,5 @@
 ﻿using doccure.Data.Models;
+using doccure.Data.ResponseModels;
 using doccure.Repositories.Implementaion;
 
 namespace doccure.Repositories.Interfance
@@ -15,7 +16,8 @@ namespace doccure.Repositories.Interfance
 		public Task<UserConnected> GetConnectionByUserId(string userId);
 		public Task<UserGroups> IsUserActiveInGroup(string userId,int groupId);
 		public Task<bool>DeActivateUserGroups(string userId);
-		public Task<UserConnected> UserConnected(string userId);
+		public Task<bool> UserConnected(string userId);
+		public Task<Applicationuser> GetUser(string Id);
 
 	}
 }

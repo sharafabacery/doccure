@@ -1,6 +1,7 @@
 ﻿using doccure.Data;
 using doccure.Data.Models;
 using doccure.Data.RequestModels;
+using doccure.Data.ResponseModels;
 using doccure.Repositories.Interfance;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -152,9 +153,26 @@ namespace doccure.Repositories.Implementaion
 
 		public async Task<UserConnected> GetConnectionByUserId(string userId)
 		{
-			var connection = await applicationDbContext.UserConnected.Where(e => e.applicationuserId == userId).FirstOrDefaultAsync();
+			var connection = await applicationDbContext.UserConnected
+														.Include(e=>e.applicationuser)
+														.Where(e => e.applicationuserId == userId)
+														
+														.FirstOrDefaultAsync();
 			if (connection != null) return connection;
 			else return null;
+		}
+
+		public async Task<Applicationuser> GetUser(string Id)
+		{
+			var user=await userManager.FindByIdAsync(Id);
+			if (user == null)
+			{
+				return user;
+			}
+			else
+			{
+				return null;
+			}
 		}
 
 		public async Task<List<GroupResponse>> GetUserGroups(string Id,List<Group> groups)
@@ -185,10 +203,12 @@ namespace doccure.Repositories.Implementaion
 			return groups;
 		}
 
-		public async Task<UserConnected> UserConnected(string userId)
+		public async Task<bool> UserConnected(string userId)
 		{
-			var Connected=await applicationDbContext.UserConnected.Where(e=>e.applicationuserId==userId).FirstOrDefaultAsync();
-			return Connected;
+			var Connected = await applicationDbContext.UserConnected
+														.Where(e => e.applicationuserId == userId)
+											.FirstOrDefaultAsync();
+			return Connected!=null;
 			
 		}
 	}
