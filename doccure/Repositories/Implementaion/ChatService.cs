@@ -184,5 +184,12 @@ namespace doccure.Repositories.Implementaion
 			var groups =await applicationDbContext.UserGroups.Include(p=>p.group).Include(p=>p.group.user).Where(p=>p.applicationuserId==Id).Select(e=>e.group).ToListAsync();
 			return groups;
 		}
+
+		public async Task<UserConnected> UserConnected(string userId)
+		{
+			var Connected=await applicationDbContext.UserConnected.Where(e=>e.applicationuserId==userId).FirstOrDefaultAsync();
+			return Connected;
+			
+		}
 	}
 }

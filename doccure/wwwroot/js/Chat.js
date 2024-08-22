@@ -391,9 +391,42 @@ ${msg.file != null ? ` <div class="chat-msg-attachments">
         }
     })
 
+    $('.voiceCall,.videoCall').on('click', async (e) => {
+        
+        var chatObject = JSON.parse(localStorage.getItem('chatUser'))
+        var calling = localStorage.getItem('calling')
+        if (chatObject != null && (calling == undefined || calling == null)) {
+            try {
+                await connection.invoke("MakeCall", chatObject.userId, chatObject.groupName, $(e.target).attr('class').split(' ')[0]);
+            } catch (e) {
+                console.log(e)
+            }
+        }
+        localStorage.removeItem('calling')
+    })
+    connection.on('CloseCallModel', (call, MediaType) => {
+        MediaType = MediaType.slice(0, -1)
+        setTimeout(() => {
+            if (call == null && (MediaType == 'voiceCall' || MediaType == 'audio_call_exit')) {
+                $('#audio_call_exit').click()
+            } else if (call == null && (MediaType == 'videoCall' || MediaType == 'video_call_exit')) {
+            $('#video_call_exit').click()
+            }
+        }, 5000)
+       
+    })
+    connection.on('OpenCallModel', (call, MediaType) => {
+        console.log(call, MediaType)
+        if (call != null) {
+            localStorage.setItem('calling', true)
+            MediaType = MediaType.slice(0, -1)
+            console.log(MediaType)
+            $(`.${MediaType}`).click()
+        }
+    })
     var chatAppTarget = $('.chat-window');
-    (async function () { 
-            
+    (async function () {
+
         if ($(window).width() > 991)
             chatAppTarget.removeClass('chat-slide');
 
@@ -410,5 +443,6 @@ ${msg.file != null ? ` <div class="chat-msg-attachments">
             return false;
         });
     }
-        )();
+    )();
+
 })(jQuery);

@@ -64,12 +64,17 @@
 								</div>
 							</div>
 							<div class="chat-options">
-								<a href="javascript:void(0)" data-toggle="modal" data-target="#voice_call">
-									<i class="material-icons">local_phone</i>
-								</a>
-								<a href="javascript:void(0)" data-toggle="modal" data-target="#video_call">
-									<i class="material-icons">videocam</i>
-								</a>
+								<div>
+									<a data-toggle="modal" data-target="#voice_call" class="voiceCall">
+									<i class="voiceCall2 material-icons">local_phone</i>
+								</a></div>
+							<div >
+                                <a data-toggle="modal" data-target="#video_call" class="videoCall">
+                                    <i class="videoCall2 material-icons">videocam</i>
+                                </a>
+                            </div>
+								
+								
 								<a href="javascript:void(0)">
 									<i class="material-icons">more_vert</i>
 								</a>
@@ -354,4 +359,10 @@
 }
 @section ChatFeature {
 	<partial name="_ChatFeature" />
+}
+@section VideoChat {
+	<partial name="_VideoChat" />
+}
+@section AudioChat {
+	<partial name="_AudioChat" />
 }

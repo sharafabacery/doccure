@@ -15,6 +15,7 @@ namespace doccure.Repositories.Interfance
 		public Task<UserConnected> GetConnectionByUserId(string userId);
 		public Task<UserGroups> IsUserActiveInGroup(string userId,int groupId);
 		public Task<bool>DeActivateUserGroups(string userId);
+		public Task<UserConnected> UserConnected(string userId);
 
 	}
 }
