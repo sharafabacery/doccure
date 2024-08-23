@@ -162,12 +162,16 @@ namespace doccure.Repositories.Implementaion
 			else return null;
 		}
 
-		public async Task<Applicationuser> GetUser(string Id)
+		public async Task<UserDTO> GetUser(string Id)
 		{
 			var user=await userManager.FindByIdAsync(Id);
-			if (user == null)
+			if (user != null)
 			{
-				return user;
+				var userDTO = new UserDTO();
+				userDTO.Id = user.Id;
+				userDTO.ProfileImage = user.Image;
+				userDTO.FullName = user.FirstName + ' ' + user.LastName;
+				return userDTO;
 			}
 			else
 			{

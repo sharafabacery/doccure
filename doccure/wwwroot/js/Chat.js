@@ -407,13 +407,22 @@ ${msg.file != null ? ` <div class="chat-msg-attachments">
     $('.audio_call_exit,.video_call_exit').on('click', async (e) => {
 
         var chatObject = JSON.parse(localStorage.getItem('chatUser'))
-        if (chatObject != null) {
-try {
-                await connection.invoke("CloseModel", chatObject.userId, chatObject.groupName, $(e.target).attr('class').split(' ')[0]);
+        var caller = JSON.parse(localStorage.getItem('callerInfo'))
+        if (caller != null) {
+            try {
+                await connection.invoke("CloseModel", caller.user.id, caller.groupName, $(e.target).attr('class').split(' ')[0]);
+                localStorage.removeItem('callerInfo')
             } catch (e) {
                 console.log(e)
             }
         }
+        else if (chatObject != null) {
+            try {
+                await connection.invoke("CloseModel", chatObject.userId, chatObject.groupName, $(e.target).attr('class').split(' ')[0]);
+            } catch (e) {
+                console.log(e)
+            }
+        } 
             
         
         
@@ -430,24 +439,29 @@ try {
 
     })
     connection.on('CloseCallModel', (call, MediaType, user) => {
-        MediaType = MediaType.slice(0, -1)
+        var mm = MediaType.slice(0, -1)
         setTimeout(() => {
-            if (call == false && (MediaType == 'voiceCall' || MediaType == 'audio_call_exit')) {
+            if (call == false && (mm == 'voiceCall' || MediaType == 'audio_call_exit')) {
                 $('#audio_call_exit').click()
-            } else if (call == false && (MediaType == 'videoCall' || MediaType == 'video_call_exit')) {
+            } else if (call == false && (mm == 'videoCall' || MediaType == 'video_call_exit')) {
             $('#video_call_exit').click()
             }
-        }, 5000)
+        }, 1000)
        
     })
-    connection.on('OpenCallModel', (call, MediaType, user) => {
+    connection.on('OpenCallModel', (call, MediaType, user, groupName) => {
         console.log(call, MediaType)
         if (call == true) {
             localStorage.setItem('calling', true)
             MediaType = MediaType.slice(0, -1)
             console.log(MediaType)
+            var obj = {
+                'user': user,
+                'groupName': groupName
+            }
+            localStorage.setItem('callerInfo', JSON.stringify( obj))
             $(`.${MediaType}`).click()
-            $(".reciver-name").text(user.firstName + ' ' + user.lastName);
+            $(".reciver-name").text(user.fullName);
             $(".reciver-img").attr("src", '/img/uploads/' + user.profileImage);
         }
     })
