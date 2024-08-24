@@ -4,6 +4,7 @@
 	{
 		public int Id { get; set; }
 		public string Name { get; set; }
-		public ICollection<Applicationuser> user { get; } = new List<Applicationuser>(); // Collection navigation containing dependents 
+		public ICollection<Applicationuser> user { get; } = new List<Applicationuser>(); // Collection navigation containing dependents
+		public ICollection<UserGroups> groups { get; } =new List<UserGroups>();
 	}
 }

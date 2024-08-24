@@ -21,8 +21,8 @@ namespace doccure.Repositories.Implementaion
 		}
 		public async Task<UserDTO> GetCallerInfo(ClaimsPrincipal claims, string meetingId)
 		{
-			string id = userManager.GetUserId(claims);
-			var callerr = await applicationDbContext.Groups.Include(e => e.user)
+			var id =await userManager.GetUserAsync(claims);
+			var callerr = await applicationDbContext.Groups
 														.Where(e => e.Name == meetingId)
 														.FirstOrDefaultAsync();
 			if(callerr == null)
@@ -31,7 +31,8 @@ namespace doccure.Repositories.Implementaion
 			}
 			else
 			{
-				var caller = callerr.user.Where(e => !e.Equals(id)).FirstOrDefault();
+
+				var caller = await applicationDbContext.UserGroups.Include(e => e.applicationuser).Where(e => e.group.Equals(callerr)&&!e.applicationuser.Equals(id)).Select(e => e.applicationuser).FirstOrDefaultAsync();
 				if(caller == null)
 				{
 					return null;

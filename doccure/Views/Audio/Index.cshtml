@@ -1,7 +1,7 @@
 ﻿@using doccure.Data.ResponseModels;
 @{
-	var callerInfo = (UserDTO)ViewBag["callerInfo"];
-	var userInfo = (UserDTO)ViewBag["userInfo"];
+	var callerInfo = (UserDTO)ViewBag.callerInfo;
+	var userInfo = (UserDTO)ViewBag.userInfo;
 
 }
 <!-- Page Content -->
@@ -45,7 +45,7 @@
 							<div class="call-contents">
 								
 								<div class="call-content-wrap">
-									<video autoplay class="voice-call-avatar">
+									<video autoplay >
 									</video>
 									<div>
 										<span class="username">@callerInfo.FullName</span>
