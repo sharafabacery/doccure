@@ -22,15 +22,23 @@ namespace doccure.Repositories.Implementaion
 		public async Task<UserDTO> GetCallerInfo(ClaimsPrincipal claims, string meetingId)
 		{
 			string id = userManager.GetUserId(claims);
-			var caller = await applicationDbContext.Groups.Include(e => e.user)
+			var callerr = await applicationDbContext.Groups.Include(e => e.user)
 														.Where(e => e.Name == meetingId)
-														.Select(e => new UserDTO()
-														{
-															Id = e.user.Where(e => e.Id != id).FirstOrDefault().Id,
-															FullName= e.user.Where(e => e.Id != id).FirstOrDefault().FirstName+' '+ e.user.Where(e => e.Id != id).FirstOrDefault().LastName,
-															ProfileImage= e.user.Where(e => e.Id != id).FirstOrDefault().Image
-														}).FirstOrDefaultAsync();
-			return caller;
+														.FirstOrDefaultAsync();
+			if(callerr == null)
+			{
+				return null;
+			}
+			else
+			{
+				var caller = callerr.user.Where(e => !e.Equals(id)).FirstOrDefault();
+				if(caller == null)
+				{
+					return null;
+				}
+				var userdto = new UserDTO() { FullName = caller.FirstName + ' ' + caller.LastName,ProfileImage=caller.Image,Id=caller.Id };
+				return userdto;
+			}
 
 		}
 

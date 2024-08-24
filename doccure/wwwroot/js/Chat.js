@@ -485,7 +485,6 @@ ${msg.file != null ? ` <div class="chat-msg-attachments">
     connection.on('AcceptCallOn', (classType) => {
         var href = $(`.${classType}`).attr('href');
         window.location.replace(href);
-})
     })
     var chatAppTarget = $('.chat-window');
     (async function () {
