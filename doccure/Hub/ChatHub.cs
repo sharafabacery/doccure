@@ -107,6 +107,10 @@ using System.Threading.Tasks;
 			var res = await messageService.AddMessage(messageRequest, Context.UserIdentifier);
 			await Clients.Group(messageRequest.GroupName).SendAsync("MessageSent", Context.ConnectionId, res);
 		}
+		public async Task AcceptCall(string groupNmae,string type)
+		{
+			await Clients.OthersInGroup(groupNmae).SendAsync("AcceptCallOn", type);
+		}
 		public async Task ActivationUserInGroup(int groupId)
 		{
 			var res = await chatService.IsUserActiveInGroup(Context.UserIdentifier, groupId);

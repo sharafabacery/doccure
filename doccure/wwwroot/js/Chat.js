@@ -248,6 +248,10 @@ ${msg.file != null ?` <div class="chat-msg-attachments">
             
             $(".reciver-name").text(chatObject.userName); 
             $(".reciver-img").attr("src", chatObject.profileImage);
+            var audioUri = window.location.origin + `/Audio?meetingId=${groupName}&type=sender`
+            var videoUri = window.location.origin + `/Video?meetingId=${groupName}&type=sender`
+            $('.audioLink').attr('href', audioUri)
+            $('.videoLink').attr('href', videoUri)
             //$(".chat-cont-right").empty();
             //$(".chat-cont-right").append(htmlChat)
         } catch (err) {
@@ -463,9 +467,26 @@ ${msg.file != null ? ` <div class="chat-msg-attachments">
             $(`.${MediaType}`).click()
             $(".reciver-name").text(user.fullName);
             $(".reciver-img").attr("src", '/img/uploads/' + user.profileImage);
+            var audioUri = window.location.origin + `/Audio?meetingId=${groupName}&type=reciver`
+            var videoUri = window.location.origin + `/Video?meetingId=${groupName}&type=reciver`
+            $('.audioLink').attr('href', audioUri)
+            $('.videoLink').attr('href', videoUri)
         }
     })
-
+    $('.audioLink,videoLink').on('click', async (e) => {
+        try {
+            var callerInfo = JSON.parse(localStorage.getItem('callerInfo'))
+            await connection.invoke("AcceptCall", callerInfo.groupName, $(e.target).attr('class').split(' ')[0]);
+            
+        } catch (e) {
+            console.log(e)
+        }
+    })
+    connection.on('AcceptCallOn', (classType) => {
+        var href = $(`.${classType}`).attr('href');
+        window.location.replace(href);
+})
+    })
     var chatAppTarget = $('.chat-window');
     (async function () {
 
