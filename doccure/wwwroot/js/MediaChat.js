@@ -1,56 +1,113 @@
 ﻿(function ($) {
     "use strict";
-    const connection = new signalR.HubConnectionBuilder()
-        .withUrl("/mediahub")
+    const connectionhub = new signalR.HubConnectionBuilder()
+        .withUrl("/mediaHub")
         .configureLogging(signalR.LogLevel.Information)
         .build();
-    const icecongigration = {
-        iceServers: [{
-'urls': "stun1.l.google.com:19302"
-            }
-            
-            ]
-        }
-    const webrtc = new RTCPeerConnection(icecongigration)
+    console.log(connectionhub)
     
+    const webrtc = new RTCPeerConnection()
+    webrtc.onicecandidate = e => { iceCandiate = JSON.stringify(webrtc.localDescription); console.log(iceCandiate); }
+
+    webrtc.addEventListener('track', event => {
+        if (remoteVideo.srcObject !== event.streams[0]) {
+            console.log(event)
+            remoteStream = event.streams[0];
+            remoteVideo.srcObject = remoteStream;
+            console.log('tracking')
+        }
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    });
     const params = new Proxy(new URLSearchParams(window.location.search), {
         get: (searchParams, prop) => searchParams.get(prop),
     });
+    const localVideo = document.getElementById('video-sender');
+    const remoteVideo = document.getElementById('video-reciver');
+    let localStream;
+    let remoteStream;
     let meetingId = params.meetingId
     let type = params.type
-    let iceCandiate = ''
-    webrtc.onicecandidate(e => iceCandiate = JSON.stringify(webrtc.localDescription))
-    async function addConnection(meeting) {
+    let iceCandiate = {}
+    const mediaStreamConstraints = {
+        video: true,
+        audio: true
+    };
+    EnableSending()
+    start()
+
+    async function start() {
         try {
-            await connection.invoke("AddConnection", meeting);
+            await connectionhub.start();
+            console.log("SignalR Connected.");
+        } catch (err) {
+            console.log(err);
+            //setTimeout(start, 5000);
+        }
+    };
+    async function EnableSending() {
+        try {
+            const mediaStream = await navigator.mediaDevices.getUserMedia(mediaStreamConstraints);
+            localVideo.srcObject = mediaStream;
+            localStream = mediaStream;
+            localStream.getTracks().forEach(track => {
+                webrtc.addTrack(track, localStream);
+            });
+        } catch (err) {
+            console.log(err);
+            //setTimeout(start, 5000);
+        }
+    };
+    connectionhub.on('Connected', async () => {
+
+        try {
+            await connectionhub.invoke("AddConnection", meetingId);
+            
         } catch (e) {
             console.log(e)
         }
+    })
+    async function creationOffer() {
+        await webrtc.createOffer()
+            .then(e => webrtc.setLocalDescription(e))
+            .then(e => {
+                console.log('local decription set for sender');
+                //iceCandiate = JSON.stringify(webrtc.localDescription);
+            })
+
     }
-    addConnection(meetingId);
-    connection.on("Info", (msg) => {
-        console.log(msg)
+    async function answerCreation() {
+        await webrtc.createAnswer()
+            .then(e => webrtc.setLocalDescription(e))
+            .then(e => {
+                console.log('local decription set for sender');
+                //iceCandiate = JSON.stringify(webrtc.localDescription);
+            })
+    }
+    connectionhub.on("Info", async(msg) => {
+       
         if (type == "sender") {
-            webrtc.createOffer().then(e => webrtc.localDescription(e)).then(e => console.log('local decription set for sender'))
+            await creationOffer()            
             try {
-                await connection.invoke("Signaling", meetingId, iceCandiate);
+                
+                await connectionhub.invoke("Signaling", meetingId, iceCandiate);
                 console.log('Invoking Signaling of sender')
             } catch (e) {
                 console.log(e)
             }
         }
     })
-    connection.on('SDP', (sdp) => {
-        webrtc.setRemoteDescription(sdp).then(e => console.log('local decription set for ' + type))
+    connectionhub.on('SDP', async (sdp) => {
+        console.log(sdp)
+        webrtc.setRemoteDescription(JSON.parse( sdp)).then(e => console.log('Remote decription set for ' + type))
         if (type == "reciver") {
-            webrtc.createAnswer().then(a => webrtc.localDescription(a)).then(e => console.log('local decription set for reciver'))
+            await answerCreation()
             try {
-                await connection.invoke("Signaling", meetingId, iceCandiate);
+                await connectionhub.invoke("Signaling", meetingId, iceCandiate);
                 console.log('Invoking Signaling of reciver')
             } catch (e) {
                 console.log(e)
             }
         } 
     })
-
+  
 })(jQuery);

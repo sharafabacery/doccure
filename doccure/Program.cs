@@ -168,8 +168,8 @@ namespace doccure
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 			//app.MapRazorPages();
-			app.MapHub<ChatHub>("/chathub");
-			app.MapHub<MediaHub>("/mediahub");
+			app.MapHub<ChatHub>("/chatHub");
+			app.MapHub<MediaHub>("/mediaHub");
 			app.Run();
         }
     }

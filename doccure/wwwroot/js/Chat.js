@@ -2,10 +2,10 @@
 (function ($) {
     "use strict";
 const connection = new signalR.HubConnectionBuilder()
-    .withUrl("/chathub")
+    .withUrl("/chatHub")
     .configureLogging(signalR.LogLevel.Information)
-    .build();
-
+        .build();
+    console.log(connection)
     function ResetlocalStorage() {
         localStorage.removeItem('chatUser')
     }

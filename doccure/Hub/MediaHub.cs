@@ -22,5 +22,14 @@
 		public async Task Signaling(string groupId,string content) {
 			await Clients.OthersInGroup(groupId).SendAsync("SDP", content);
 		}
+		public async Task UserConnected() {
+			await Clients.Caller.SendAsync("Connected");
+
+		}
+		public override async Task OnConnectedAsync()
+		{
+			await UserConnected();
+			await base.OnConnectedAsync();
+		}
 	}
 }

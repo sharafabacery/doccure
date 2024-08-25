@@ -20,7 +20,7 @@
 								<div class="navbar">
 									<div class="user-details mr-auto">
 										<div class="float-left user-img">
-											<a class="avatar avatar-sm mr-2" href="patient-profile.html" title="Charlene Reed">
+											<a class="avatar avatar-sm mr-2" href="patient-profile.html" title="{@userInfo.FullName}">
 												<img src="assets/img/uploads/{@userInfo.ProfileImage}" alt="User Image" class="rounded-circle">
 												<span class="status online"></span>
 											</a>
@@ -42,25 +42,32 @@
 							</div>
 							<!-- /Call Header -->
 							<!-- Call Contents -->
+
 							<div class="call-contents">
 								
 								<div class="call-content-wrap">
-									<video autoplay >
-									</video>
-									<div>
-										<span class="username">@callerInfo.FullName</span>
-										<span class="call-timing-count">00:59</span>
+									
+									<div >
+
+										@*<span class="username">@callerInfo.FullName</span>
+										<span class="call-timing-count">00:59</span>*@
 									</div>
-									@*<div class="call-users">
+									<div class="call-users">
 										<ul>
 											<li>
-												<a href="#">
-													<img src="assets/img/patients/patient1.jpg" class="img-fluid" alt="User Image">
-													<span class="call-mute"><i class="fa fa-microphone-slash"></i></span>
-												</a>
+												<video autoplay id="video-reciver" height="150" width="150">
+												</video>
+											</li>
+											<li>
+												
+												<video autoplay id="video-sender" height="150" width="150">
+										</video>
+													@*<img src="assets/img/patients/patient1.jpg" class="img-fluid" alt="User Image">*@
+													
+											
 											</li>
 										</ul>
-									</div>*@
+									</div>
 								</div>
 							</div>
 							<!-- /Call Contents -->
