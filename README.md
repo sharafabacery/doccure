@@ -58,7 +58,7 @@ Add secerts of google clientid
 
 **Client:** HTML , CSS , JS , Jquery
 
-**Server:** asp.net Core , SQLSERVER
+**Server:** .net core, asp.net Core , SignalR , WebRTC , SQLSERVER
 
 ## Authors
 
