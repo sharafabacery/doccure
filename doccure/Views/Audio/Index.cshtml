@@ -21,7 +21,7 @@
 									<div class="user-details mr-auto">
 										<div class="float-left user-img">
 											<a class="avatar avatar-sm mr-2" href="patient-profile.html" title="{@userInfo.FullName}">
-												<img src="assets/img/uploads/{@userInfo.ProfileImage}" alt="User Image" class="rounded-circle">
+												<img src="~/img/uploads/{@userInfo.ProfileImage}" alt="User Image" class="rounded-circle">
 												<span class="status online"></span>
 											</a>
 										</div>
@@ -44,27 +44,21 @@
 							<!-- Call Contents -->
 
 							<div class="call-contents">
-								
 								<div class="call-content-wrap">
+									<div class="voice-call-avatar">
+								<video autoplay id="video-reciver" height="400">
+										</video>
 									
-									<div >
-
-										@*<span class="username">@callerInfo.FullName</span>
-										<span class="call-timing-count">00:59</span>*@
-									</div>
+                                        <span class="username">@callerInfo.FullName</span>
+										<span id="timerDisplay" class="call-timing-count"></span>
+								</div>
+									
 									<div class="call-users">
 										<ul>
 											<li>
-												<video autoplay id="video-reciver" height="150" width="150">
-												</video>
-											</li>
-											<li>
-												
-												<video autoplay id="video-sender" height="150" width="150">
+												<video autoplay id="video-sender" height="100">
 										</video>
 													@*<img src="assets/img/patients/patient1.jpg" class="img-fluid" alt="User Image">*@
-													
-											
 											</li>
 										</ul>
 									</div>
