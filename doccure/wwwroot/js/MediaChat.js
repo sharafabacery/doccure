@@ -9,6 +9,14 @@
     var elapsedTime = 0; // Start time in seconds (initially 0)
     var timerDisplay = document.getElementById("timerDisplay");
 
+    let path = window.location.pathname
+    console.log(path == '/Audio')
+    let isVideoEnabled = path!='/Audio';
+    let isAudioMuted = false;
+
+    let mediaConfigration = { video:  true, audio: true }
+
+
     const params = new Proxy(new URLSearchParams(window.location.search), {
         get: (searchParams, prop) => searchParams.get(prop),
     });
@@ -19,6 +27,7 @@
 
     let meetingId = params.meetingId
     let peerConnection;
+
     function startTimer() {
         setInterval(function () {
             elapsedTime++;
@@ -57,9 +66,9 @@
             //setTimeout(start, 5000);
         }
     };
-    async function startCall() {
+    async function startCall(mediaConfigration) {
         // Get local media stream
-        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        localStream = await navigator.mediaDevices.getUserMedia(mediaConfigration);
         localVideo.srcObject = localStream;
 
         // Initialize PeerConnection
@@ -67,7 +76,7 @@
 
         // Add local stream to PeerConnection
         localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
-
+        localStream.getVideoTracks()[0].enabled = isVideoEnabled;
         // Handle remote stream
         peerConnection.ontrack = (event) => {
             remoteVideo.srcObject = event.streams[0];
@@ -108,11 +117,22 @@ const offer = await peerConnection.createOffer();
         // Create offer and send it to the remote peer
         
     }
+    $('.enableAudio').on('click', () => {
+        isAudioMuted = !isAudioMuted;
+        localStream.getAudioTracks()[0].enabled = !isAudioMuted;
+        $('.enableAudio').css('color', isAudioMuted ?  "blue":"red" ) ;
+    })
+    $('.enableVideo').on('click', () => {
+        isVideoEnabled = !isVideoEnabled;
+        localStream.getVideoTracks()[0].enabled = isVideoEnabled;
+        $('.enableVideo').css('color', isVideoEnabled ?  "blue":"red" );
+    });
+    $('.endCall').on('click', () => {
+        peerConnection.close();
+        signalingServer.stop();
+        history.back();
+        })
     start()
-    startCall()
+    startCall(mediaConfigration)
     window.onload = startTimer;
-    
-    
-   
-  
 })(jQuery);

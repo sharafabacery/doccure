@@ -473,9 +473,10 @@ ${msg.file != null ? ` <div class="chat-msg-attachments">
             $('.videoLink').attr('href', videoUri)
         }
     })
-    $('.audioLink,videoLink').on('click', async (e) => {
+    $('.audioLink,.videoLink').on('click', async (e) => {
         try {
             var callerInfo = JSON.parse(localStorage.getItem('callerInfo'))
+            
             await connection.invoke("AcceptCall", callerInfo.groupName, $(e.target).attr('class').split(' ')[0]);
             
         } catch (e) {
