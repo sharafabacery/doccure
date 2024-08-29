@@ -27,9 +27,9 @@ for patient it could be like a portable electronic health record (EHR).
 
 [✔] Text Chating
 
-## Features (Not-Complete) Still Under-Development
+[✔] Video Chating
 
-[X] Video Chating
+## Features (Not-Complete) Still Under-Development
 
 [X] Seeding Database
 
