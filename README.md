@@ -61,9 +61,13 @@ for patient it could be like a portable electronic health record (EHR) for futur
 
 ## Tech Stack
 
+**Code Structure:** Model-View-Controller , Controllers spereated from Logic By Implement repository pattern (Services and Implemenation for each and reuse service to save time)
+
 **Client:** HTML , CSS , JS , Jquery
 
-**Server:** .net core, asp.net Core , SignalR , WebRTC , SQLSERVER
+**Server:** .net core, asp.net Core , SignalR , WebRTC , SQLSERVER , Entity Framework 
+
+**3 party Tools:**  MailTrap , GoogleAuth
 
 ## Authors
 
