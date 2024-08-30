@@ -36,11 +36,14 @@ for patient it could be like a portable electronic health record (EHR) for futur
 1) Install Doccure-medical-system required packages
 
 2) Go To and genrate appsettings.json 
+
   2.1) Configure Database Connection and Create new database with name you choose in db connection
+  
   2.2) Configure MailProvider Section For Mail Service
+  
   2.3) Configure UseSeeder bool to activate seeder of database
    
-3) Run the command to run migration.
+4) Run the command to run migration.
 
 ```bash 
   update-database
