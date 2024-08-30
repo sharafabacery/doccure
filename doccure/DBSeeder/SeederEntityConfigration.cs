@@ -8,9 +8,9 @@ namespace doccure.DBSeeder
 		Male=1,
 		Female=0
 	}
-	public class SeederEntityConfigration
+	public static class SeederEntityConfigration
 	{
-		private Faker<Applicationuser> GenrateUsersConfigration()
+		private static Faker<Applicationuser> GenrateUsersConfigration()
 		{
 			var blood = new[] { "A", "AB", "O" };
 			var userRule = new Faker<Applicationuser>()
@@ -27,7 +27,7 @@ namespace doccure.DBSeeder
 						 .RuleFor(u => u.PasswordHash, f => "P@ssw0rdP@ssword_cmdr");
 			return userRule;
 		}
-		private Faker<Address> GenrateAddressConfigration()
+		private static Faker<Address> GenrateAddressConfigration()
 		{
 			var addressRule = new Faker<Address>()
 							.RuleFor(e => e.Address1, f => f.Address.StreetName())
@@ -37,7 +37,7 @@ namespace doccure.DBSeeder
 							.RuleFor(e => e.State, f => f.Address.State());
 			return addressRule;
 		}
-		private Faker<Clinic> GenrateClinicConfigration()
+		private static Faker<Clinic> GenrateClinicConfigration()
 		{
 			var addressRule = new Faker<Clinic>()
 							.RuleFor(e => e.FromDay, 3)
@@ -47,7 +47,7 @@ namespace doccure.DBSeeder
 							
 			return addressRule;
 		}
-		private Faker<Doctor> GenrateDoctorBasicInformationConfigration(List<Speciality> specialities)
+		private static Faker<Doctor> GenrateDoctorBasicInformationConfigration(List<Speciality> specialities)
 		{
 			var doctorRule = new Faker<Doctor>()
 								.RuleFor(e => e.Speciality, f => f.PickRandom(specialities))
@@ -59,7 +59,7 @@ namespace doccure.DBSeeder
 
 			return doctorRule;
 		}
-		private Faker<Education> GenrateEducation()
+		private static Faker<Education> GenrateEducation()
 		{
 			
 			var education = new Faker<Education>()
@@ -70,7 +70,7 @@ namespace doccure.DBSeeder
 			return education;
 		}
 
-		 private Faker<Experience> GenrateExperience()
+		 private static Faker<Experience> GenrateExperience()
 		{
 			var experience = new Faker<Experience>()
 				.RuleFor(e => e.HospitalName, f => "Hospital of " + f.Address.City())
@@ -80,21 +80,21 @@ namespace doccure.DBSeeder
 				.RuleFor(e => e.To, (f,u) => u.From.AddYears(f.Random.Number(5)));
 			return experience;
 		}
-		private Faker<Awards> GenrateAwards()
+		private static Faker<Awards> GenrateAwards()
 		{
 			var experience = new Faker<Awards>()
 				.RuleFor(e => e.award, f => f.Lorem.Paragraph(20));
 				
 			return experience;
 		}
-		private Faker<Membership> GenrateMembership()
+		private static Faker<Membership> GenrateMembership()
 		{
 			var experience = new Faker<Membership>()
 				.RuleFor(e => e.description, f => f.Lorem.Paragraph(20));
 
 			return experience;
 		}
-		public List<Applicationuser> UsersGenrated(int seed)
+		public static List<Applicationuser> UsersGenrated(int seed)
 		{
 			var usersRule = GenrateUsersConfigration();
 			var AddressRule = GenrateAddressConfigration();
@@ -102,7 +102,7 @@ namespace doccure.DBSeeder
 			var users=usersTest.Generate(seed);
 			return users;
 		}
-		public List<Applicationuser> DoctorGenrated(int seed, List<Speciality> specialities)
+		public static List<Applicationuser> DoctorGenrated(int seed, List<Speciality> specialities)
 		{
 			var usersRule = GenrateUsersConfigration();
 			var AddressRule = GenrateAddressConfigration();
