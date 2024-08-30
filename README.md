@@ -1,9 +1,9 @@
 ﻿# Doccure Medical System
 
-An Medical platform for clinics that serve and connects doctors and patients.
+An Medical platform for clinics that serve and connects doctors and patients for reservation and Add medicine for patient and add price of all what doctor do with patient.
 App has 3 primary users (patient,doctor,admin)
 first 2 can create account and connect to each other.
-for patient it could be like a portable electronic health record (EHR).
+for patient it could be like a portable electronic health record (EHR) for future.
 
 ## Features (Complete)
 
@@ -29,25 +29,27 @@ for patient it could be like a portable electronic health record (EHR).
 
 [✔] Video Chating
 
-## Features (Not-Complete) Still Under-Development
-
-[X] Seeding Database
-
-
+[✔] Seeding Database
 
 ## Installation 
 
-Install Doccure-medical-system required packages
+1 Install Doccure-medical-system required packages
 
-Run the command to run migration.
+2 Go To and genrate appsettings.json 
+
+      2.1 Configure Database Connection and Create new database with name you choose in db connection
+  
+      2.2 Configure MailProvider Section For Mail Service
+  
+      2.3 Configure UseSeeder bool to activate seeder of database
+   
+4 Run the command to run migration.
 
 ```bash 
   update-database
 ```
 
-Add Admin User manully to SQLSERVER And  Its Rules
-
-Add secerts of google clientid
+4 secerts of google clientid
 
 ```bash 
   dotnet user-secrets set "Authentication:Google:ClientId" "<client-id>"
