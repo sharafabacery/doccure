@@ -10,12 +10,16 @@ namespace doccure.DBSeeder
 	{
 		internal static async void Initialize(ApplicationDbContext applicationDbContext, UserManager<Applicationuser> userManager, RoleManager<IdentityRole> roleManager)
 		{
-			ArgumentNullException.ThrowIfNull(applicationDbContext, nameof(applicationDbContext));
+			ArgumentNullException.ThrowIfNull(roleManager, nameof(roleManager));
 
 			applicationDbContext.Database.EnsureCreated();
 			if (applicationDbContext.Users.Any()) return;
 			applicationDbContext.SaveChanges();
 			
+			await roleManager.CreateAsync(new IdentityRole("patient"));
+			await roleManager.CreateAsync(new IdentityRole("doctor"));
+			await roleManager.CreateAsync(new IdentityRole("admin"));
+
 			List<Speciality> specialities = new List<Speciality>();
 			specialities.Add(new Speciality { Name = "Urology",image= "specialities-01.png" });
 			specialities.Add(new Speciality { Name = "Neurology", image= "specialities-02.png" });
@@ -25,14 +29,14 @@ namespace doccure.DBSeeder
 			applicationDbContext.Speciality.AddRange(specialities);
 			applicationDbContext.SaveChanges();
 
-			await  roleManager.CreateAsync(new IdentityRole("patient"));
-			await  roleManager.CreateAsync(new IdentityRole("doctor"));
-			await roleManager.CreateAsync(new IdentityRole("admin"));
+			var password = "P@ssw0rdP@ssword_cmdr";
+
 			
+
 			int adminSeeder = 1;
 			var adminUser = SeederEntityConfigration.UsersGenrated(adminSeeder);
 			foreach(var user in adminUser) {
-				await userManager.CreateAsync(user);
+				await userManager.CreateAsync(user, password);
 				await userManager.AddToRoleAsync(user, "admin");
 			}
 
@@ -40,15 +44,15 @@ namespace doccure.DBSeeder
 			var normalUsers = SeederEntityConfigration.UsersGenrated(normalUserSeeder);
 			foreach (var user in normalUsers)
 			{
-				await userManager.CreateAsync(user);
+				await userManager.CreateAsync(user, password);
 				await userManager.AddToRoleAsync(user, "patient");
 			}
 
 			int doctorUserSeeder = 7;
-			var doctors = SeederEntityConfigration.DoctorGenrated(doctorUserSeeder,specialities);
+			var doctors = SeederEntityConfigration.DoctorGenrated(doctorUserSeeder, specialities);
 			foreach (var user in doctors)
 			{
-				await userManager.CreateAsync(user);
+				await userManager.CreateAsync(user, password);
 				await userManager.AddToRoleAsync(user, "doctor");
 			}
 

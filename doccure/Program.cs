@@ -140,7 +140,7 @@ namespace doccure
 			//});
 			builder.Services.AddSignalR();
 			var app = builder.Build();
-			var useSeeder = builder.Configuration.GetSection("UseSeeder").GetValue<bool>("UseSeeder");
+			var useSeeder = builder.Configuration.GetValue<bool>("UseSeeder");
 			if (useSeeder)
 			{
 				app.UseItToSeedSqlServer();

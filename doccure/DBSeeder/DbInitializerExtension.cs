@@ -10,13 +10,14 @@ namespace doccure.DBSeeder
 		{
 			ArgumentNullException.ThrowIfNull(app, nameof(app));
 
-			using var scope = app.ApplicationServices.CreateScope();
+			var scope = app.ApplicationServices.CreateScope();
 			var services = scope.ServiceProvider;
 			try
 			{
 				var context = services.GetRequiredService<ApplicationDbContext>();
 				var userMange = services.GetRequiredService<UserManager<Applicationuser>>();
 				var roleMange = services.GetRequiredService<RoleManager<IdentityRole>>();
+
 				DbInitializer.Initialize(context,userMange,roleMange);
 			}
 			catch (Exception ex)

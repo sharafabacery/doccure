@@ -1,5 +1,6 @@
 ﻿using Bogus;
 using doccure.Data.Models;
+using NuGet.Packaging;
 
 namespace doccure.DBSeeder
 {
@@ -23,8 +24,8 @@ namespace doccure.DBSeeder
 						 .RuleFor(u => u.EmailConfirmed, f => true)
 						 .RuleFor(u => u.PhoneNumber, f => f.Phone.PhoneNumber())
 						 .RuleFor(u => u.CreatedTime, f => DateTime.Now)
-						 .RuleFor(u => u.BloodGroup, f => f.PickRandom(blood))
-						 .RuleFor(u => u.PasswordHash, f => "P@ssw0rdP@ssword_cmdr");
+						 .RuleFor(u => u.BloodGroup, f => f.PickRandom(blood));
+						 //.RuleFor(u => u.PasswordHash, f => "P@ssw0rdP@ssword_cmdr");
 			return userRule;
 		}
 		private static Faker<Address> GenrateAddressConfigration()
@@ -43,8 +44,13 @@ namespace doccure.DBSeeder
 							.RuleFor(e => e.FromDay, 3)
 							.RuleFor(e => e.ToDay, 6)
 							.RuleFor(e => e.FromTime, "09:00")
-							.RuleFor(e => e.ToTime, f => "15:00");
-							
+							.RuleFor(e => e.ToTime, f => "15:00")
+							.RuleFor(e => e.Address, f => f.Address.StreetName())
+							.RuleFor(e => e.Name, f => f.Company.CompanyName() +" Clinic");
+
+
+
+
 			return addressRule;
 		}
 		private static Faker<Doctor> GenrateDoctorBasicInformationConfigration(List<Speciality> specialities)
@@ -113,16 +119,18 @@ namespace doccure.DBSeeder
 			var awardseRule = GenrateAwards();
 			var MembershipRule = GenrateMembership();
 
-			var doctorTest = doctorRule.RuleFor(e => e.clinics, f => ClinicRule.Generate(1).ToList());
-
-			var usersTest = usersRule.RuleFor(e => e.address, f => AddressRule.Generate(1).First());
-			var doctorFinalTest = usersTest
-										.RuleFor(e => e.doctor, f => doctorTest.Generate(1).First())
-										.RuleFor(e => e.doctor.educations, f => educationRule.Generate(1).ToList())
-										.RuleFor(e => e.doctor.experiences, f => experienceRule.Generate(1).ToList())
-										.RuleFor(e => e.doctor.awards, f => awardseRule.Generate(1).ToList())
-										.RuleFor(e => e.doctor.memberships, f => MembershipRule.Generate(1).ToList());
+			var usersTest = usersRule
+				.RuleFor(e => e.address, f => AddressRule.Generate(1).First())
+				.RuleFor(e => e.doctor, f => doctorRule.Generate(1).First())
+				.FinishWith((x, f) =>
+				{
+					f.doctor.clinics.AddRange(ClinicRule.Generate(1));
+					f.doctor.educations.AddRange(educationRule.Generate(1));
+					f.doctor.experiences.AddRange(experienceRule.Generate(1));
+					f.doctor.memberships.AddRange(MembershipRule.Generate(1));
+				});
 			var users = usersTest.Generate(seed);
+			
 			return users;
 		}
 	}
