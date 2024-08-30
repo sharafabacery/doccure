@@ -1,5 +1,6 @@
 using doccure.Data;
 using doccure.Data.Models;
+using doccure.DBSeeder;
 using doccure.Hub;
 using doccure.Repositories.Implementaion;
 using doccure.Repositories.Interfance;
@@ -122,6 +123,7 @@ namespace doccure
 			builder.Services.AddScoped<IStaticticsService, StaticticsService>();
 			builder.Services.AddScoped<IForgetPassword, ForgetPasswordService>();
 			builder.Services.AddScoped<IGetCallerInfoService, GetCallerInfoService>();
+			builder.Services.AddScoped<DbInitializer>();
 			// builder.Services.AddScoped<IUserAuthticationService, UserAuthticationService>();
 
 			//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -138,7 +140,12 @@ namespace doccure
 			//});
 			builder.Services.AddSignalR();
 			var app = builder.Build();
-
+			var useSeeder = builder.Configuration.GetSection("UseSeeder").GetValue<bool>("UseSeeder");
+			if (useSeeder)
+			{
+				app.UseItToSeedSqlServer();
+			}
+			
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
