@@ -37,11 +37,11 @@ for patient it could be like a portable electronic health record (EHR) for futur
 
 2) Go To and genrate appsettings.json 
 
-  2.1) Configure Database Connection and Create new database with name you choose in db connection
+      2.1) Configure Database Connection and Create new database with name you choose in db connection
   
-  2.2) Configure MailProvider Section For Mail Service
+      2.2) Configure MailProvider Section For Mail Service
   
-  2.3) Configure UseSeeder bool to activate seeder of database
+      2.3) Configure UseSeeder bool to activate seeder of database
    
 4) Run the command to run migration.
 
