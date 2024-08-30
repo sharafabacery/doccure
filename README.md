@@ -1,4 +1,4 @@
-﻿# Doccure Medical System
+﻿# Doccure Medical System (Phase 1)
 
 An Medical platform for clinics that serve and connects doctors and patients for reservation and Add medicine for patient and add price of all what doctor do with patient.
 
@@ -73,6 +73,7 @@ for patient it could be like a portable electronic health record (EHR) for futur
 ## Related
 
 This App was templete based for Frontend ,I download the Templete Thin I Create Backend.
+
 This App still in Development Mode Could be Some Bugs I need T fix.
 
 ## Feedback
