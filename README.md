@@ -33,23 +33,23 @@ for patient it could be like a portable electronic health record (EHR) for futur
 
 ## Installation 
 
-1) Install Doccure-medical-system required packages
+1 Install Doccure-medical-system required packages
 
-2) Go To and genrate appsettings.json 
+2 Go To and genrate appsettings.json 
 
-      2.1) Configure Database Connection and Create new database with name you choose in db connection
+      2.1 Configure Database Connection and Create new database with name you choose in db connection
   
-      2.2) Configure MailProvider Section For Mail Service
+      2.2 Configure MailProvider Section For Mail Service
   
-      2.3) Configure UseSeeder bool to activate seeder of database
+      2.3 Configure UseSeeder bool to activate seeder of database
    
-4) Run the command to run migration.
+4 Run the command to run migration.
 
 ```bash 
   update-database
 ```
 
-4) secerts of google clientid
+4 secerts of google clientid
 
 ```bash 
   dotnet user-secrets set "Authentication:Google:ClientId" "<client-id>"
