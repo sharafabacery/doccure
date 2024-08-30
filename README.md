@@ -67,7 +67,7 @@ for patient it could be like a portable electronic health record (EHR) for futur
 
 **Server:** .net core, asp.net Core , SignalR , WebRTC , SQLSERVER , Entity Framework 
 
-**3 party Tools:**  MailTrap , GoogleAuth
+**3 party Tools:**  MailTrap , GoogleAuth , bogus
 
 ## Authors
 
