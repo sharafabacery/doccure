@@ -1,8 +1,11 @@
 ﻿# Doccure Medical System
 
 An Medical platform for clinics that serve and connects doctors and patients for reservation and Add medicine for patient and add price of all what doctor do with patient.
+
 App has 3 primary users (patient,doctor,admin)
+
 first 2 can create account and connect to each other.
+
 for patient it could be like a portable electronic health record (EHR) for future.
 
 ## Features (Complete)
