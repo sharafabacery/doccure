@@ -28,9 +28,9 @@ for patient it could be like a portable electronic health record (EHR) for futur
 
 [✔] Login with 3rd party Authuntication (Google)
 
-[✔] Text Chating
+[✔] Text Chating (SignalR)
 
-[✔] Video Chating
+[✔] Video Chating (WebRTC)
 
 [✔] Seeding Database
 
